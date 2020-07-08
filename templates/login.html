@@ -1,0 +1,26 @@
+{% extends 'index.html' %}
+
+{% block content %}
+  <div id="login_app">
+    <div class="container">
+      <div class="login">
+        <h3>Login</h3>
+        <span class="errMsg">
+          {{ error }}
+        </span>
+        <form action="/login" method="post">
+          {% csrf_token %}
+          <div class="form-group">
+            <span><i class="fa fa-user-o" aria-hidden="true"></i></span>
+            <input type="text" name="username" id="" autocomplete="off" placeholder="Username">
+          </div>
+          <div class="form-group">
+            <span><i class="fa fa-unlock-alt" aria-hidden="true"></i></span>
+            <input type="password" name="password" id="" autocomplete="off" placeholder="Password">
+          </div>
+          <input type="submit" value="Login"> 
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}

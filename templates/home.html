@@ -1,0 +1,19 @@
+{% extends 'index.html' %}
+
+{% block content %}
+{{ data.name }}
+<script type='text/javascript'>
+ // var people = {{ data|safe }};
+ 
+  const jscontext={token: '{{ data | safe }}'}
+  const data = JSON.parse(jscontext.token)
+</script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="static/js/index.js"></script> -->
+
+  <div id="login_app">
+
+    [[ message ]]
+
+  </div>
+{% endblock %}
