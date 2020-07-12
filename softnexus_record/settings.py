@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'record.apps.RecordConfig',
+    'urlparams'
 ]
 
 MIDDLEWARE = [
@@ -77,9 +79,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'softnexus_record',
-        'USER': 'postgre'
-        'ROOT': 'localhost',
+        'USER': 'postgres',
         'PASSWORD': 'enny', 
+        'ROOT': 'localhost',
     }
 }
 

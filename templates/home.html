@@ -1,19 +1,526 @@
 {% extends 'index.html' %}
 
 {% block content %}
-{{ data.name }}
-<script type='text/javascript'>
- // var people = {{ data|safe }};
- 
-  const jscontext={token: '{{ data | safe }}'}
-  const data = JSON.parse(jscontext.token)
-</script>
-<!-- <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-<script src="static/js/index.js"></script> -->
+  <script type='text/javascript'> 
+    const jscontext={token: '{{ data | safe }}'}
+    var userData = JSON.parse(jscontext.token)
+  </script>
 
-  <div id="login_app">
+  <div
+    id="main"
+    :class="{pauseScroll: showModal}"
+  >
 
-    [[ message ]]
+    <div
+      :class="[{showModalClass: showModal}, 'add-record-modal']"
+    >
+      <div
+        v-if="showAccEntry"
+        class="modal-content accouunt-entry"
+      >
+          <header>
+            <h2>
+              Add New Account Record
+            </h2>
+            <span
+              @click="closeModal()"
+            >+</span>
+          </header>
+          <main>
+            <form action="#">
+              <div class="form-group">
+                <input type="text" name="" id="" placeholder="Entry Description Here">
+              </div>
+              <div class="form-group">
+                <select name="type" id="">
+                  <option value="">Choose Entry Type</option>
+                  <option value="Credit">Credit</option>
+                  <option value="Debit">Debit</option>              
+                </select>
+              </div>
+              <div class="form-group">
+                <input type="text" name="amount" id="" placeholder="Enter amount in format(200.0)">
+              </div>
+              <input type="submit" value="Submit">
+            </form>
+          </main>
+      </div>
+      <div 
+        v-if="showClientEntry"
+        class="modal-content client-entry"
+      >
+        <header>
+          <h2>
+            Add New Client Record
+          </h2>
+          <span
+            @click="closeModal()"
+          >+</span>
+        </header>
+        <main>
+          <form action="#">
+            <div class="form-group">
+              <input type="text" name="client_name" id="" placeholder="Client Name">
+            </div>
+            <div class="form-group">
+              <input type="text" name="client_email" id="" placeholder="Client Email Address">
+            </div>
+            <div class="form-group">
+              <input type="text" name="client_phone" id="" placeholder="Client Phone Number">
+            </div>
+            <div class="form-group">
+              <input type="text" name="service" id="" placeholder="Decription of service Offered">
+            </div>
+            <div class="form-group">
+              <input type="text" name="amount" id="" placeholder="Amount Charged For Service (200.0)">
+            </div>
+            <div class="form-group">
+              <input type="text" name="amount_paid" id="" placeholder="Amount Paid So far (200.0)">
+            </div>
+            <input type="submit" value="Submit">
+          </form>
+        </main>
+      </div>
+    </div>
+    <!-- END OF MODAL -->
 
+    <header>
+      <div class="logo-holder">
+        <div class="logo">
+          <a v-bind:href=`/home?user=${current_user.username}` target="_self">
+            <img src="static/images/logo.png" alt="SoftNexus Logo" >
+          </a>
+        </div>
+      </div>
+      <div class="user-details">
+        <div class="user">
+          <p>
+            Hi, [[ current_user.username ]]
+            <span
+              @click="userActionDropDown=!userActionDropDown"
+            >
+              <i class="fa fa-sort-desc fa-1x" aria-hidden="true"></i>
+            </span>
+          </p>
+          <ul 
+            :class="[{fix: !current_user.is_admin},'ctas']"
+            v-if="userActionDropDown"
+          >
+            <li>
+              <a href="#">Sign Out</a>
+            </li>
+            <li 
+              v-if="current_user.is_admin"
+            >
+              <a href="#">Manage Users</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </header>
+    <section class="tab-btns">
+      <div class="account-book">
+        <button
+          @click="showAccList=true"
+          class="account-tab"
+        >Account Book</button>
+        <button 
+          @click="triggerRecordEntryView('account')"
+          class="add"
+        >
+          <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
+        </button>
+      </div>
+      <div class="client-entry">
+        <button
+          class="client-tab"
+          @click="showAccList=false"
+        >Client Entries</button>
+        <button
+          class="add"
+          @click="triggerRecordEntryView('client')"
+        >
+          <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
+        </button>
+      </div>
+    </section>
+    <main 
+      v-if="showAccList"
+      class="account-record"
+    >
+      <div class="table-responsive">
+        <table class="table .table-sm table-hover">
+          <thead class="table-head">
+            <tr>
+              <th scope="col">S/N</th>
+              <th scope="col">Description</th>
+              <th scope="col">Type</th>
+              <th scope="col">Amount</th>
+              <th scope="col">Date</th>
+              <th scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">1</th>
+              <td>Mark</td>
+              <td>Otto</td>
+              <td>@mdo</td>
+              <td>september 17, 2020</td>
+              <td>
+                <button class="action-btn">
+                  <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
+                </button>
+                <button class="action-btn">
+                  <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">1</th>
+              <td>Mark</td>
+              <td>Otto</td>
+              <td>@mdo</td>
+              <td>september 17, 2020</td>
+              <td>
+                <button class="action-btn">
+                  <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
+                </button>
+                <button class="action-btn">
+                  <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">1</th>
+              <td>Mark</td>
+              <td>Otto</td>
+              <td>@mdo</td>
+              <td>september 17, 2020</td>
+              <td>
+                <button class="action-btn">
+                  <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
+                </button>
+                <button class="action-btn">
+                  <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">1</th>
+              <td>Mark</td>
+              <td>Otto</td>
+              <td>@mdo</td>
+              <td>september 17, 2020</td>
+              <td>
+                <button class="action-btn">
+                  <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
+                </button>
+                <button class="action-btn">
+                  <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">1</th>
+              <td>Mark</td>
+              <td>Otto</td>
+              <td>@mdo</td>
+              <td>september 17, 2020</td>
+              <td>
+                <button class="action-btn">
+                  <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
+                </button>
+                <button class="action-btn">
+                  <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">1</th>
+              <td>Mark</td>
+              <td>Otto</td>
+              <td>@mdo</td>
+              <td>september 17, 2020</td>
+              <td>
+                <button class="action-btn">
+                  <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
+                </button>
+                <button class="action-btn">
+                  <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">1</th>
+              <td>Mark</td>
+              <td>Otto</td>
+              <td>@mdo</td>
+              <td>september 17, 2020</td>
+              <td>
+                <button class="action-btn">
+                  <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
+                </button>
+                <button class="action-btn">
+                  <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">1</th>
+              <td>Mark</td>
+              <td>Otto</td>
+              <td>@mdo</td>
+              <td>september 17, 2020</td>
+              <td>
+                <button class="action-btn">
+                  <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
+                </button>
+                <button class="action-btn">
+                  <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">1</th>
+              <td>Mark</td>
+              <td>Otto</td>
+              <td>@mdo</td>
+              <td>september 17, 2020</td>
+              <td>
+                <button class="action-btn">
+                  <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
+                </button>
+                <button class="action-btn">
+                  <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">1</th>
+              <td>Mark</td>
+              <td>Otto</td>
+              <td>@mdo</td>
+              <td>september 17, 2020</td>
+              <td>
+                <button class="action-btn">
+                  <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
+                </button>
+                <button class="action-btn">
+                  <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
+                </button>
+              </td>
+            </tr>
+
+            <tr>
+              <th scope="row">2</th>
+              <td>Jacob</td>
+              <td>Thornton</td>
+              <td>@fat</td>
+            </tr>
+            <tr>
+              <th scope="row">3</th>
+              <td>Larry</td>
+              <td>the Bird</td>
+              <td>@twitter</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+    <main 
+      v-if="!showAccList"
+      class="client-entry"
+    >
+      <div class="table-responsive">
+        <table class="table .table-sm table-hover">
+          <thead class="table-head">
+            <tr>
+              <th scope="col">S/dfgghhj</th>
+              <th scope="col">Description</th>
+              <th scope="col">Type</th>
+              <th scope="col">Amount</th>
+              <th scope="col">Date</th>
+              <th scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">1</th>
+              <td>Mark</td>
+              <td>Otto</td>
+              <td>@mdo</td>
+              <td>september 17, 2020</td>
+              <td>
+                <button class="action-btn">
+                  <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
+                </button>
+                <button class="action-btn">
+                  <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">1</th>
+              <td>Mark</td>
+              <td>Otto</td>
+              <td>@mdo</td>
+              <td>september 17, 2020</td>
+              <td>
+                <button class="action-btn">
+                  <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
+                </button>
+                <button class="action-btn">
+                  <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">1</th>
+              <td>Mark</td>
+              <td>Otto</td>
+              <td>@mdo</td>
+              <td>september 17, 2020</td>
+              <td>
+                <button class="action-btn">
+                  <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
+                </button>
+                <button class="action-btn">
+                  <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">1</th>
+              <td>Mark</td>
+              <td>Otto</td>
+              <td>@mdo</td>
+              <td>september 17, 2020</td>
+              <td>
+                <button class="action-btn">
+                  <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
+                </button>
+                <button class="action-btn">
+                  <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">1</th>
+              <td>Mark</td>
+              <td>Otto</td>
+              <td>@mdo</td>
+              <td>september 17, 2020</td>
+              <td>
+                <button class="action-btn">
+                  <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
+                </button>
+                <button class="action-btn">
+                  <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">1</th>
+              <td>Mark</td>
+              <td>Otto</td>
+              <td>@mdo</td>
+              <td>september 17, 2020</td>
+              <td>
+                <button class="action-btn">
+                  <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
+                </button>
+                <button class="action-btn">
+                  <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">1</th>
+              <td>Mark</td>
+              <td>Otto</td>
+              <td>@mdo</td>
+              <td>september 17, 2020</td>
+              <td>
+                <button class="action-btn">
+                  <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
+                </button>
+                <button class="action-btn">
+                  <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">1</th>
+              <td>Mark</td>
+              <td>Otto</td>
+              <td>@mdo</td>
+              <td>september 17, 2020</td>
+              <td>
+                <button class="action-btn">
+                  <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
+                </button>
+                <button class="action-btn">
+                  <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">1</th>
+              <td>Mark</td>
+              <td>Otto</td>
+              <td>@mdo</td>
+              <td>september 17, 2020</td>
+              <td>
+                <button class="action-btn">
+                  <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
+                </button>
+                <button class="action-btn">
+                  <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">1</th>
+              <td>Mark</td>
+              <td>Otto</td>
+              <td>@mdo</td>
+              <td>september 17, 2020</td>
+              <td>
+                <button class="action-btn">
+                  <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
+                </button>
+                <button class="action-btn">
+                  <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
+                </button>
+              </td>
+            </tr>
+
+            <tr>
+              <th scope="row">2</th>
+              <td>Jacob</td>
+              <td>Thornton</td>
+              <td>@fat</td>
+            </tr>
+            <tr>
+              <th scope="row">3</th>
+              <td>Larry</td>
+              <td>the Bird</td>
+              <td>@twitter</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+    <footer>
+      <p>
+        &copy;
+        <span 
+        v-html="new Date().getFullYear()"
+        ></span>
+        SoftNexus
+      </p>
+    </footer>
   </div>
+  <script src="static/js/index.js"></script>
 {% endblock %}

@@ -4,29 +4,30 @@
   <div id="login_app">
     <div class="login-holder">
       <div class="login">
-        <h3>Login</h3>       
-          {% if error == 'success' %}
-            <span class="successMsg">
-              Registration successful, Please login.
-            </span>
-          {% else %}
-            <span class="errMsg">
-              {{ error }}
-            </span>
-          {% endif %}
-        <form action="/login" method="post">
+        <h3>Sign Up</h3>
+        <span class="errMsg">
+          {{ error }}
+        </span>
+        <form action="/add_user" method="post">
           {% csrf_token %}
           <div class="form-group">
             <span><i class="fa fa-user-o" aria-hidden="true"></i></span>
             <input type="text" name="username" id="" autocomplete="off" placeholder="Username">
           </div>
           <div class="form-group">
+            <span><i class="fa fa-email" aria-hidden="true"></i></span>
+            <input type="text" name="email" id="" autocomplete="off" placeholder="Email">
+          </div>
+          <div class="form-group">
             <span><i class="fa fa-unlock-alt" aria-hidden="true"></i></span>
             <input type="password" name="password" id="" autocomplete="off" placeholder="Password">
           </div>
-          <input type="submit" value="Login"> 
+          <div class="form-group">
+            <span><i class="fa fa-unlock-alt" aria-hidden="true"></i></span>
+            <input type="password" name="comfirmpass" id="" autocomplete="off" placeholder="Comfirm Password">
+          </div>
+          <input type="submit" value="Sign Up"> 
         </form>
-        <a href="/register">Sign Up here</a>
       </div>
     </div>
   </div>

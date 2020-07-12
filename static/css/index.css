@@ -1,12 +1,18 @@
+* {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box; }
+
 html, body {
   margin: 0;
-  padding: 0; }
+  padding: 0;
+  font-family: 'Open Sans', sans-serif; }
 
-.container {
+.login-holder {
   background: url(../images/bg.jpg);
   background-repeat: no-repeat;
-  background-size: contain;
-  height: 525px;
+  background-size: cover;
+  height: 100vh;
+  width: 100%;
   padding: 50px 20px;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -17,27 +23,33 @@ html, body {
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center; }
-  .container .login {
+  .login-holder .login {
     width: 25%;
     border-radius: 20px;
     padding: 20px;
-    border: 2px solid grey;
+    background-color: blanchedalmond;
     margin: 0px 0px 0px 70%;
     -webkit-box-shadow: 2px 2px 6px black;
     box-shadow: 2px 2px 6px black; }
     @media (max-width: 768px) {
-      .container .login {
-        width: 80%; } }
-    .container .login h3 {
+      .login-holder .login {
+        width: 90%;
+        margin: 0px auto; } }
+    .login-holder .login h3 {
       margin: 0px 0px 40px;
       color: #0b0b0c;
       font-weight: bold; }
-    .container .login .errMsg {
+    .login-holder .login .errMsg {
       font-size: 15px;
       color: #fd4463;
       margin: 0;
       padding: 0; }
-    .container .login .form-group {
+    .login-holder .login .successMsg {
+      font-size: 15px;
+      color: #43ec76;
+      margin: 0;
+      padding: 0; }
+    .login-holder .login .form-group {
       display: -webkit-box;
       display: -ms-flexbox;
       display: flex;
@@ -48,25 +60,25 @@ html, body {
       border-radius: 5px;
       border: 1px solid grey;
       margin: 20px auto 30px; }
-      .container .login .form-group input {
+      .login-holder .login .form-group input {
         outline: none;
         border: none;
         background-color: transparent;
         height: 100%;
         width: 95%; }
-      .container .login .form-group input::-webkit-input-placeholder {
+      .login-holder .login .form-group input::-webkit-input-placeholder {
         font-size: 10px;
         color: black; }
-      .container .login .form-group input:-ms-input-placeholder {
+      .login-holder .login .form-group input:-ms-input-placeholder {
         font-size: 10px;
         color: black; }
-      .container .login .form-group input::-ms-input-placeholder {
+      .login-holder .login .form-group input::-ms-input-placeholder {
         font-size: 10px;
         color: black; }
-      .container .login .form-group input::placeholder {
+      .login-holder .login .form-group input::placeholder {
         font-size: 10px;
         color: black; }
-    .container .login input[type=submit] {
+    .login-holder .login input[type=submit] {
       background-color: #2539ac;
       width: 50%;
       margin: 0px 25%;
@@ -76,3 +88,263 @@ html, body {
       border: none;
       border-radius: 5px;
       color: whitesmoke; }
+
+.add-record-modal {
+  display: none;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.9);
+  z-index: 1000; }
+  .add-record-modal .modal-content {
+    width: 40%;
+    border-radius: 20px;
+    padding: 0px 0px; }
+    @media (max-width: 768px) {
+      .add-record-modal .modal-content {
+        width: 90%; } }
+    .add-record-modal .modal-content header {
+      padding: 5px;
+      position: relative; }
+      .add-record-modal .modal-content header h2 {
+        color: whitesmoke;
+        font-weight: 400;
+        font-size: 20px;
+        padding-left: 5px; }
+      .add-record-modal .modal-content header span {
+        font-size: 42px;
+        color: whitesmoke;
+        font-weight: 400;
+        -webkit-transform: rotate(45deg);
+        -ms-transform: rotate(45deg);
+        transform: rotate(45deg);
+        position: absolute;
+        top: -6px;
+        right: 14px;
+        cursor: pointer; }
+      .add-record-modal .modal-content header span:hover {
+        color: red; }
+    .add-record-modal .modal-content main {
+      padding: 0px 20px 10px !important;
+      min-height: 36.5vh !important; }
+      .add-record-modal .modal-content main .form-group {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+        justify-content: space-between;
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid grey;
+        margin: 20px auto 30px; }
+        .add-record-modal .modal-content main .form-group input, .add-record-modal .modal-content main .form-group select {
+          outline: none;
+          border: none;
+          background-color: transparent;
+          height: 100%;
+          width: 95%; }
+        .add-record-modal .modal-content main .form-group option:hover {
+          border: 0; }
+        .add-record-modal .modal-content main .form-group input::-webkit-input-placeholder {
+          font-size: 13px;
+          color: black; }
+        .add-record-modal .modal-content main .form-group input:-ms-input-placeholder {
+          font-size: 13px;
+          color: black; }
+        .add-record-modal .modal-content main .form-group input::-ms-input-placeholder {
+          font-size: 13px;
+          color: black; }
+        .add-record-modal .modal-content main .form-group input::placeholder {
+          font-size: 13px;
+          color: black; }
+      .add-record-modal .modal-content main input[type=submit] {
+        background-color: #2539ac;
+        width: 50%;
+        margin: 0px 25%;
+        padding: 5px 10px;
+        font-size: 17px;
+        outline: none;
+        border: none;
+        border-radius: 5px;
+        color: whitesmoke; }
+
+#main {
+  height: 100vh;
+  position: relative; }
+  #main header {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    background-color: #6886c5; }
+    #main header .logo-holder {
+      color: blanchedalmond;
+      width: 50%;
+      padding: 20px 10px; }
+      #main header .logo-holder .logo {
+        width: 70px; }
+        #main header .logo-holder .logo img {
+          width: 100%; }
+    #main header .user-details {
+      color: blanchedalmond;
+      padding: 0px 10px 20px 0px;
+      width: 50%;
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-pack: end;
+      -ms-flex-pack: end;
+      justify-content: flex-end;
+      -webkit-box-align: end;
+      -ms-flex-align: end;
+      align-items: flex-end; }
+      #main header .user-details .user {
+        position: relative; }
+        #main header .user-details .user .ctas {
+          width: 100px;
+          position: absolute;
+          bottom: -58px;
+          right: -10px;
+          margin: 0;
+          padding: 0px;
+          background-color: #fffcf7; }
+          #main header .user-details .user .ctas li {
+            list-style-type: none;
+            padding: 2px 5px; }
+            #main header .user-details .user .ctas li a {
+              padding: 3px;
+              color: #292727;
+              text-decoration: none;
+              font-size: small; }
+          #main header .user-details .user .ctas li:hover {
+            background-color: #035aa6; }
+            #main header .user-details .user .ctas li:hover a {
+              color: whitesmoke; }
+        #main header .user-details .user p {
+          margin: 0;
+          padding: 0px 5px; }
+          #main header .user-details .user p span {
+            cursor: pointer; }
+  #main .tab-btns {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex; }
+    #main .tab-btns .account-book {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-pack: start;
+      -ms-flex-pack: start;
+      justify-content: flex-start;
+      width: 50%; }
+      #main .tab-btns .account-book .account-tab {
+        outline: none;
+        padding: 5px 10px;
+        border: 2px solid #a4c5c6;
+        width: 75%;
+        background-color: #a4c5c6; }
+      #main .tab-btns .account-book .account-tab:hover {
+        background-color: #035aa6;
+        border-color: #035aa6;
+        color: whitesmoke; }
+      #main .tab-btns .account-book .add {
+        width: 10%;
+        padding: 7.5px 0px;
+        background-color: #6886c5;
+        border: 2px solid #6886c5;
+        margin: 0;
+        outline: none;
+        font-size: small; }
+      #main .tab-btns .account-book .add:hover {
+        background-color: #000839;
+        color: white;
+        border-color: #000839; }
+    #main .tab-btns .client-entry {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-pack: start;
+      -ms-flex-pack: start;
+      justify-content: flex-start;
+      width: 50%; }
+      #main .tab-btns .client-entry .client-tab {
+        outline: none;
+        padding: 5px 10px;
+        border: 2px solid #a4c5c6;
+        width: 75%;
+        background-color: #a4c5c6; }
+      #main .tab-btns .client-entry .client-tab:hover {
+        background-color: #035aa6;
+        border-color: #035aa6;
+        color: whitesmoke; }
+      #main .tab-btns .client-entry .add {
+        width: 10%;
+        padding: 7.5px 0px;
+        background-color: #6886c5;
+        border: 2px solid #6886c5;
+        margin: 0;
+        outline: none;
+        font-size: small; }
+      #main .tab-btns .client-entry .add:hover {
+        background-color: #000839;
+        color: white;
+        border-color: #000839; }
+  #main main {
+    min-height: 61.5vh;
+    padding: 40px 20px 0px; }
+    @media (max-width: 768px) {
+      #main main {
+        padding: 40px 10px 0px;
+        min-height: 63vh; } }
+  #main .table-head {
+    background-color: #a9c6de; }
+  #main .action-btn {
+    border: 0;
+    background-color: transparent;
+    padding: 0;
+    margin-right: 4px;
+    outline: none; }
+  #main .action-btn:hover {
+    border-radius: 5px;
+    background-color: #000839;
+    color: whitesmoke;
+    padding: 2px; }
+  #main footer {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    background-color: #323232;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    padding: 40px; }
+    #main footer p {
+      text-align: center;
+      color: blanchedalmond;
+      font-size: 20px;
+      margin: 0;
+      padding: 0; }
+
+.fix {
+  bottom: -29px !important; }
+
+.pauseScroll {
+  overflow-y: hidden !important; }
+
+.showModalClass {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex; }

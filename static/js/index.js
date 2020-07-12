@@ -1,20 +1,33 @@
 var app = new Vue({
   delimiters: ['[[',']]'],
-
-  el: '#login_app',
-  data: {
+  el: '#main',
+  
+  data: () => {
+    return {
     message: 'Hello Vue!',
-    data_from_template: data
-  },
+    current_user: userData,
+    userActionDropDown: false,
+    showModal: false,
+    showAccList:  true,
+    showAccEntry: false,
+    showClientEntry: false
+  }
+},
 
   methods: {
-    sayHi: () => {
-      alert('Hey we are here')
+    triggerRecordEntryView (view)  {
+      view ==='account' ? this.showAccEntry = true : this.showClientEntry=true
+      this.showModal = !this.showModal
+    },
+
+    closeModal () {
+      this.showModal = !this.showModal
+      this.showAccEntry = false,
+      this.showClientEntry = false
     }
   },
 
   mounted: function () {
-
-    console.log(this.data_from_template.name)
+    console.log(this.current_user.username)
   }
 })
