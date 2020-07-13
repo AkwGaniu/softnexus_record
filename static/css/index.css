@@ -109,10 +109,15 @@ html, body {
     padding: 0px 0px; }
     @media (max-width: 768px) {
       .add-record-modal .modal-content {
-        width: 90%; } }
+        width: 100%;
+        height: 100vh;
+        border-radius: 0px; } }
     .add-record-modal .modal-content header {
       padding: 5px;
       position: relative; }
+      @media (max-width: 768px) {
+        .add-record-modal .modal-content header {
+          padding: 15px; } }
       .add-record-modal .modal-content header h2 {
         color: whitesmoke;
         font-weight: 400;
@@ -129,28 +134,48 @@ html, body {
         top: -6px;
         right: 14px;
         cursor: pointer; }
+        @media (max-width: 768px) {
+          .add-record-modal .modal-content header span {
+            top: -5px; } }
       .add-record-modal .modal-content header span:hover {
         color: red; }
     .add-record-modal .modal-content main {
-      padding: 0px 20px 10px !important;
+      padding: 10px 20px 20px !important;
       min-height: 36.5vh !important; }
+      @media (max-width: 768px) {
+        .add-record-modal .modal-content main {
+          padding: 20px 20px; } }
+      .add-record-modal .modal-content main span {
+        color: #f38a8a;
+        font-size: smaller; }
       .add-record-modal .modal-content main .form-group {
-        display: -webkit-box;
-        display: -ms-flexbox;
-        display: flex;
-        -webkit-box-pack: justify;
-        -ms-flex-pack: justify;
-        justify-content: space-between;
-        padding: 10px;
-        border-radius: 5px;
-        border: 1px solid grey;
-        margin: 20px auto 30px; }
-        .add-record-modal .modal-content main .form-group input, .add-record-modal .modal-content main .form-group select {
+        padding: 5px;
+        margin: 0px auto 0px; }
+        @media (max-width: 768px) {
+          .add-record-modal .modal-content main .form-group {
+            padding: 10px; } }
+        .add-record-modal .modal-content main .form-group label {
+          margin: 0;
+          font-weight: bold; }
+        .add-record-modal .modal-content main .form-group input {
+          border-radius: 5px;
+          border: 0.5px solid grey;
           outline: none;
-          border: none;
+          font-size: 13px;
+          background-color: transparent;
+          padding: 5px 10px;
+          width: 95%; }
+        .add-record-modal .modal-content main .form-group select {
+          border-radius: 5px;
+          border: 0.5px solid grey;
+          outline: none;
+          font-size: 13px;
+          padding: 5px 10px;
           background-color: transparent;
           height: 100%;
           width: 95%; }
+          .add-record-modal .modal-content main .form-group select option {
+            background-color: #f8ecec; }
         .add-record-modal .modal-content main .form-group option:hover {
           border: 0; }
         .add-record-modal .modal-content main .form-group input::-webkit-input-placeholder {
@@ -165,10 +190,19 @@ html, body {
         .add-record-modal .modal-content main .form-group input::placeholder {
           font-size: 13px;
           color: black; }
+          @media (max-width: 768px) {
+            .add-record-modal .modal-content main .form-group input::-webkit-input-placeholder {
+              font-size: 15px; }
+            .add-record-modal .modal-content main .form-group input:-ms-input-placeholder {
+              font-size: 15px; }
+            .add-record-modal .modal-content main .form-group input::-ms-input-placeholder {
+              font-size: 15px; }
+            .add-record-modal .modal-content main .form-group input::placeholder {
+              font-size: 15px; } }
       .add-record-modal .modal-content main input[type=submit] {
         background-color: #2539ac;
         width: 50%;
-        margin: 0px 25%;
+        margin: 10px 25% 0px;
         padding: 5px 10px;
         font-size: 17px;
         outline: none;
@@ -265,6 +299,9 @@ html, body {
         margin: 0;
         outline: none;
         font-size: small; }
+        @media (max-width: 768px) {
+          #main .tab-btns .account-book .add {
+            width: 20%; } }
       #main .tab-btns .account-book .add:hover {
         background-color: #000839;
         color: white;
@@ -295,17 +332,52 @@ html, body {
         margin: 0;
         outline: none;
         font-size: small; }
+        @media (max-width: 768px) {
+          #main .tab-btns .client-entry .add {
+            width: 20%; } }
       #main .tab-btns .client-entry .add:hover {
         background-color: #000839;
         color: white;
         border-color: #000839; }
   #main main {
     min-height: 61.5vh;
-    padding: 40px 20px 0px; }
+    padding: 20px 20px 0px; }
     @media (max-width: 768px) {
       #main main {
-        padding: 40px 10px 0px;
+        padding: 20px 0px 0px;
         min-height: 63vh; } }
+    #main main .title {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-pack: start;
+      -ms-flex-pack: start;
+      justify-content: start; }
+      #main main .title h4 {
+        width: 30%; }
+        @media (max-width: 768px) {
+          #main main .title h4 {
+            font-size: medium;
+            width: 35%;
+            padding-left: 5px; } }
+      #main main .title .success {
+        min-width: 50%;
+        display: none;
+        -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+        justify-content: space-between;
+        border-radius: 5px;
+        margin-bottom: .4rem;
+        padding: 2.5px 10px 0px;
+        color: white;
+        background-color: #b7efcd; }
+        #main main .title .success p {
+          margin: 0 !important;
+          font-size: medium;
+          font-weight: bold; }
+        #main main .title .success span {
+          margin-left: 10px;
+          color: #ff9393; }
   #main .table-head {
     background-color: #a9c6de; }
   #main .action-btn {
@@ -345,6 +417,11 @@ html, body {
   overflow-y: hidden !important; }
 
 .showModalClass {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex; }
+  display: -webkit-box !important;
+  display: -ms-flexbox !important;
+  display: flex !important; }
+
+.showSuccessClass {
+  display: -webkit-box !important;
+  display: -ms-flexbox !important;
+  display: flex !important; }

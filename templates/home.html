@@ -3,91 +3,17 @@
 {% block content %}
   <script type='text/javascript'> 
     const jscontext={token: '{{ data | safe }}'}
-    var userData = JSON.parse(jscontext.token)
+    var Data = JSON.parse(jscontext.token)
   </script>
 
   <div
     id="main"
     :class="{pauseScroll: showModal}"
   >
-
-    <div
-      :class="[{showModalClass: showModal}, 'add-record-modal']"
-    >
-      <div
-        v-if="showAccEntry"
-        class="modal-content accouunt-entry"
-      >
-          <header>
-            <h2>
-              Add New Account Record
-            </h2>
-            <span
-              @click="closeModal()"
-            >+</span>
-          </header>
-          <main>
-            <form action="#">
-              <div class="form-group">
-                <input type="text" name="" id="" placeholder="Entry Description Here">
-              </div>
-              <div class="form-group">
-                <select name="type" id="">
-                  <option value="">Choose Entry Type</option>
-                  <option value="Credit">Credit</option>
-                  <option value="Debit">Debit</option>              
-                </select>
-              </div>
-              <div class="form-group">
-                <input type="text" name="amount" id="" placeholder="Enter amount in format(200.0)">
-              </div>
-              <input type="submit" value="Submit">
-            </form>
-          </main>
-      </div>
-      <div 
-        v-if="showClientEntry"
-        class="modal-content client-entry"
-      >
-        <header>
-          <h2>
-            Add New Client Record
-          </h2>
-          <span
-            @click="closeModal()"
-          >+</span>
-        </header>
-        <main>
-          <form action="#">
-            <div class="form-group">
-              <input type="text" name="client_name" id="" placeholder="Client Name">
-            </div>
-            <div class="form-group">
-              <input type="text" name="client_email" id="" placeholder="Client Email Address">
-            </div>
-            <div class="form-group">
-              <input type="text" name="client_phone" id="" placeholder="Client Phone Number">
-            </div>
-            <div class="form-group">
-              <input type="text" name="service" id="" placeholder="Decription of service Offered">
-            </div>
-            <div class="form-group">
-              <input type="text" name="amount" id="" placeholder="Amount Charged For Service (200.0)">
-            </div>
-            <div class="form-group">
-              <input type="text" name="amount_paid" id="" placeholder="Amount Paid So far (200.0)">
-            </div>
-            <input type="submit" value="Submit">
-          </form>
-        </main>
-      </div>
-    </div>
-    <!-- END OF MODAL -->
-
     <header>
       <div class="logo-holder">
         <div class="logo">
-          <a v-bind:href=`/home?user=${current_user.username}` target="_self">
+          <a v-bind:href=`/home?user=${current_data.user.username}` target="_self">
             <img src="static/images/logo.png" alt="SoftNexus Logo" >
           </a>
         </div>
@@ -95,7 +21,7 @@
       <div class="user-details">
         <div class="user">
           <p>
-            Hi, [[ current_user.username ]]
+            Hi, [[ current_data.user.username ]]
             <span
               @click="userActionDropDown=!userActionDropDown"
             >
@@ -103,14 +29,14 @@
             </span>
           </p>
           <ul 
-            :class="[{fix: !current_user.is_admin},'ctas']"
+            :class="[{fix: !current_data.user.is_admin},'ctas']"
             v-if="userActionDropDown"
           >
             <li>
               <a href="#">Sign Out</a>
             </li>
             <li 
-              v-if="current_user.is_admin"
+              v-if="current_data.user.is_admin"
             >
               <a href="#">Manage Users</a>
             </li>
@@ -127,6 +53,14 @@
         <button 
           @click="triggerRecordEntryView('account')"
           class="add"
+          v-if="current_data.user.add_permit"
+        >
+          <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
+        </button>
+        <button 
+          @click="seekPermit()"
+          class="add"
+          v-else
         >
           <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
         </button>
@@ -138,7 +72,15 @@
         >Client Entries</button>
         <button
           class="add"
+          v-if="current_data.user.add_permit"
           @click="triggerRecordEntryView('client')"
+        >
+          <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
+        </button>
+        <button
+          class="add"
+          v-else
+          @click="seekPermit()"
         >
           <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
         </button>
@@ -146,8 +88,19 @@
     </section>
     <main 
       v-if="showAccList"
-      class="account-record"
+      class="account-entry"
     >
+    <div class="title">
+      <h4>Account Record</h4>
+      <div
+        :class="[{showSuccessClass: successMsg != ''}, 'success']"
+      >
+      <p> [[ successMsg ]] </p>
+      <span
+        @click="successMsg = ''"
+      ><i class="fa fa-times" aria-hidden="true"></i></span>
+    </div>
+    </div>
       <div class="table-responsive">
         <table class="table .table-sm table-hover">
           <thead class="table-head">
@@ -161,168 +114,43 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <th scope="row">1</th>
-              <td>Mark</td>
-              <td>Otto</td>
-              <td>@mdo</td>
-              <td>september 17, 2020</td>
+            <tr
+              v-for="(account, index) in current_data.account_record"
+              key="index"
+            >
+              <th scope="row"> [[ index + 1 ]] </th>
+              <td> [[ account.description ]] </td>
+              <td> [[ account.type ]] </td>
+              <td> [[ account.amount]] </td>
+              <td> [[ account.date ]] </td>
               <td>
-                <button class="action-btn">
+                <button 
+                  class="action-btn"
+                  v-if="current_data.user.edit_permit"
+                >
                   <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
                 </button>
-                <button class="action-btn">
-                  <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
-                </button>
-              </td>
-            </tr>
-            <tr>
-              <th scope="row">1</th>
-              <td>Mark</td>
-              <td>Otto</td>
-              <td>@mdo</td>
-              <td>september 17, 2020</td>
-              <td>
-                <button class="action-btn">
+                <button 
+                  class="action-btn"
+                  v-else
+                  @click="seekPermit()"
+                >
                   <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
                 </button>
-                <button class="action-btn">
+                <button 
+                  class="action-btn"
+                  v-if="current_data.user.delete_permit"
+                >
                   <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
                 </button>
+                <button 
+                class="action-btn"
+                v-else
+                @click="seekPermit()"
+              >
+                <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
+              </button>
               </td>
-            </tr>
-            <tr>
-              <th scope="row">1</th>
-              <td>Mark</td>
-              <td>Otto</td>
-              <td>@mdo</td>
-              <td>september 17, 2020</td>
-              <td>
-                <button class="action-btn">
-                  <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
-                </button>
-                <button class="action-btn">
-                  <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
-                </button>
-              </td>
-            </tr>
-            <tr>
-              <th scope="row">1</th>
-              <td>Mark</td>
-              <td>Otto</td>
-              <td>@mdo</td>
-              <td>september 17, 2020</td>
-              <td>
-                <button class="action-btn">
-                  <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
-                </button>
-                <button class="action-btn">
-                  <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
-                </button>
-              </td>
-            </tr>
-            <tr>
-              <th scope="row">1</th>
-              <td>Mark</td>
-              <td>Otto</td>
-              <td>@mdo</td>
-              <td>september 17, 2020</td>
-              <td>
-                <button class="action-btn">
-                  <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
-                </button>
-                <button class="action-btn">
-                  <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
-                </button>
-              </td>
-            </tr>
-            <tr>
-              <th scope="row">1</th>
-              <td>Mark</td>
-              <td>Otto</td>
-              <td>@mdo</td>
-              <td>september 17, 2020</td>
-              <td>
-                <button class="action-btn">
-                  <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
-                </button>
-                <button class="action-btn">
-                  <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
-                </button>
-              </td>
-            </tr>
-            <tr>
-              <th scope="row">1</th>
-              <td>Mark</td>
-              <td>Otto</td>
-              <td>@mdo</td>
-              <td>september 17, 2020</td>
-              <td>
-                <button class="action-btn">
-                  <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
-                </button>
-                <button class="action-btn">
-                  <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
-                </button>
-              </td>
-            </tr>
-            <tr>
-              <th scope="row">1</th>
-              <td>Mark</td>
-              <td>Otto</td>
-              <td>@mdo</td>
-              <td>september 17, 2020</td>
-              <td>
-                <button class="action-btn">
-                  <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
-                </button>
-                <button class="action-btn">
-                  <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
-                </button>
-              </td>
-            </tr>
-            <tr>
-              <th scope="row">1</th>
-              <td>Mark</td>
-              <td>Otto</td>
-              <td>@mdo</td>
-              <td>september 17, 2020</td>
-              <td>
-                <button class="action-btn">
-                  <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
-                </button>
-                <button class="action-btn">
-                  <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
-                </button>
-              </td>
-            </tr>
-            <tr>
-              <th scope="row">1</th>
-              <td>Mark</td>
-              <td>Otto</td>
-              <td>@mdo</td>
-              <td>september 17, 2020</td>
-              <td>
-                <button class="action-btn">
-                  <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
-                </button>
-                <button class="action-btn">
-                  <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
-                </button>
-              </td>
-            </tr>
-
-            <tr>
-              <th scope="row">2</th>
-              <td>Jacob</td>
-              <td>Thornton</td>
-              <td>@fat</td>
-            </tr>
-            <tr>
-              <th scope="row">3</th>
-              <td>Larry</td>
-              <td>the Bird</td>
-              <td>@twitter</td>
             </tr>
           </tbody>
         </table>
@@ -332,181 +160,73 @@
       v-if="!showAccList"
       class="client-entry"
     >
+    <div class="title">
+      <h4>Client Record</h4>
+      <div
+        :class="[{showSuccessClass: successMsg != ''}, 'success']"
+      >
+      <p> [[ successMsg ]] </p>
+      <span
+        @click="successMsg = ''"
+      ><i class="fa fa-times" aria-hidden="true"></i></span>
+    </div>
+    </div>
       <div class="table-responsive">
         <table class="table .table-sm table-hover">
           <thead class="table-head">
             <tr>
-              <th scope="col">S/dfgghhj</th>
-              <th scope="col">Description</th>
-              <th scope="col">Type</th>
-              <th scope="col">Amount</th>
+              <th scope="col">S/N</th>
+              <th scope="col">Service Offered</th>
+              <th scope="col">Client Name</th>
+              <th scope="col">Email</th>
+              <th scope="col">Phone</th>
+              <th scope="col">Amount Charged</th>
+              <th scope="col">Amount Paid</th>
               <th scope="col">Date</th>
               <th scope="col">Actions</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <th scope="row">1</th>
-              <td>Mark</td>
-              <td>Otto</td>
-              <td>@mdo</td>
-              <td>september 17, 2020</td>
+            <tr
+              v-for="(client, index) in current_data.client_record"
+            >
+              <th scope="row"> [[ index + 1 ]] </th>
+              <td> [[ client.service_offered ]] </td>
+              <td> [[ client.client_name ]] </td>
+              <td> [[ client.client_email]] </td>
+              <td> [[ client.client_phone ]] </td>
+              <td> [[ client.amount_charged ]] </td>
+              <td> [[ client.amount_paid ]] </td>
+              <td> [[ client.date ]] </td>             
               <td>
-                <button class="action-btn">
+                <button 
+                  class="action-btn"
+                  v-if="current_data.user.edit_permit"
+                  @click="triggerEdit(client.id)"
+                >
                   <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
                 </button>
-                <button class="action-btn">
+                <button 
+                  class="action-btn"
+                  v-else
+                  @click="seekPermit()"
+                >
+                  <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
+                </button>
+                <button 
+                  class="action-btn"
+                  v-if="current_data.user.delete_permit"
+                >
+                  <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
+                </button>
+                <button 
+                  class="action-btn"
+                  v-else
+                  @click="seekPermit()"
+                >
                   <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
                 </button>
               </td>
-            </tr>
-            <tr>
-              <th scope="row">1</th>
-              <td>Mark</td>
-              <td>Otto</td>
-              <td>@mdo</td>
-              <td>september 17, 2020</td>
-              <td>
-                <button class="action-btn">
-                  <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
-                </button>
-                <button class="action-btn">
-                  <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
-                </button>
-              </td>
-            </tr>
-            <tr>
-              <th scope="row">1</th>
-              <td>Mark</td>
-              <td>Otto</td>
-              <td>@mdo</td>
-              <td>september 17, 2020</td>
-              <td>
-                <button class="action-btn">
-                  <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
-                </button>
-                <button class="action-btn">
-                  <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
-                </button>
-              </td>
-            </tr>
-            <tr>
-              <th scope="row">1</th>
-              <td>Mark</td>
-              <td>Otto</td>
-              <td>@mdo</td>
-              <td>september 17, 2020</td>
-              <td>
-                <button class="action-btn">
-                  <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
-                </button>
-                <button class="action-btn">
-                  <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
-                </button>
-              </td>
-            </tr>
-            <tr>
-              <th scope="row">1</th>
-              <td>Mark</td>
-              <td>Otto</td>
-              <td>@mdo</td>
-              <td>september 17, 2020</td>
-              <td>
-                <button class="action-btn">
-                  <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
-                </button>
-                <button class="action-btn">
-                  <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
-                </button>
-              </td>
-            </tr>
-            <tr>
-              <th scope="row">1</th>
-              <td>Mark</td>
-              <td>Otto</td>
-              <td>@mdo</td>
-              <td>september 17, 2020</td>
-              <td>
-                <button class="action-btn">
-                  <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
-                </button>
-                <button class="action-btn">
-                  <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
-                </button>
-              </td>
-            </tr>
-            <tr>
-              <th scope="row">1</th>
-              <td>Mark</td>
-              <td>Otto</td>
-              <td>@mdo</td>
-              <td>september 17, 2020</td>
-              <td>
-                <button class="action-btn">
-                  <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
-                </button>
-                <button class="action-btn">
-                  <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
-                </button>
-              </td>
-            </tr>
-            <tr>
-              <th scope="row">1</th>
-              <td>Mark</td>
-              <td>Otto</td>
-              <td>@mdo</td>
-              <td>september 17, 2020</td>
-              <td>
-                <button class="action-btn">
-                  <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
-                </button>
-                <button class="action-btn">
-                  <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
-                </button>
-              </td>
-            </tr>
-            <tr>
-              <th scope="row">1</th>
-              <td>Mark</td>
-              <td>Otto</td>
-              <td>@mdo</td>
-              <td>september 17, 2020</td>
-              <td>
-                <button class="action-btn">
-                  <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
-                </button>
-                <button class="action-btn">
-                  <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
-                </button>
-              </td>
-            </tr>
-            <tr>
-              <th scope="row">1</th>
-              <td>Mark</td>
-              <td>Otto</td>
-              <td>@mdo</td>
-              <td>september 17, 2020</td>
-              <td>
-                <button class="action-btn">
-                  <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
-                </button>
-                <button class="action-btn">
-                  <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
-                </button>
-              </td>
-            </tr>
-
-            <tr>
-              <th scope="row">2</th>
-              <td>Jacob</td>
-              <td>Thornton</td>
-              <td>@fat</td>
-            </tr>
-            <tr>
-              <th scope="row">3</th>
-              <td>Larry</td>
-              <td>the Bird</td>
-              <td>@twitter</td>
             </tr>
           </tbody>
         </table>
@@ -521,6 +241,106 @@
         SoftNexus
       </p>
     </footer>
+
+<!-- BEGINING OF MODAL -->
+  <div
+    :class="[{showModalClass: showModal}, 'add-record-modal']"
+  >
+    <div
+      v-if="showAccEntry"
+      class="modal-content accouunt-entry"
+    >
+        <header>
+          <h2>
+            Add New Account Record
+          </h2>
+          <span
+            @click="closeModal()"
+          >+</span>
+        </header>
+        <main>
+          <form action="#">
+            <div class="form-group">
+              <label for="description">Description</label>
+              <input type="text" name="" id="" placeholder="Entry Description Here">
+            </div>
+            <div class="form-group">
+              <label for="entry type">Choose Entry Type</label>
+              <select name="type" id="">
+                <option value="Credit">Credit</option>
+                <option value="Debit">Debit</option>              
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="amount">Amount</label>
+              <input type="text" name="amount" id="" placeholder="Enter amount in format(200.0)">
+            </div>
+            <input type="submit" value="Submit">
+          </form>
+        </main>
+    </div>
+    <div 
+      v-if="showClientEntry"
+      class="modal-content client-entry"
+    >
+      <header>
+        <h2>
+          Add New Client Record
+        </h2>
+        <span
+          @click="closeModal()"
+        >+</span>
+      </header>
+      <main>
+        <!-- 
+ clientRecord: {
+      service_offered: '',
+      name: '',
+      email: '',
+      phone_number: '',
+      amount_charged: 0.0,
+      amount_paid: 0.0,
+      // entry_date: Date
+    },
+
+         -->
+        <form action="#">
+          {% csrf_token %}
+          <span>[[ errorMsg ]]</span>
+          <div class="form-group">
+            <label for="client name">Client Name*</label>
+            <input type="text" name="client_name" v-model="clientRecord.name" placeholder="Akowanu Ganiu">
+          </div>
+          <div class="form-group">
+            <label for="client email ">Client Email*</label>
+            <input type="text" name="client_email" v-model="clientRecord.email" placeholder="client@example.com">
+          </div>
+          <div class="form-group">
+            <label for="client phone">Client Phone Number</label>
+            <input type="text" name="client_phone" v-model="clientRecord.phone_number" placeholder="07020025802">
+          </div>
+          <div class="form-group">
+            <label for="service">Service Description*</label>
+            <input type="text" name="service" v-model="clientRecord.service_offered" placeholder="Decription of service Offered">
+          </div>
+          <div class="form-group">
+            <label for="amount charged">Amount Charged*</label>
+            <input type="text" name="amount_charged" v-model="clientRecord.amount_charged" placeholder="200000.0">
+          </div>
+          <div class="form-group">
+            <label for="amount paid">Amount Paid</label>
+            <input type="text" name="amount_paid" v-model="clientRecord.amount_paid" placeholder="15000.0">
+          </div>
+          <input 
+            type="submit"
+            value="Submit"
+            @click.prevent="submitForm()"
+          >
+        </form>
+      </main>
+    </div>
   </div>
-  <script src="static/js/index.js"></script>
+  <!-- END OF MODAL -->
+  </div>
+  <script src="static/js/index.js"></script>  
 {% endblock %}
