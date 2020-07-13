@@ -399,17 +399,19 @@ html, body {
 
   .action-btn {
     border: 0;
-    background-color: transparent;
+    // background-color: transparent;
     padding: 0;
     margin-right: 4px;
     outline: none;
+
+    border-radius: 5px;
+    background-color: #3d55f0;
+    color: whitesmoke;
+    padding: .5px;
   }
 
   .action-btn:hover {
-    border-radius: 5px;
     background-color: #000839;
-    color: whitesmoke;
-    padding: 2px;
   }
   
   footer {

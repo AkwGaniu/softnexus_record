@@ -382,15 +382,15 @@ html, body {
     background-color: #a9c6de; }
   #main .action-btn {
     border: 0;
-    background-color: transparent;
     padding: 0;
     margin-right: 4px;
-    outline: none; }
-  #main .action-btn:hover {
+    outline: none;
     border-radius: 5px;
-    background-color: #000839;
+    background-color: #3d55f0;
     color: whitesmoke;
-    padding: 2px; }
+    padding: .5px; }
+  #main .action-btn:hover {
+    background-color: #000839; }
   #main footer {
     display: -webkit-box;
     display: -ms-flexbox;
