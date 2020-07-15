@@ -12,7 +12,7 @@ class Account(models.Model):
 class Client(models.Model):
   client_name = models.CharField(max_length=100)
   client_email = models.EmailField()
-  client_phone = models.CharField(max_length=15)
+  client_phone = models.CharField(max_length=50)
   service_offered = models.CharField(max_length=1500)
   amount_charged = models.CharField(max_length=20)
   amount_paid = models.CharField(max_length=20)

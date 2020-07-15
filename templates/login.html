@@ -1,33 +1,94 @@
 {% extends 'index.html' %}
 
 {% block content %}
-  <div id="login_app">
+  <div id="loginApp">
     <div class="login-holder">
       <div class="login">
-        <h3>Login</h3>       
-          {% if error == 'success' %}
+        <h3>Login</h3>  
             <span class="successMsg">
-              Registration successful, Please login.
+              [[ successMessage ]]     
             </span>
-          {% else %}
             <span class="errMsg">
-              {{ error }}
+              [[ error ]]
             </span>
-          {% endif %}
         <form action="/login" method="post">
           {% csrf_token %}
           <div class="form-group">
             <span><i class="fa fa-user-o" aria-hidden="true"></i></span>
-            <input type="text" name="username" id="" autocomplete="off" placeholder="Username">
+            <input 
+              type="text" 
+              autocomplete="off" 
+              placeholder="Username"
+              v-model="user.username"
+              @keyup.enter="tryLogin()"
+            >
           </div>
           <div class="form-group">
             <span><i class="fa fa-unlock-alt" aria-hidden="true"></i></span>
-            <input type="password" name="password" id="" autocomplete="off" placeholder="Password">
+            <input
+              type="password"
+              autocomplete="off"
+              placeholder="Password"
+              v-model="user.password"
+              @keyup.enter="tryLogin()"
+            >
           </div>
-          <input type="submit" value="Login"> 
+          <input
+            type="submit"
+            value="Login"
+            @click.prevent="tryLogin()"
+          > 
         </form>
         <a href="/register">Sign Up here</a>
       </div>
     </div>
   </div>
+  
+<script>
+  var loginApp = new Vue({
+    delimiters: ['[[',']]'],
+    el: '#loginApp',
+    data () {
+      return {
+        error: '',
+        successMessage: '',
+        user: {
+          username: '',
+          password: ''
+        }
+      }
+    },
+    methods: {
+      tryLogin () {
+        username = this.user.username
+        password = this.user.password
+
+        if (password === '' || username === '') {
+          this.error = 'Please provide your login credentials'
+        } else if (password.length < 6) {
+          this.error = 'Your password cannot be less than 6 characters'
+        } else {
+          this.error = ''
+          thissuccessMessage =''
+          const payload = {
+            username: username,
+            password: password
+          }
+          axios.post('/user_login', payload)
+          .then((response) => {
+            if (response.data.reply === 'access denied') {
+              this.error = 'Invalid login credentials'
+            } else {
+            localStorage.setItem('user', JSON.stringify(response.data.reply))
+            self.location = '/home'
+            }
+          })
+          .catch((error) => {
+            console.log({'error': error})
+          })
+        }
+      }
+    }
+  })
+</script>
 {% endblock %}

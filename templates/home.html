@@ -1,11 +1,10 @@
 {% extends 'index.html' %}
 
 {% block content %}
-  <script type='text/javascript'> 
+  <!-- <script type='text/javascript'> 
     const jscontext={token: '{{ data | safe }}'}
     var Data = JSON.parse(jscontext.token)
-  </script>
-
+  </script> -->
   <div
     id="main"
     :class="{pauseScroll: showModal}"
@@ -33,7 +32,9 @@
             v-if="userActionDropDown"
           >
             <li>
-              <a href="#">Sign Out</a>
+              <a
+                href="/logout_user"
+              >Sign Out</a>
             </li>
             <li 
               v-if="current_data.user.is_admin"
@@ -51,7 +52,7 @@
           class="account-tab"
         >Account Book</button>
         <button 
-          @click="triggerRecordEntryView('account')"
+          @click="triggerRecordEntryView('account', 'add')"
           class="add"
           v-if="current_data.user.add_permit"
         >
@@ -73,7 +74,7 @@
         <button
           class="add"
           v-if="current_data.user.add_permit"
-          @click="triggerRecordEntryView('client')"
+          @click="triggerRecordEntryView('client', 'add')"
         >
           <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
         </button>
@@ -116,17 +117,17 @@
           <tbody>
             <tr
               v-for="(account, index) in current_data.account_record"
-              key="index"
             >
               <th scope="row"> [[ index + 1 ]] </th>
               <td> [[ account.description ]] </td>
-              <td> [[ account.type ]] </td>
+              <td> [[ account.entry_type ]] </td>
               <td> [[ account.amount]] </td>
               <td> [[ account.date ]] </td>
               <td>
                 <button 
                   class="action-btn"
                   v-if="current_data.user.edit_permit"
+                  @click="triggerAccountUpdate(account.id)"
                 >
                   <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
                 </button>
@@ -140,6 +141,7 @@
                 <button 
                   class="action-btn"
                   v-if="current_data.user.delete_permit"
+                  @click="triggerDelete(account.id, 'account')"
                 >
                   <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
                 </button>
@@ -202,7 +204,7 @@
                 <button 
                   class="action-btn"
                   v-if="current_data.user.edit_permit"
-                  @click="triggerEdit(client.id)"
+                  @click="triggerClientUpdate(client.id)"
                 >
                   <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
                 </button>
@@ -216,6 +218,7 @@
                 <button 
                   class="action-btn"
                   v-if="current_data.user.delete_permit"
+                  @click="triggerDelete(client.id, 'client')"
                 >
                   <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
                 </button>
@@ -242,7 +245,7 @@
       </p>
     </footer>
 
-<!-- BEGINING OF MODAL -->
+<!-- BEGINING OF Add And update MODAL -->
   <div
     :class="[{showModalClass: showModal}, 'add-record-modal']"
   >
@@ -260,22 +263,35 @@
         </header>
         <main>
           <form action="#">
+            <span>[[ errorMsg ]]</span>
             <div class="form-group">
               <label for="description">Description</label>
-              <input type="text" name="" id="" placeholder="Entry Description Here">
+              <input type="text" @keyup.enter="addAccountRecord()" v-model="accountRecord.description" placeholder="Entry Description Here">
             </div>
             <div class="form-group">
               <label for="entry type">Choose Entry Type</label>
-              <select name="type" id="">
+              <select v-model="accountRecord.type">
+                <option value="">Entry type</option>
                 <option value="Credit">Credit</option>
                 <option value="Debit">Debit</option>              
               </select>
             </div>
             <div class="form-group">
               <label for="amount">Amount</label>
-              <input type="text" name="amount" id="" placeholder="Enter amount in format(200.0)">
+              <input type="text" @keyup.enter="addAccountRecord()" v-model="accountRecord.amount" placeholder="Enter amount in format(200.0)">
             </div>
-            <input type="submit" value="Submit">
+            <input 
+              type="submit"
+              value="Update"
+              v-if="edit_flag"
+              @click.prevent="updateAccountRecord()"
+            >
+            <input 
+              type="submit"
+              value="Submit"
+              v-else
+              @click.prevent="addAccountRecord()"
+            >
           </form>
         </main>
     </div>
@@ -292,18 +308,6 @@
         >+</span>
       </header>
       <main>
-        <!-- 
- clientRecord: {
-      service_offered: '',
-      name: '',
-      email: '',
-      phone_number: '',
-      amount_charged: 0.0,
-      amount_paid: 0.0,
-      // entry_date: Date
-    },
-
-         -->
         <form action="#">
           {% csrf_token %}
           <span>[[ errorMsg ]]</span>
@@ -333,14 +337,42 @@
           </div>
           <input 
             type="submit"
+            value="Update"
+            v-if="edit_flag"
+            @click.prevent="updateClientRecord()"
+          >
+          <input 
+            type="submit"
             value="Submit"
-            @click.prevent="submitForm()"
+            v-else
+            @click.prevent="addClientRecord()"
           >
         </form>
       </main>
     </div>
+  </div><!-- END OF Add And update MODAL -->
+  <div 
+    :class="[{showModalClass: delete_flag},'delete-modal']"
+  >
+    <div class="modal-content">
+      <header>
+        <h4>Confirm Delete</h4>
+      </header>
+      <main>
+        <p>Are you sure you want to delete this entry?</p>
+        <div class="comfirm_btn">
+          <button 
+            class="cancel"
+            @click="cancelDelete()"
+          >Cancel</button>
+          <button 
+            @click="deleteRecord()"
+            class="del"
+          >Delete</button>
+        </div>
+      </main>
+    </div><!-- END OF DELETE MODAL -->
   </div>
-  <!-- END OF MODAL -->
   </div>
   <script src="static/js/index.js"></script>  
 {% endblock %}

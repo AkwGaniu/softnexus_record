@@ -361,7 +361,6 @@ html, body {
             width: 35%;
             padding-left: 5px; } }
       #main main .title .success {
-        min-width: 50%;
         display: none;
         -webkit-box-pack: justify;
         -ms-flex-pack: justify;
@@ -377,7 +376,8 @@ html, body {
           font-weight: bold; }
         #main main .title .success span {
           margin-left: 10px;
-          color: #ff9393; }
+          color: #ff9393;
+          cursor: pointer; }
   #main .table-head {
     background-color: #a9c6de; }
   #main .action-btn {
@@ -409,6 +409,70 @@ html, body {
       font-size: 20px;
       margin: 0;
       padding: 0; }
+
+.delete-modal {
+  display: none;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.1);
+  z-index: 1000; }
+  .delete-modal .modal-content {
+    width: 30%;
+    border: 0;
+    border-radius: 20px;
+    padding: 0px 0px;
+    height: 30vh; }
+    @media (max-width: 768px) {
+      .delete-modal .modal-content {
+        width: 82%;
+        height: 28vh; } }
+    .delete-modal .modal-content header {
+      border-radius: 20px;
+      display: block !important; }
+      .delete-modal .modal-content header h4 {
+        text-align: center !important;
+        font-size: x-large;
+        padding-top: 5px;
+        font-weight: bold;
+        color: #dad8d8; }
+    .delete-modal .modal-content main {
+      min-height: auto !important;
+      padding: 20px 10px 0px !important; }
+      .delete-modal .modal-content main p {
+        font-size: large;
+        font-weight: 500;
+        color: #0b0b0c; }
+      .delete-modal .modal-content main .comfirm_btn {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-pack: end;
+        -ms-flex-pack: end;
+        justify-content: flex-end; }
+        .delete-modal .modal-content main .comfirm_btn button {
+          outline: none;
+          border-radius: 5px;
+          margin-left: 20px;
+          border: 0;
+          color: #f8ecec;
+          font-size: medium;
+          font-weight: 900; }
+        .delete-modal .modal-content main .comfirm_btn .del {
+          background-color: #f38a8a; }
+        .delete-modal .modal-content main .comfirm_btn .del:hover {
+          background-color: #cc2c2c; }
+        .delete-modal .modal-content main .comfirm_btn .cancel {
+          background-color: #6497f7; }
+        .delete-modal .modal-content main .comfirm_btn .cancel:hover {
+          background-color: #1d66ec; }
 
 .fix {
   bottom: -29px !important; }
