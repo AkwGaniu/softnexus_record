@@ -5,6 +5,7 @@ var app = new Vue({
     return {
     current_id: 0,
     current_data: Object,
+    csrftoken: '',
     userActionDropDown: false,
     showModal: false,
     showAccList:  true,
@@ -12,6 +13,7 @@ var app = new Vue({
     showClientEntry: false,
     edit_flag: false,
     delete_flag: false,
+    modalHeader: '',
     delete_table: '',
     errorMsg: '',
     successMsg: '',
@@ -35,19 +37,22 @@ var app = new Vue({
       if (view ==='account' && action === 'add') {
         this.showAccEntry = true
         this.edit_flag = false
-      } else if (view ==='account' && action === 'edit') {
+        this.modalHeader = 'Add New Account Record'
+      } else if (view === 'account' && action === 'edit') {
         this.showAccEntry = true
         this.edit_flag = true
+        this.modalHeader = 'Update Account Record'
       } else if (view ==='client' && action === 'add') {
         this.showClientEntry=true
         this.edit_flag = false
+        this.modalHeader = 'Add New Client Record'
       } else if (view ==='client' && action === 'edit') {
         this.showClientEntry=true
         this.edit_flag = true
+        this.modalHeader = 'Edit Client Record'
       }
       this.showModal = !this.showModal
     },
-
     closeModal () {
       this.showModal = !this.showModal
       this.showAccEntry = false
@@ -67,38 +72,17 @@ var app = new Vue({
         type: '',
       }
     },
-
     addClientRecord () {
       this.errorMsg = ''
-      const { service_offered, name, email, phone_number, amount_charged, amount_paid } = this.clientRecord
-      if (service_offered==='' || name==='' || email==='' || amount_charged==='') {
-        this.errorMsg = 'Please fill out the required fields'
-      }else {
-        this.errorMsg = ''
-        const data = {
-          service: service_offered,
-          name: name,
-          email: email,
-          phone: phone_number,
-          amount_charged: amount_charged,
-          amount_paid: amount_paid,
-          user: this.current_data.user.username,
-          permit: 'add_permit'
-        }
-        this.showModal = !this.showModal
-        this.clientRecord = {
-          service_offered: '',
-          name: '',
-          email: '',
-          phone_number: '',
-          amount_charged: '',
-          amount_paid: '',
-        }
+      if (this.validateClientRecord('add_permit')){
+        const data = this.validateClientRecord('add_permit')
+
+        this.closeModal()
+
         axios.post('/add_client_record', data)
         .then((response) => {
-          if (response.data.reply = 'success') {
-            this.successMsg = 'Client record added'
-          }
+          this.displaySuccessMsg('Client record added')
+          this.current_data = response.data.reply
         })
         .catch((error) => {
           console.log(error)
@@ -107,11 +91,14 @@ var app = new Vue({
     },
     addAccountRecord () {
       this.errorMsg = ''
-      const { description, amount, type } = this.accountRecord
+      let { description, amount, type } = this.accountRecord
       if (description==='' || amount==='' || type==='') {
         this.errorMsg = 'All fields are required'
-      }else {
+      } else if (!this.validNumber(amount)){
+        this.errorMsg = 'Amount can only be numbers'
+      } else {
         this.errorMsg = ''
+        amount = amount + ".00"
         const data = {
           description: description,
           amount: amount,
@@ -119,18 +106,11 @@ var app = new Vue({
           user: this.current_data.user.username,
           permit: 'add_permit'
         }
-
-        this.showModal = !this.showModal
-        this.accountRecord = {
-          description: '',
-          amount: '',
-          type: '',
-        }
-
+        this.closeModal()
         axios.post('/add_account_record', data)
         .then((response) => {
-            this.successMsg = 'Account record added'
-            this.current_data = response.data.reply
+          this.displaySuccessMsg('Account record added')
+          this.current_data = response.data.reply
         })
         .catch((error) => {
           console.log(error)
@@ -139,26 +119,43 @@ var app = new Vue({
     },
     triggerClientUpdate (id) {
       client = this.current_data.client_record.find(element => element.id === id)
+      let new_amount_paid
+      let new_amount_charge
+      if (client.amount_paid === '0.00') {
+        new_amount_paid = ''
+      } else {
+        let length = client.amount_paid.length
+        new_amount_paid = client.amount_paid.substring(0, length - 3)
+      }
+      let len = client.amount_charged.length
+      new_amount_charge = client.amount_charged.substring(0, len - 3)
+
       this.clientRecord = {
         service_offered: client.service_offered,
         name: client.client_name,
         email: client.client_email,
         phone_number: client.client_phone,
-        amount_charged: client.amount_charged,
-        amount_paid: client.amount_paid,
+        amount_charged: new_amount_charge,
+        amount_paid: new_amount_paid,
       }
       this.current_id = id
       this.triggerRecordEntryView('client', 'edit')
     },
     triggerAccountUpdate (id) {
       account = this.current_data.account_record.find(element => element.id === id)
+      let len = account.amount.length
+      new_amount = account.amount.substring(0, len - 3)
       this.accountRecord = {
         description: account.description,
-        amount: account.amount,
+        amount: new_amount,
         type: account.entry_type,
       }
       this.current_id = id
       this.triggerRecordEntryView('account', 'edit')
+    },
+    displaySuccessMsg (msg) {
+      this.successMsg = msg
+      setTimeout(()=> this.successMsg = '', 5000)
     },
     seekPermit () {
       this.successMsg = 'Access Denied. Please contact admin'
@@ -166,50 +163,32 @@ var app = new Vue({
     },
     updateClientRecord () {
       this.errorMsg = ''
-      const { service_offered, name, email, phone_number, amount_charged, amount_paid } = this.clientRecord
-      if (service_offered==='' || name==='' || email==='' || amount_charged==='') {
-        this.errorMsg = 'Please fill out the required fields'
-      }else {
-        this.errorMsg = ''
-        const data = {
-          service: service_offered,
-          name: name,
-          email: email,
-          phone: phone_number,
-          amount_charged: amount_charged,
-          amount_paid: amount_paid,
-          user: this.current_data.user.username,
-          id: this.current_id,
-          permit: 'edit_permit'
-        }
-        this.showModal = !this.showModal
-        this.current_id = 0
-        this.clientRecord = {
-          service_offered: '',
-          name: '',
-          email: '',
-          phone_number: '',
-          amount_charged: '',
-          amount_paid: '',
-        }
+      if (this.validateClientRecord('edit_permit')){
+        const data = this.validateClientRecord('edit_permit')
+
+        this.closeModal()
+
         axios.put('/update_client_record', data)
         .then((response) => {
-          this.successMsg = 'Client record updated'
+          this.displaySuccessMsg('Client record updated')
           this.current_data = response.data.reply
         })
         .catch((error) => {
           console.log(error)
         })
       }
-
     },
     updateAccountRecord () {
       this.errorMsg = ''
-      const { description, amount, type } = this.accountRecord
+      let { description, amount, type } = this.accountRecord
       if (description==='' || amount==='' || type==='') {
         this.errorMsg = 'All fields are required'
-      }else {
+      } else if (!this.validNumber(amount)){
+        this.errorMsg = 'Amount can only be numbers'
+      } else {
         this.errorMsg = ''
+        amount = amount + ".00"
+
         const data = {
           description: description,
           amount: amount,
@@ -218,17 +197,12 @@ var app = new Vue({
           id: this.current_id,
           permit: 'edit_permit'
         }
-        this.showModal = !this.showModal
-        this.current_id = 0
-        this.accountRecord = {
-          description: '',
-          amount: '',
-          type: '',
-        }
+        // { data: data, headers: { 'X-CSRFToken': this.csrftoken } }
+        this.closeModal()
 
-        axios.put('/update_account_record', data)
+        axios.post('/update_account_record', data)
         .then((response) => {
-          this.successMsg = 'Account record updated'
+          this.displaySuccessMsg('Account record updated')
           this.current_data = response.data.reply
         })
         .catch((error) => {
@@ -267,21 +241,121 @@ var app = new Vue({
         axios.delete('/delete_record', {data: payload})
         .then((response) => {
           this.current_data = response.data.reply
-          this.successMsg = 'Record deleted'
+          this.displaySuccessMsg('Record deleted')
         })
         .catch((error) => {
           console.log(error)
         })
-    }
-  },
-  created () {
-    user = JSON.parse(localStorage.getItem('user'))
-    axios.get('/get_data', {params: user})
+    },
+    validEmail(email) {
+      const regex = /^\S+@\S+\.\S+$/;
+      if(regex.test(email) === false) {
+          return false
+      } else{
+        return true
+      }
+    },
+    validText (text) {
+      const regex = /^[a-zA-Z\s]+$/;                
+        if(regex.test(text) === false) {
+          return false
+        } else {
+          return true
+        }
+    },
+    validNumber (text) {
+      const regex = /^[0-9\s]+$/;                
+        if(regex.test(text) === false) {
+          return false
+        } else {
+          return true
+        }
+    },
+    validPhoneNumber (number) {
+      const regex = /^(?=.*[0])(?=.*[0-9])(?=.*[0-1])(?=.*[0-9])(?=.{11,})/
+      if(regex.test(number) === false) {
+        return false
+      } else{
+        return true
+      }
+    },
+    validateClientRecord(action_permit) {
+      let { service_offered, name, email, phone_number, amount_charged, amount_paid } = this.clientRecord
+      if (service_offered==='' || name==='' || email==='' || amount_charged==='') {
+        this.errorMsg = 'Please fill out the required fields'
+        return false
+      } else if (!this.validText(name)){
+        this.errorMsg = 'Name field can only be text'
+        return false
+      } else if (!this.validEmail(email)) {
+        this.errorMsg = 'Please enter a valid email'
+        return false
+      } else if (phone_number.length > 0 && !this.validPhoneNumber(phone_number)){
+        this.errorMsg = 'Please provide a valid phone number'
+        return false
+      } else if (!this.validNumber(amount_charged)){
+        this.errorMsg = 'Amount can only be numbers'
+        return false
+      }else if (amount_paid.length > 0 && !this.validNumber(amount_paid)){
+        this.errorMsg = 'Amount can only be numbers'
+        return false
+      }else {
+        amount_paid.length ? amount_paid = amount_paid + ".00" : amount_paid = amount_paid + "0.00"
+        amount_charged = amount_charged + ".00" 
+        this.errorMsg = ''
+        let data = {}
+        if (action_permit === 'edit_permit') {
+          data = {
+            service: service_offered,
+            name: name,
+            email: email,
+            phone: phone_number,
+            amount_charged: amount_charged,
+            amount_paid: amount_paid,
+            user: this.current_data.user.username,
+            id: this.current_id,
+            permit: action_permit,
+          }
+        } else {
+          data = {
+            service: service_offered,
+            name: name,
+            email: email,
+            phone: phone_number,
+            amount_charged: amount_charged,
+            amount_paid: amount_paid,
+            user: this.current_data.user.username,
+            permit: action_permit,
+          }
+        }
+        return data
+      }
+    },
+    getToken() {
+      window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+      console.log('I ran')
+          let token = document.head.querySelector('meta[name="csrf-token"]');
+
+          if (token) {
+            this.csrftoken = token.content
+            window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
+          } else {
+              console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
+          }
+      }
+    },
+    created () {
+      const data = localStorage.getItem('user')
+      if (data !== null) {
+        user = JSON.parse(data)
+          axios.get('/get_data', {params: user})
         .then((response) => {
          this.current_data = response.data.reply
         })
         .catch((error) => {
           console.log(error)
-    })
-  }
+        })
+      } 
+      this.getToken()
+    }
 })

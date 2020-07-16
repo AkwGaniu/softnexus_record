@@ -43,7 +43,6 @@
       </div>
     </div>
   </div>
-  
 <script>
   var loginApp = new Vue({
     delimiters: ['[[',']]'],
@@ -79,8 +78,9 @@
             if (response.data.reply === 'access denied') {
               this.error = 'Invalid login credentials'
             } else {
-            localStorage.setItem('user', JSON.stringify(response.data.reply))
-            self.location = '/home'
+              localStorage.setItem('user', JSON.stringify(response.data.reply))
+              //self.location = `/home?user=${response.data.reply.user}`
+              self.location = '/home'
             }
           })
           .catch((error) => {
@@ -88,6 +88,20 @@
           })
         }
       }
+    },
+    mounted() {
+      const message = localStorage.getItem('message')
+      setTimeout(()=> {
+        if (message !== null) {
+          const msg = JSON.parse(message)
+          this.successMessage = msg.message
+        }
+      }, 1000)
+
+      setTimeout(()=> {
+        this.successMessage = ''
+        localStorage.clear()
+      }, 6000)
     }
   })
 </script>

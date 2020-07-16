@@ -8,6 +8,7 @@
   <div
     id="main"
     :class="{pauseScroll: showModal}"
+    v-if="Object.keys(this.current_data).length > 0"
   >
     <header>
       <div class="logo-holder">
@@ -229,6 +230,12 @@
                 >
                   <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
                 </button>
+                <button
+                  class="action-btn"
+                  data-toggle="tooltip" data-placement="top" title="Generate invoice"
+                >
+                  <i class="fa fa-book" aria-hidden="true"></i>
+                </button>
               </td>
             </tr>
           </tbody>
@@ -255,7 +262,7 @@
     >
         <header>
           <h2>
-            Add New Account Record
+            [[ modalHeader ]]
           </h2>
           <span
             @click="closeModal()"
@@ -301,7 +308,7 @@
     >
       <header>
         <h2>
-          Add New Client Record
+          [[ modalHeader ]]
         </h2>
         <span
           @click="closeModal()"
@@ -329,11 +336,11 @@
           </div>
           <div class="form-group">
             <label for="amount charged">Amount Charged*</label>
-            <input type="text" name="amount_charged" v-model="clientRecord.amount_charged" placeholder="200000.0">
+            <input type="text" name="amount_charged" v-model="clientRecord.amount_charged" placeholder="2000000">
           </div>
           <div class="form-group">
             <label for="amount paid">Amount Paid</label>
-            <input type="text" name="amount_paid" v-model="clientRecord.amount_paid" placeholder="15000.0">
+            <input type="text" name="amount_paid" v-model="clientRecord.amount_paid" placeholder="1500000">
           </div>
           <input 
             type="submit"

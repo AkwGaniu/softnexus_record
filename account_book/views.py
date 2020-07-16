@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
+# from django.views.decorators.csrf import csrf_exemp
 import json
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
@@ -20,10 +21,48 @@ def register(request):
   return render(request, 'register.html')
 
 def home(request):
-  if request.user.is_authenticated:
-    return render(request, 'home.html')
-  else:
-    return render(request, '404.html')
+# if request.user.is_authenticated:
+  # username = request.GET['user']
+  # current_user = User.objects.get(username=username)    
+  # if current_user.is_superuser:
+  #   new_user_obj = {
+  #     'username': current_user.username,
+  #     'is_admin': current_user.is_superuser,
+  #     'edit_permit': True,
+  #     'delete_permit': True,
+  #     'add_permit': True
+  #   }
+  # else:
+  #   user_permission = Permission.objects.get(user=current_user.id)
+  #   new_user_obj = {
+  #     'username': current_user.username,
+  #     'is_admin': current_user.is_superuser,
+  #     'edit_permit': user_permission.edit_permit,
+  #     'delete_permit': user_permission.delete_permit,
+  #     'add_permit': user_permission.add_permit
+  #   }
+
+  # get_accounts = Account.objects.all()
+  # get_clients = Client.objects.all()
+
+  # client_records = list(get_clients.values(
+  #   'id', 'client_name', 'client_email',
+  #   'client_phone', 'service_offered',
+  #   'amount_charged', 'amount_paid', 'date'
+  # ))
+  # account_records = list(get_accounts.values(
+  #   'id', 'description', 'date', 'amount', 'entry_type'
+  # ))
+  # payload = {
+  #   'user': new_user_obj,
+  #   'client_record': client_records,
+  #   'account_record': account_records
+  # }
+  # context = {}
+  # context['data'] = json.dumps(payload)
+  return render(request, 'home.html')
+# else:
+#   return render(request, '404.html')
 
 @api_view(['post'])
 def user_login(request):
@@ -33,9 +72,10 @@ def user_login(request):
 
     user = authenticate(request, username=username, password=password)
     if user is not None:
-      login(request, user)
+      # login(request, user)
       user_data = {'user': user.username}
       return JsonResponse({'reply': user_data})
+      # return redirect('/home?user='+ user.username)
     else:
       return JsonResponse({'reply':'access denied'})
   except EnvironmentError as e:
@@ -43,90 +83,80 @@ def user_login(request):
 
 
 def logout_user(request):
-  print('herefdfdfdjfdjdjfjdkjf')
   logout(request)
   return redirect('/')
 
 
 def get_data(request):
-  if request.user.is_authenticated:
-    try:
-      username = request.GET['user']
-      current_user = User.objects.get(username=username)    
-      if current_user.is_superuser:
-        new_user_obj = {
-          'username': current_user.username,
-          'is_admin': current_user.is_superuser,
-          'edit_permit': True,
-          'delete_permit': True,
-          'add_permit': True
-        }
-      else:
-        user_permission = Permission.objects.get(user=current_user.id)
-        new_user_obj = {
-          'username': current_user.username,
-          'is_admin': current_user.is_superuser,
-          'edit_permit': user_permission.edit_permit,
-          'delete_permit': user_permission.delete_permit,
-          'add_permit': user_permission.add_permit
-        }
-
-      get_accounts = Account.objects.all()
-      get_clients = Client.objects.all()
-
-      client_records = list(get_clients.values(
-        'id', 'client_name', 'client_email',
-        'client_phone', 'service_offered',
-        'amount_charged', 'amount_paid', 'date'
-      ))
-      account_records = list(get_accounts.values(
-        'id', 'description', 'date', 'amount', 'entry_type'
-      ))
-      payload = {
-        'user': new_user_obj,
-        'client_record': client_records,
-        'account_record': account_records
+  # if request.user.is_authenticated:
+  try:
+    username = request.GET['user']
+    current_user = User.objects.get(username=username)    
+    if current_user.is_superuser:
+      new_user_obj = {
+        'username': current_user.username,
+        'is_admin': current_user.is_superuser,
+        'edit_permit': True,
+        'delete_permit': True,
+        'add_permit': True
       }
-      return JsonResponse({'reply': payload})
-    except EnvironmentError as e:
-      print('Error: ' + e)
-  else:
-    return render(request, '404.html')
+    else:
+      user_permission = Permission.objects.get(user=current_user.id)
+      new_user_obj = {
+        'username': current_user.username,
+        'is_admin': current_user.is_superuser,
+        'edit_permit': user_permission.edit_permit,
+        'delete_permit': user_permission.delete_permit,
+        'add_permit': user_permission.add_permit
+      }
 
+    get_accounts = Account.objects.all()
+    get_clients = Client.objects.all()
 
+    client_records = list(get_clients.values(
+      'id', 'client_name', 'client_email',
+      'client_phone', 'service_offered',
+      'amount_charged', 'amount_paid', 'date'
+    ))
+    account_records = list(get_accounts.values(
+      'id', 'description', 'date', 'amount', 'entry_type'
+    ))
+    payload = {
+      'user': new_user_obj,
+      'client_record': client_records,
+      'account_record': account_records
+    }
+    return JsonResponse({'reply': payload})
+  except EnvironmentError as e:
+    print('Error: ' + e)
+  # else:
+    # return render(request, '404.html')
+
+@api_view(['post'])
 def create_user(request):
   try:
-    username = request.POST['username']
-    password = request.POST['password']
-    email = request.POST['email']
-    comfirm_pass = request.POST['comfirmpass']
-    error_obj = {
-      'error': ''
-    }
+    username = request.data['username']
+    password = request.data['password']
+    email = request.data['email']
 
-    if len(username) == 0 or len(email) == 0:
-      error_obj.update({'error': 'Please fill out the form'})
-      return render(request, 'register.html', error_obj)
-    elif len(password) < 6:
-      error_obj.update({'error': 'Please provide a password of 6+ characters'})
-      return render(request, 'register.html', error_obj)
-    elif password != comfirm_pass:
-      error_obj.update({'error': 'Password fields does not match'})
-      return render(request, 'register.html', error_obj)
+    users = User.objects.filter(username=username)
+    print(users)
+    if len(users) > 0:
+      return JsonResponse({'reply': 'username already exist'})
     else:
       user = User(
         username = username,
         password = password,
         email = email,
+        is_staff = True
       )
       user.set_password(password)
       user.save()
       set_permission = Permission(
         user = User(id=user.id)
       )
-      set_permission.save() 
-      error_obj.update({'error': 'success'})
-      return render(request, 'login.html', error_obj)
+      set_permission.save()
+      return JsonResponse({'reply': 'success'})
   except EnvironmentError as e:
     print('Error: ' + e)
   # except:
@@ -162,7 +192,8 @@ def add_client_record(request):
           date = current_date
         )
         new_client_record.save()
-        return JsonResponse({"reply": "success"})
+        payload = reloadData(user)
+        return JsonResponse({"reply": payload})
       else:
         return JsonResponse({
           "reply": "Access denied"
@@ -173,7 +204,10 @@ def add_client_record(request):
 
 @api_view(['put'])
 def update_client_record(request):
+# if request.user.is_authenticated:
+  # context_instance = RequestContext(request)
   try:
+    print('igogdjdfdkfjdjfkdj')
     client_name = request.data['name']
     client_phone_num = request.data['phone']
     client_email = request.data['email']
@@ -191,13 +225,14 @@ def update_client_record(request):
     else:      
       if is_permitted(user, action):
         client = Client.objects.get(id = client_id)
-     
+    
         client.client_name = client_name
         client.client_email = client_email
         client.client_phone = client_phone_num
         client.service_offered = service_offered
         client.amount_charged = amount_charged
         client.amount_paid = amount_paid
+        print('igot here')
 
         client.save()
         payload = reloadData(user)
@@ -208,6 +243,8 @@ def update_client_record(request):
           })
   except EnvironmentError as e:
     print('Error: ' + e)
+# else:
+#   return render(request, '404.html')
 
   
 @api_view(['post'])
@@ -242,10 +279,11 @@ def add_account_record(request):
   except EnvironmentError as e:
     print('Error: ' + e)
 
-
-@api_view(['put'])
+@api_view(['post'])
 def update_account_record(request):
+  print('igot her by mistake')
   try:
+    print(request.data)
     description = request.data['description']
     amount = request.data['amount']
     entry_type = request.data['entry_type']
@@ -260,11 +298,9 @@ def update_account_record(request):
     else:
       if is_permitted(user, action):
         account = Account.objects.get(id = entry_id)
-        print(account.id)
         account.description = description
         account.type = entry_type
         account.amount = amount
-        print(account.id)
         account.save()
         payload = reloadData(user)
         return JsonResponse({"reply": payload})

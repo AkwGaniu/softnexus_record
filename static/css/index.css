@@ -131,7 +131,7 @@ html, body {
         -ms-transform: rotate(45deg);
         transform: rotate(45deg);
         position: absolute;
-        top: -6px;
+        top: -16px;
         right: 14px;
         cursor: pointer; }
         @media (max-width: 768px) {
@@ -383,7 +383,7 @@ html, body {
   #main .action-btn {
     border: 0;
     padding: 0;
-    margin-right: 4px;
+    margin: 0px;
     outline: none;
     border-radius: 5px;
     background-color: #3d55f0;
@@ -409,6 +409,11 @@ html, body {
       font-size: 20px;
       margin: 0;
       padding: 0; }
+
+.table th,
+.table td {
+  padding: .5rem !important;
+  vertical-align: bottom !important; }
 
 .delete-modal {
   display: none;

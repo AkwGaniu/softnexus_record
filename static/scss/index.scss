@@ -122,7 +122,7 @@ html, body {
         font-weight: 400;
         transform: rotate(45deg);
         position: absolute;
-        top: -6px;
+        top: -16px;
         right: 14px;
         cursor: pointer;
         @media (max-width: 768px) {
@@ -401,9 +401,8 @@ html, body {
     border: 0;
     // background-color: transparent;
     padding: 0;
-    margin-right: 4px;
+    margin: 0px;
     outline: none;
-
     border-radius: 5px;
     background-color: #3d55f0;
     color: whitesmoke;
@@ -428,6 +427,11 @@ html, body {
       padding: 0;
     }
   }
+}
+.table th,
+.table td {
+  padding: .5rem !important;
+  vertical-align: bottom !important;
 }
 
 .delete-modal {
