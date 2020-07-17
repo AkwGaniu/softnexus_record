@@ -78,12 +78,19 @@ WSGI_APPLICATION = 'softnexus_record.wsgi.application'
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 DATABASES = {
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.postgresql',
+    #     'NAME': 'softnexus_account_book',
+    #     'USER': 'postgres',
+    #     'PASSWORD': 'enny', 
+    #     'ROOT': 'localhost',
+    # }
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'softnexus_account_book',
-        'USER': 'postgres',
-        'PASSWORD': 'enny', 
-        'ROOT': 'localhost',
+        'NAME': 'd39bec24qtji5l',
+        'USER': 'cfmahnwxmvptij',
+        'PASSWORD': 'fe58d594bf96e376b1395b04c724d3698062616655b3a12b11ed5d6e5ecf3eec', 
+        'ROOT': 'ec2-50-19-26-235.compute-1.amazonaws.com',
     }
 }
 
