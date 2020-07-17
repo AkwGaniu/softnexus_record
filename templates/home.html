@@ -13,7 +13,7 @@
     <header>
       <div class="logo-holder">
         <div class="logo">
-          <a v-bind:href=`/home?user=${current_data.user.username}` target="_self">
+          <a href="/home" target="_self">
             <img src="static/images/logo.png" alt="SoftNexus Logo" >
           </a>
         </div>
@@ -233,6 +233,7 @@
                 <button
                   class="action-btn"
                   data-toggle="tooltip" data-placement="top" title="Generate invoice"
+                  @click="displaySuccessMsg('This function is not ready yet')"
                 >
                   <i class="fa fa-book" aria-hidden="true"></i>
                 </button>

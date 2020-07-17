@@ -29,7 +29,7 @@
             </span>
           </p>
           <ul 
-            class="ctas fix"
+            class="ctas"
             v-if="userActionDropDown"
           >
             <li>
@@ -46,6 +46,14 @@
     </header>
     <section class="user-section">
       <h4>User Management</h4>
+      <div
+        :class="[{showSuccessClass: successMsg != ''}, 'user_permit_success']"
+      >
+      <p> [[ successMsg ]] </p>
+      <span
+        @click="successMsg = ''"
+      ><i class="fa fa-times" aria-hidden="true"></i></span>
+    </div>
       <main>
         <div class="table-responsive">
           <table class="table .table-sm table-hover">
@@ -182,6 +190,7 @@
         users: Data,
         admin: Admin,
         permission_request_text: '',
+        successMsg: '',
         permit_type: '',
         showModal_flag: false,
         current_user: 'Olu',
@@ -245,22 +254,15 @@
 
         axios.put('/permit_user', data)
         .then((response) => {
-          
+          this.showPermitted('Permission granted, proceed to inform user')
           this.users = response.data.reply.users
         })
         .catch((error) => {
           console.log({error: error})
         })
       },
-      showPermitted (permit) {
-        if (permit === 'edit') {
-          this.permitted_text = 'User is permitted to UPDATE. Please inform user'
-        } else if (permit === 'add') {
-          this.permitted_text = 'User is permitted to ADD. Please inform user'
-        } else if (permit === 'delete') {
-          this.permitted_text = 'User is permitted to'
-        } 
-        //this.successMsg = msg
+      showPermitted (msg) {
+        this.successMsg = msg
         setTimeout(()=> this.successMsg = '', 5000)
       },
     }

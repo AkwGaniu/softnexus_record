@@ -347,6 +347,7 @@ var app = new Vue({
     created () {
       const data = localStorage.getItem('user')
       if (data !== null) {
+        console.log('hljs-keyword')
         user = JSON.parse(data)
           axios.get('/get_data', {params: user})
         .then((response) => {
@@ -355,7 +356,10 @@ var app = new Vue({
         .catch((error) => {
           console.log(error)
         })
-      } 
+      } else {
+        console.log('hey')
+        self.location = '/logout_user'
+      }
       this.getToken()
     }
 })
