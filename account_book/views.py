@@ -4,7 +4,7 @@ from django.http import HttpResponse, JsonResponse
 import json
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from urlparams.redirect import param_redirect
+# from urlparams.redirect import param_redirect
 from rest_framework.decorators import api_view
 from account_book.models import Permission, Account, Client
 from .utilities.utilities import user_friendly_date, is_permitted, reloadData, reloadUserData
