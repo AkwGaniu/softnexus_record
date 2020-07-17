@@ -1,21 +1,20 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
-# from django.views.decorators.csrf import csrf_exemp
 import json
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-# from urlparams.redirect import param_redirect
 from rest_framework.decorators import api_view
 from account_book.models import Permission, Account, Client
+
+# PERSONAL IMPORTS
 from .utilities.utilities import user_friendly_date, is_permitted, reloadData, reloadUserData
 
 
-# Create your views here.
 def welcome(request):
-  if not request.user.is_authenticated:
-    return render(request, 'login.html')
-  else:
-    return render(request, 'home.html')
+  # if not request.user.is_authenticated:
+  return render(request, 'login.html')
+  # else:
+  #   return render(request, 'home.html')
 
 def register(request):
   return render(request, 'register.html')
