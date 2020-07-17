@@ -1,0 +1,586 @@
+* {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Open Sans', sans-serif; }
+
+.login-holder {
+  background: url("../images/bg.11431845f88a.jpg");
+  -webkit-box-shadow: inset 0 0 0 1000px rgba(0, 0, 0, 0.5);
+  box-shadow: inset 0 0 0 1000px rgba(0, 0, 0, 0.5);
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 100vh;
+  width: 100%;
+  padding: 50px 20px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: left;
+  -ms-flex-pack: left;
+  justify-content: left;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center; }
+  .login-holder .login {
+    width: 30%;
+    border-radius: 20px;
+    padding: 20px;
+    background-color: blanchedalmond;
+    margin: 0px 0px 0px 70%;
+    -webkit-box-shadow: 2px 2px 6px black;
+    box-shadow: 2px 2px 6px black; }
+    @media (max-width: 768px) {
+      .login-holder .login {
+        width: 90%;
+        margin: 0px auto; } }
+    .login-holder .login h3 {
+      margin: 0px 0px 40px;
+      color: #0b0b0c;
+      font-weight: bold; }
+    .login-holder .login .errMsg {
+      font-size: 15px;
+      color: #fd4463;
+      margin: 0;
+      padding: 0; }
+    .login-holder .login .successMsg {
+      font-size: 15px;
+      color: #43ec76;
+      margin: 0;
+      padding: 0; }
+    .login-holder .login .form-group {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+      justify-content: space-between;
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid grey;
+      margin: 20px auto 30px; }
+      .login-holder .login .form-group input {
+        outline: none;
+        border: none;
+        background-color: transparent;
+        height: 100%;
+        width: 95%; }
+      .login-holder .login .form-group input::-webkit-input-placeholder {
+        font-size: 10px;
+        color: black; }
+      .login-holder .login .form-group input:-ms-input-placeholder {
+        font-size: 10px;
+        color: black; }
+      .login-holder .login .form-group input::-ms-input-placeholder {
+        font-size: 10px;
+        color: black; }
+      .login-holder .login .form-group input::placeholder {
+        font-size: 10px;
+        color: black; }
+    .login-holder .login input[type=submit] {
+      background-color: #2539ac;
+      width: 50%;
+      margin: 0px 25%;
+      padding: 5px 10px;
+      font-size: 17px;
+      outline: none;
+      border: none;
+      border-radius: 5px;
+      color: whitesmoke; }
+    .login-holder .login .reg-redirect {
+      margin-top: 20px;
+      letter-spacing: 3;
+      font-weight: 600;
+      font-size: small; }
+      .login-holder .login .reg-redirect a {
+        text-decoration: none;
+        color: #302f2f; }
+      .login-holder .login .reg-redirect a:hover {
+        color: black; }
+
+.add-record-modal {
+  display: none;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.9);
+  z-index: 1000; }
+  .add-record-modal .modal-content {
+    width: 40%;
+    border-radius: 20px;
+    padding: 0px 0px; }
+    @media (max-width: 768px) {
+      .add-record-modal .modal-content {
+        width: 100%;
+        height: 100vh;
+        border-radius: 0px; } }
+    .add-record-modal .modal-content header {
+      padding: 5px;
+      position: relative; }
+      @media (max-width: 768px) {
+        .add-record-modal .modal-content header {
+          padding: 15px; } }
+      .add-record-modal .modal-content header h2 {
+        color: whitesmoke;
+        font-weight: 400;
+        font-size: 20px;
+        padding-left: 5px; }
+      .add-record-modal .modal-content header span {
+        font-size: 42px;
+        color: whitesmoke;
+        font-weight: 400;
+        -webkit-transform: rotate(45deg);
+        -ms-transform: rotate(45deg);
+        transform: rotate(45deg);
+        position: absolute;
+        top: -16px;
+        right: 14px;
+        cursor: pointer; }
+        @media (max-width: 768px) {
+          .add-record-modal .modal-content header span {
+            top: -5px; } }
+      .add-record-modal .modal-content header span:hover {
+        color: red; }
+    .add-record-modal .modal-content main {
+      padding: 10px 20px 20px !important;
+      min-height: 36.5vh !important; }
+      @media (max-width: 768px) {
+        .add-record-modal .modal-content main {
+          padding: 20px 20px; } }
+      .add-record-modal .modal-content main span {
+        color: #f38a8a;
+        font-size: smaller; }
+      .add-record-modal .modal-content main .form-group {
+        padding: 5px;
+        margin: 0px auto 0px; }
+        @media (max-width: 768px) {
+          .add-record-modal .modal-content main .form-group {
+            padding: 10px; } }
+        .add-record-modal .modal-content main .form-group label {
+          margin: 0;
+          font-weight: bold; }
+        .add-record-modal .modal-content main .form-group input {
+          border-radius: 5px;
+          border: 0.5px solid grey;
+          outline: none;
+          font-size: 13px;
+          background-color: transparent;
+          padding: 5px 10px;
+          width: 95%; }
+        .add-record-modal .modal-content main .form-group select {
+          border-radius: 5px;
+          border: 0.5px solid grey;
+          outline: none;
+          font-size: 13px;
+          padding: 5px 10px;
+          background-color: transparent;
+          height: 100%;
+          width: 95%; }
+          .add-record-modal .modal-content main .form-group select option {
+            background-color: #f8ecec; }
+        .add-record-modal .modal-content main .form-group option:hover {
+          border: 0; }
+        .add-record-modal .modal-content main .form-group input::-webkit-input-placeholder {
+          font-size: 13px;
+          color: black; }
+        .add-record-modal .modal-content main .form-group input:-ms-input-placeholder {
+          font-size: 13px;
+          color: black; }
+        .add-record-modal .modal-content main .form-group input::-ms-input-placeholder {
+          font-size: 13px;
+          color: black; }
+        .add-record-modal .modal-content main .form-group input::placeholder {
+          font-size: 13px;
+          color: black; }
+          @media (max-width: 768px) {
+            .add-record-modal .modal-content main .form-group input::-webkit-input-placeholder {
+              font-size: 15px; }
+            .add-record-modal .modal-content main .form-group input:-ms-input-placeholder {
+              font-size: 15px; }
+            .add-record-modal .modal-content main .form-group input::-ms-input-placeholder {
+              font-size: 15px; }
+            .add-record-modal .modal-content main .form-group input::placeholder {
+              font-size: 15px; } }
+      .add-record-modal .modal-content main input[type=submit] {
+        background-color: #2539ac;
+        width: 50%;
+        margin: 10px 25% 0px;
+        padding: 5px 10px;
+        font-size: 17px;
+        outline: none;
+        border: none;
+        border-radius: 5px;
+        color: whitesmoke; }
+
+#main {
+  height: 100vh;
+  position: relative; }
+  #main header {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    background-color: #6886c5; }
+    #main header .logo-holder {
+      color: blanchedalmond;
+      width: 50%;
+      padding: 20px 10px; }
+      #main header .logo-holder .logo {
+        width: 70px; }
+        #main header .logo-holder .logo img {
+          width: 100%; }
+    #main header .user-details {
+      color: blanchedalmond;
+      padding: 0px 10px 20px 0px;
+      width: 50%;
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-pack: end;
+      -ms-flex-pack: end;
+      justify-content: flex-end;
+      -webkit-box-align: end;
+      -ms-flex-align: end;
+      align-items: flex-end; }
+      #main header .user-details .user {
+        position: relative; }
+        #main header .user-details .user .ctas {
+          width: 100px;
+          position: absolute;
+          bottom: -58px;
+          right: -10px;
+          margin: 0;
+          padding: 0px;
+          background-color: #fffcf7; }
+          #main header .user-details .user .ctas li {
+            list-style-type: none;
+            padding: 2px 5px; }
+            #main header .user-details .user .ctas li a {
+              padding: 3px;
+              color: #292727;
+              text-decoration: none;
+              font-size: small; }
+          #main header .user-details .user .ctas li:hover {
+            background-color: #035aa6; }
+            #main header .user-details .user .ctas li:hover a {
+              color: whitesmoke; }
+        #main header .user-details .user p {
+          margin: 0;
+          padding: 0px 5px; }
+          #main header .user-details .user p span {
+            cursor: pointer; }
+  #main .tab-btns {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex; }
+    #main .tab-btns .account-book {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-pack: start;
+      -ms-flex-pack: start;
+      justify-content: flex-start;
+      width: 50%; }
+      #main .tab-btns .account-book .account-tab {
+        outline: none;
+        padding: 5px 10px;
+        border: 2px solid #a4c5c6;
+        width: 75%;
+        font-size: larger;
+        font-weight: 500;
+        letter-spacing: 2px;
+        color: #2f2519;
+        background-color: #a4c5c6; }
+        @media (max-width: 768px) {
+          #main .tab-btns .account-book .account-tab {
+            width: 80%;
+            padding: 5px;
+            letter-spacing: 0; } }
+      #main .tab-btns .account-book .account-tab:hover {
+        background-color: #035aa6;
+        border-color: #035aa6;
+        color: whitesmoke; }
+      #main .tab-btns .account-book .add {
+        width: 10%;
+        padding: 7.5px 0px;
+        background-color: #6886c5;
+        border: 2px solid #6886c5;
+        margin: 0;
+        outline: none;
+        font-size: large;
+        color: whitesmoke; }
+        @media (max-width: 768px) {
+          #main .tab-btns .account-book .add {
+            width: 20%; } }
+      #main .tab-btns .account-book .add:hover {
+        background-color: #000839;
+        color: white;
+        border-color: #000839; }
+    #main .tab-btns .client-entry {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-pack: start;
+      -ms-flex-pack: start;
+      justify-content: flex-start;
+      width: 50%; }
+      #main .tab-btns .client-entry .client-tab {
+        outline: none;
+        padding: 5px 10px;
+        border: 2px solid #a4c5c6;
+        width: 75%;
+        background-color: #a4c5c6;
+        font-size: larger;
+        font-weight: 500;
+        letter-spacing: 2px;
+        color: #2f2519; }
+        @media (max-width: 768px) {
+          #main .tab-btns .client-entry .client-tab {
+            width: 80%;
+            padding: 5px;
+            letter-spacing: 0; } }
+      #main .tab-btns .client-entry .client-tab:hover {
+        background-color: #035aa6;
+        border-color: #035aa6;
+        color: whitesmoke; }
+      #main .tab-btns .client-entry .add {
+        width: 10%;
+        padding: 7.5px 0px;
+        background-color: #6886c5;
+        border: 2px solid #6886c5;
+        margin: 0;
+        outline: none;
+        font-size: large;
+        color: whitesmoke; }
+        @media (max-width: 768px) {
+          #main .tab-btns .client-entry .add {
+            width: 20%; } }
+      #main .tab-btns .client-entry .add:hover {
+        background-color: #000839;
+        color: white;
+        border-color: #000839; }
+  #main main {
+    min-height: 60.5vh;
+    padding: 20px 10px 0px; }
+    @media (max-width: 768px) {
+      #main main {
+        padding: 20px 0px 0px;
+        min-height: 63vh !important; } }
+    @media (max-width: 1446px) {
+      #main main {
+        min-height: 67.2vh; } }
+    #main main .title {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-pack: start;
+      -ms-flex-pack: start;
+      justify-content: start; }
+      #main main .title h4 {
+        width: 30%;
+        font-size: larger;
+        font-weight: bold;
+        letter-spacing: 3px;
+        color: #292828; }
+        @media (max-width: 768px) {
+          #main main .title h4 {
+            font-size: medium;
+            width: 35%;
+            letter-spacing: 0;
+            padding-left: 5px; } }
+      #main main .title .success {
+        display: none;
+        -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+        justify-content: space-between;
+        border-radius: 5px;
+        margin-bottom: .4rem;
+        padding: 2.5px 10px 0px;
+        color: white;
+        background-color: #b7efcd; }
+        #main main .title .success p {
+          margin: 0 !important;
+          font-size: medium;
+          font-weight: bold; }
+        #main main .title .success span {
+          margin-left: 10px;
+          color: #ff9393;
+          cursor: pointer; }
+  #main .table-head {
+    background-color: #a9c6de; }
+  #main .action-btn {
+    border: 0;
+    padding: 0;
+    margin: 0px;
+    outline: none;
+    border-radius: 5px;
+    background-color: #3d55f0;
+    color: whitesmoke;
+    padding: .5px; }
+  #main .action-btn:hover {
+    background-color: #000839; }
+  #main footer {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    background-color: #323232;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    padding: 40px; }
+    #main footer p {
+      text-align: center;
+      color: blanchedalmond;
+      font-size: 20px;
+      margin: 0;
+      padding: 0; }
+
+.table th,
+.table td {
+  padding: .5rem !important;
+  vertical-align: bottom !important; }
+
+.action-btn-holder {
+  width: 50px !important; }
+
+.user_permit_success {
+  display: none;
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  border-radius: 5px;
+  width: 50%;
+  margin: 1rem auto 0rem;
+  padding: 2.5px 10px 2.5px 15px;
+  color: white;
+  background-color: #b7efcd; }
+  .user_permit_success p {
+    margin: 0 !important;
+    font-size: medium;
+    font-weight: bold; }
+  .user_permit_success span {
+    margin-left: 10px;
+    color: #ff9393;
+    cursor: pointer; }
+
+.delete-modal {
+  display: none;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.1);
+  z-index: 1000; }
+  .delete-modal .modal-content {
+    width: 30%;
+    border: 0;
+    border-radius: 20px;
+    padding: 0px 0px;
+    height: 30vh; }
+    @media (max-width: 768px) {
+      .delete-modal .modal-content {
+        width: 82%;
+        height: 28vh; } }
+    .delete-modal .modal-content header {
+      border-radius: 20px;
+      display: block !important; }
+      .delete-modal .modal-content header h4 {
+        text-align: center !important;
+        font-size: x-large;
+        padding-top: 5px;
+        font-weight: bold;
+        color: #dad8d8; }
+    .delete-modal .modal-content main {
+      min-height: auto !important;
+      padding: 20px 10px 0px !important; }
+      .delete-modal .modal-content main p {
+        font-size: large;
+        font-weight: 500;
+        color: #0b0b0c; }
+      .delete-modal .modal-content main .comfirm_btn {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-pack: end;
+        -ms-flex-pack: end;
+        justify-content: flex-end; }
+        .delete-modal .modal-content main .comfirm_btn button {
+          outline: none;
+          border-radius: 5px;
+          margin-left: 20px;
+          border: 0;
+          color: #f8ecec;
+          font-size: medium;
+          font-weight: 900; }
+        .delete-modal .modal-content main .comfirm_btn .del {
+          background-color: #f38a8a; }
+        .delete-modal .modal-content main .comfirm_btn .del:hover {
+          background-color: #cc2c2c; }
+        .delete-modal .modal-content main .comfirm_btn .cancel {
+          background-color: #6497f7; }
+        .delete-modal .modal-content main .comfirm_btn .cancel:hover {
+          background-color: #1d66ec; }
+        .delete-modal .modal-content main .comfirm_btn .permt {
+          background-color: #32e0c4; }
+        .delete-modal .modal-content main .comfirm_btn .permt:hover {
+          background-color: #2fc4b2; }
+
+.user-section h4 {
+  margin: 0;
+  text-align: center;
+  font-size: larger;
+  font-weight: bold;
+  letter-spacing: 3px;
+  padding-top: 20px;
+  color: #292828; }
+
+.user-section main {
+  min-height: 60.7vh !important; }
+  @media (max-width: 1446px) {
+    .user-section main {
+      min-height: 66.2vh !important; } }
+  .user-section main .action-btn {
+    padding: 0px 3px !important; }
+
+.fix {
+  bottom: -29px !important; }
+
+.pauseScroll {
+  overflow-y: hidden !important; }
+
+.showModalClass {
+  display: -webkit-box !important;
+  display: -ms-flexbox !important;
+  display: flex !important; }
+
+.showSuccessClass {
+  display: -webkit-box !important;
+  display: -ms-flexbox !important;
+  display: flex !important; }
+
+.permit {
+  background-color: #32e0c4 !important; }
+
+.notPermit {
+  background-color: #e84a5f !important; }
