@@ -7,7 +7,7 @@
   </script> -->
   <div
     id="main"
-    :class="{pauseScroll: showModal}"
+    :class="{pauseScroll: showModal || delete_flag}"
     v-if="Object.keys(this.current_data).length > 0"
   >
     <header>
@@ -40,7 +40,7 @@
             <li 
               v-if="current_data.user.is_admin"
             >
-              <a href="#">Manage Users</a>
+              <a href="/user_permission">Manage Users</a>
             </li>
           </ul>
         </div>
@@ -57,14 +57,14 @@
           class="add"
           v-if="current_data.user.add_permit"
         >
-          <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
+          <i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i>
         </button>
         <button 
           @click="seekPermit()"
           class="add"
           v-else
         >
-          <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
+          <i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i>
         </button>
       </div>
       <div class="client-entry">
@@ -77,14 +77,14 @@
           v-if="current_data.user.add_permit"
           @click="triggerRecordEntryView('client', 'add')"
         >
-          <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
+          <i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i>
         </button>
         <button
           class="add"
           v-else
           @click="seekPermit()"
         >
-          <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
+          <i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i>
         </button>
       </div>
     </section>
@@ -124,7 +124,7 @@
               <td> [[ account.entry_type ]] </td>
               <td> [[ account.amount]] </td>
               <td> [[ account.date ]] </td>
-              <td>
+              <td class="action-btn-holder">
                 <button 
                   class="action-btn"
                   v-if="current_data.user.edit_permit"
@@ -201,7 +201,7 @@
               <td> [[ client.amount_charged ]] </td>
               <td> [[ client.amount_paid ]] </td>
               <td> [[ client.date ]] </td>             
-              <td>
+              <td class="action-btn-holder">
                 <button 
                   class="action-btn"
                   v-if="current_data.user.edit_permit"

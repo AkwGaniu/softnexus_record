@@ -79,3 +79,25 @@ def reloadData(username):
     }
 
     return payload
+
+
+def reloadUserData():
+  try:
+    users_result = User.objects.filter()
+    users = list(users_result.values('id', 'username', 'email', 'is_staff', 'is_superuser'))
+    permissions_result = Permission.objects.filter()
+    permissions = list(permissions_result.values('user_id', 'add_permit', 'edit_permit', 'delete_permit'))
+    list_of_users = []
+    for user in users:
+      for permit in permissions:
+        if permit['user_id'] == user['id']:
+          user.update({'permissions': permit})
+        elif user['is_superuser']:
+          user.update({'permissions': {'add_permit': True, 'delete_permit': True, 'edit_permit': True}})
+      list_of_users.append(user)
+    context = {}
+    context['users'] = list_of_users
+    return  context
+  except EnvironmentError as e:
+    print({'Error': e})
+

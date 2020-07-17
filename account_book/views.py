@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from urlparams.redirect import param_redirect
 from rest_framework.decorators import api_view
 from account_book.models import Permission, Account, Client
-from .utilities.utilities import user_friendly_date, is_permitted, reloadData
+from .utilities.utilities import user_friendly_date, is_permitted, reloadData, reloadUserData
 
 
 # Create your views here.
@@ -79,7 +79,7 @@ def user_login(request):
     else:
       return JsonResponse({'reply':'access denied'})
   except EnvironmentError as e:
-    print('Error: ' + e)
+    print({'Error': e})
 
 
 def logout_user(request):
@@ -158,7 +158,7 @@ def create_user(request):
       set_permission.save()
       return JsonResponse({'reply': 'success'})
   except EnvironmentError as e:
-    print('Error: ' + e)
+    print({'Error': e})
   # except:
   #   return HttpResponse('Oopss, Something went wrong')
 
@@ -242,7 +242,7 @@ def update_client_record(request):
           "reply": "Access deniied"
           })
   except EnvironmentError as e:
-    print('Error: ' + e)
+    print({'Error': e})
 # else:
 #   return render(request, '404.html')
 
@@ -277,7 +277,7 @@ def add_account_record(request):
           "reply": "Access denied"
           })
   except EnvironmentError as e:
-    print('Error: ' + e)
+    print({'Error': e})
 
 @api_view(['post'])
 def update_account_record(request):
@@ -309,7 +309,7 @@ def update_account_record(request):
           "reply": "Access denied"
           })
   except EnvironmentError as e:
-    print('Error: ' + e)
+    print({'Error': e})
 
 @api_view(['delete'])
 def delete_record(request):
@@ -333,4 +333,52 @@ def delete_record(request):
     else:
       return JsonResponse({"reply": 'Access denied'})
   except EnvironmentError as e:
-    print('Error: ' + e)
+    print({'Error': e})
+
+
+def user_permission(request):
+  try:
+    users_result = User.objects.filter()
+    users = list(users_result.values('id', 'username', 'email', 'is_staff', 'is_superuser'))
+    permissions_result = Permission.objects.filter()
+    permissions = list(permissions_result.values('user_id', 'add_permit', 'edit_permit', 'delete_permit'))
+    list_of_users = []
+    for user in users:
+      for permit in permissions:
+        if permit['user_id'] == user['id']:
+          user.update({'permissions': permit})
+        elif user['is_superuser']:
+          user.update({'permissions': {'add_permit': True, 'delete_permit': True, 'edit_permit': True}})
+      list_of_users.append(user)
+    context = {}
+    context['users'] = json.dumps(list_of_users)
+    return render(request, 'users.html', context)
+  except EnvironmentError as e:
+    print({'Error': e})
+
+
+@api_view(['put'])
+def permit_user(request):
+  try:
+    admin = request.data['admin']
+    user_id = request.data['user_id']
+    action = request.data['permit_type']
+    
+    admin_user = User.objects.get(username=admin)
+    if admin_user.is_superuser:
+      permission = Permission.objects.get(user_id=user_id)
+      if action == 'add_permit':
+        permission.add_permit = True
+      elif action == 'edit_permit':
+        permission.edit_permit =True
+      elif action == 'delete_permit':
+        permission.delete_permit = True
+
+      permission.save()
+      
+      payload = reloadUserData()
+      return JsonResponse({"reply": payload})
+    else:
+      return JsonResponse({"reply": 'Access denied'})
+  except EnvironmentError as e:
+    print({'Error': e})

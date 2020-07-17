@@ -1,0 +1,270 @@
+{% extends 'index.html' %}
+
+{% block content %}
+  <script type='text/javascript'> 
+    const jscontext={token: '{{ users | safe }}'}
+    var Data = JSON.parse(jscontext.token)
+    const Admin = JSON.parse(localStorage.getItem('user'))
+  </script>
+  <div
+    id="main"
+    :class="{pauseScroll: showModal_flag}"
+  >
+    <header>
+      <div class="logo-holder">
+        <div class="logo">
+          <a v-bind:href=`/user_permission` target="_self">
+            <img src="static/images/logo.png" alt="SoftNexus Logo" >
+          </a>
+        </div>
+      </div>
+      <div class="user-details">
+        <div class="user">
+          <p>
+            Hi, [[ current_user]]
+            <span
+              @click="userActionDropDown=!userActionDropDown"
+            >
+              <i class="fa fa-sort-desc fa-1x" aria-hidden="true"></i>
+            </span>
+          </p>
+          <ul 
+            class="ctas fix"
+            v-if="userActionDropDown"
+          >
+            <li>
+              <a
+                href="/logout_user"
+              >Sign Out</a>
+            </li>
+            <li>
+              <a href="/home">account</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </header>
+    <section class="user-section">
+      <h4>User Management</h4>
+      <main>
+        <div class="table-responsive">
+          <table class="table .table-sm table-hover">
+            <thead class="table-head">
+              <tr>
+                <th scope="col">S/N</th>
+                <th scope="col">UserName</th>
+                <th scope="col">User Role</th>
+                <th scope="col">Permissions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                v-for="(user, index) in users"
+              >
+                <th scope="row"> 
+                  [[ index + 1 ]] 
+                </th>
+                <td> [[ user.username ]] </td>
+                <td v-if="user.is_superuser">Admin</td>
+                <td v-else>Staff</td>
+                <td class="action-btn-holder">
+                  <button 
+                    :class="[
+                      {permit: user.is_superuser || user.permissions.add_permit},
+                      {notPermit: !user.permissions.add_permit},'action-btn'
+                    ]"
+                    v-if="!user.permissions.add_permit"
+                    @click="triggerPermitRequest(user.permissions.user_id, 'add')"
+                  >
+                    <i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i>
+                  </button>
+                  <button 
+                    :class="[
+                      {permit: user.is_superuser || user.permissions.add_permit},
+                      {notPermit: !user.permissions.add_permit},'action-btn'
+                    ]"
+                    v-else
+                    @click="showPermitted('add')"
+
+                  >
+                    <i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i>
+                  </button>
+                  <!-- END OF ADD BUTTON -->
+                  <button
+                    :class="[
+                      {permit: user.is_superuser || user.permissions.edit_permit},
+                      {notPermit: !user.permissions.edit_permit},'action-btn'
+                    ]"
+                    v-if="!user.permissions.edit_permit"
+                    @click="triggerPermitRequest(user.permissions.user_id, 'edit')"
+                  >
+                    <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
+                  </button>
+                  <button
+                    :class="[
+                      {permit: user.is_superuser || user.permissions.edit_permit},
+                      {notPermit: !user.permissions.edit_permit},'action-btn'
+                    ]"
+                    v-else
+                    @click="showPermitted('edit')"
+                  >
+                    <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
+                  </button>
+                  <!-- END OF UPDATE BUTTON -->
+                  <button 
+                  :class="[
+                    {permit: user.is_superuser || user.permissions.delete_permit},
+                    {notPermit: !user.permissions.delete_permit},'action-btn'
+                  ]"
+                  v-if="!user.permissions.delete_permit"
+                  @click="triggerPermitRequest(user.permissions.user_id, 'delete')"
+                >
+                  <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
+                </button>
+                <button 
+                  :class="[
+                    {permit: user.is_superuser || user.permissions.delete_permit},
+                    {notPermit: !user.permissions.delete_permit},'action-btn'
+                  ]"
+                  v-else
+                  @click="showPermitted('delete')"
+                >
+                  <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
+                </button>
+                  
+                  <!-- END OF DELETE BUTTON -->
+                </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </main>
+    </section>
+    <footer>
+      <p>
+        &copy;
+        <span 
+        v-html="new Date().getFullYear()"
+        ></span>
+        SoftNexus
+      </p>
+    </footer>
+    <div 
+    :class="[{showModalClass: showModal_flag},'delete-modal']"
+  >
+    <div class="modal-content">
+      <header>
+        <h4>Permission</h4>
+      </header>
+      <main>
+        <p> [[ permission_request_text ]] </p>
+        <div class="comfirm_btn">
+          <button 
+            class="cancel"
+            @click="closeModal()"
+          >Cancel</button>
+          <button 
+            @click="permitUser()"
+            class="permit"
+          >Permit</button>
+        </div>
+      </main>
+    </div><!-- END OF DELETE MODAL -->
+  </div>
+</div>
+  
+<script>
+  const userApp = new Vue({
+    delimiters: ['[[',']]'],
+    el: '#main',
+    data () {
+      return {
+        users: Data,
+        admin: Admin,
+        permission_request_text: '',
+        permit_type: '',
+        showModal_flag: false,
+        current_user: 'Olu',
+        current_id: 0,
+        userActionDropDown: false
+      }
+    },
+    methods: {
+      triggerRecordEntryView (view, action)  {
+
+        if (view ==='account' && action === 'add') {
+          this.showAccEntry = true
+          this.edit_flag = false
+          this.modalHeader = 'Add New Account Record'
+        } else if (view === 'account' && action === 'edit') {
+          this.showAccEntry = true
+          this.edit_flag = true
+          this.modalHeader = 'Update Account Record'
+        } else if (view ==='client' && action === 'add') {
+          this.showClientEntry=true
+          this.edit_flag = false
+          this.modalHeader = 'Add New Client Record'
+        } else if (view ==='client' && action === 'edit') {
+          this.showClientEntry=true
+          this.edit_flag = true
+          this.modalHeader = 'Edit Client Record'
+        }
+        this.showModal = !this.showModal
+      },
+      triggerPermitRequest (id, permit) {
+        if (permit === 'edit') {
+          this.permission_request_text = 'Grant update permit'
+          this.permit_type = 'edit_permit'
+        } else if (permit === 'add') {
+          this.permission_request_text = 'Grant add permit'
+          this.permit_type = 'add_permit'
+        } else if (permit === 'delete') {
+          this.permission_request_text = 'Grant delete Permit'
+          this.permit_type = 'delete_permit'
+        } 
+        this.current_id = id
+        this.showModal_flag = true
+      },
+      closeModal() {
+        this.current_id = 0
+        this.showModal_flag = false
+        this.permission_request_text = ''
+        this.permit_type = ''
+      },
+      permitUser () {
+        user_id = this.current_id
+        permit_type = this.permit_type
+        
+        const data = {
+          user_id: user_id,
+          permit_type: permit_type,
+          admin: this.admin.user
+        }
+
+        this.closeModal()
+
+        axios.put('/permit_user', data)
+        .then((response) => {
+          
+          this.users = response.data.reply.users
+        })
+        .catch((error) => {
+          console.log({error: error})
+        })
+      },
+      showPermitted (permit) {
+        if (permit === 'edit') {
+          this.permitted_text = 'User is permitted to UPDATE. Please inform user'
+        } else if (permit === 'add') {
+          this.permitted_text = 'User is permitted to ADD. Please inform user'
+        } else if (permit === 'delete') {
+          this.permitted_text = 'User is permitted to'
+        } 
+        //this.successMsg = msg
+        setTimeout(()=> this.successMsg = '', 5000)
+      },
+    }
+  })
+</script>
+{% endblock %}
+

@@ -286,7 +286,16 @@ html, body {
         padding: 5px 10px;
         border: 2px solid #a4c5c6;
         width: 75%;
+        font-size: larger;
+        font-weight: 500;
+        letter-spacing: 2px;
+        color: #2f2519;
         background-color: #a4c5c6; }
+        @media (max-width: 768px) {
+          #main .tab-btns .account-book .account-tab {
+            width: 80%;
+            padding: 5px;
+            letter-spacing: 0; } }
       #main .tab-btns .account-book .account-tab:hover {
         background-color: #035aa6;
         border-color: #035aa6;
@@ -298,7 +307,8 @@ html, body {
         border: 2px solid #6886c5;
         margin: 0;
         outline: none;
-        font-size: small; }
+        font-size: large;
+        color: whitesmoke; }
         @media (max-width: 768px) {
           #main .tab-btns .account-book .add {
             width: 20%; } }
@@ -319,7 +329,16 @@ html, body {
         padding: 5px 10px;
         border: 2px solid #a4c5c6;
         width: 75%;
-        background-color: #a4c5c6; }
+        background-color: #a4c5c6;
+        font-size: larger;
+        font-weight: 500;
+        letter-spacing: 2px;
+        color: #2f2519; }
+        @media (max-width: 768px) {
+          #main .tab-btns .client-entry .client-tab {
+            width: 80%;
+            padding: 5px;
+            letter-spacing: 0; } }
       #main .tab-btns .client-entry .client-tab:hover {
         background-color: #035aa6;
         border-color: #035aa6;
@@ -331,7 +350,8 @@ html, body {
         border: 2px solid #6886c5;
         margin: 0;
         outline: none;
-        font-size: small; }
+        font-size: large;
+        color: whitesmoke; }
         @media (max-width: 768px) {
           #main .tab-btns .client-entry .add {
             width: 20%; } }
@@ -345,7 +365,10 @@ html, body {
     @media (max-width: 768px) {
       #main main {
         padding: 20px 0px 0px;
-        min-height: 63vh; } }
+        min-height: 63vh !important; } }
+    @media (max-width: 1446px) {
+      #main main {
+        min-height: 67.2vh; } }
     #main main .title {
       display: -webkit-box;
       display: -ms-flexbox;
@@ -354,11 +377,16 @@ html, body {
       -ms-flex-pack: start;
       justify-content: start; }
       #main main .title h4 {
-        width: 30%; }
+        width: 30%;
+        font-size: larger;
+        font-weight: bold;
+        letter-spacing: 3px;
+        color: #292828; }
         @media (max-width: 768px) {
           #main main .title h4 {
             font-size: medium;
             width: 35%;
+            letter-spacing: 0;
             padding-left: 5px; } }
       #main main .title .success {
         display: none;
@@ -414,6 +442,9 @@ html, body {
 .table td {
   padding: .5rem !important;
   vertical-align: bottom !important; }
+
+.action-btn-holder {
+  width: 50px !important; }
 
 .delete-modal {
   display: none;
@@ -478,6 +509,27 @@ html, body {
           background-color: #6497f7; }
         .delete-modal .modal-content main .comfirm_btn .cancel:hover {
           background-color: #1d66ec; }
+        .delete-modal .modal-content main .comfirm_btn .permt {
+          background-color: #32e0c4; }
+        .delete-modal .modal-content main .comfirm_btn .permt:hover {
+          background-color: #2fc4b2; }
+
+.user-section h4 {
+  margin: 0;
+  text-align: center;
+  font-size: larger;
+  font-weight: bold;
+  letter-spacing: 3px;
+  padding-top: 20px;
+  color: #292828; }
+
+.user-section main {
+  min-height: 60.7vh !important; }
+  @media (max-width: 1446px) {
+    .user-section main {
+      min-height: 66.2vh !important; } }
+  .user-section main .action-btn {
+    padding: 0px 3px !important; }
 
 .fix {
   bottom: -29px !important; }
@@ -494,3 +546,9 @@ html, body {
   display: -webkit-box !important;
   display: -ms-flexbox !important;
   display: flex !important; }
+
+.permit {
+  background-color: #32e0c4 !important; }
+
+.notPermit {
+  background-color: #e84a5f !important; }

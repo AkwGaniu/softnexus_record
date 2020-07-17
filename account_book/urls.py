@@ -13,5 +13,7 @@ urlpatterns = [
     path('add_account_record', views.add_account_record),
     path('update_account_record', views.update_account_record),
     path('delete_record', views.delete_record),
-    path('logout_user', views.logout_user)
+    path('logout_user', views.logout_user),
+    path('user_permission', views.user_permission),
+    path('permit_user', views.permit_user)
 ]
