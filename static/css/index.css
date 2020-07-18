@@ -9,8 +9,8 @@ html, body {
 
 .login-holder {
   background: url(../images/bg.jpg);
-  -webkit-box-shadow: inset 0 0 0 1000px rgba(0, 0, 0, 0.5);
-  box-shadow: inset 0 0 0 1000px rgba(0, 0, 0, 0.5);
+  -webkit-box-shadow: inset 0 0 0 1000px rgba(0, 0, 0, 0.2);
+  box-shadow: inset 0 0 0 1000px rgba(0, 0, 0, 0.2);
   background-repeat: no-repeat;
   background-size: cover;
   height: 100vh;
@@ -19,9 +19,9 @@ html, body {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: left;
-  -ms-flex-pack: left;
-  justify-content: left;
+  -webkit-box-pack: end;
+  -ms-flex-pack: end;
+  justify-content: flex-end;
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center; }
@@ -29,10 +29,9 @@ html, body {
     width: 30%;
     border-radius: 20px;
     padding: 20px;
-    background-color: blanchedalmond;
-    margin: 0px 0px 0px 70%;
-    -webkit-box-shadow: 2px 2px 6px black;
-    box-shadow: 2px 2px 6px black; }
+    background-color: #fffafa;
+    -webkit-box-shadow: 2px 2px 4px black;
+    box-shadow: 2px 2px 4px black; }
     @media (max-width: 768px) {
       .login-holder .login {
         width: 90%;
@@ -65,21 +64,22 @@ html, body {
       .login-holder .login .form-group input {
         outline: none;
         border: none;
+        padding-left: 5px;
         background-color: transparent;
         height: 100%;
         width: 95%; }
       .login-holder .login .form-group input::-webkit-input-placeholder {
         font-size: 10px;
-        color: black; }
+        color: #c7c4c4; }
       .login-holder .login .form-group input:-ms-input-placeholder {
         font-size: 10px;
-        color: black; }
+        color: #c7c4c4; }
       .login-holder .login .form-group input::-ms-input-placeholder {
         font-size: 10px;
-        color: black; }
+        color: #c7c4c4; }
       .login-holder .login .form-group input::placeholder {
         font-size: 10px;
-        color: black; }
+        color: #c7c4c4; }
     .login-holder .login input[type=submit] {
       background-color: #2539ac;
       width: 50%;
@@ -152,8 +152,7 @@ html, body {
       .add-record-modal .modal-content header span:hover {
         color: red; }
     .add-record-modal .modal-content main {
-      padding: 10px 20px 20px !important;
-      min-height: 36.5vh !important; }
+      padding: 10px 20px 20px; }
       @media (max-width: 768px) {
         .add-record-modal .modal-content main {
           padding: 20px 20px; } }
@@ -191,26 +190,17 @@ html, body {
         .add-record-modal .modal-content main .form-group option:hover {
           border: 0; }
         .add-record-modal .modal-content main .form-group input::-webkit-input-placeholder {
-          font-size: 13px;
-          color: black; }
+          font-size: 10px;
+          color: #c7c4c4; }
         .add-record-modal .modal-content main .form-group input:-ms-input-placeholder {
-          font-size: 13px;
-          color: black; }
+          font-size: 10px;
+          color: #c7c4c4; }
         .add-record-modal .modal-content main .form-group input::-ms-input-placeholder {
-          font-size: 13px;
-          color: black; }
+          font-size: 10px;
+          color: #c7c4c4; }
         .add-record-modal .modal-content main .form-group input::placeholder {
-          font-size: 13px;
-          color: black; }
-          @media (max-width: 768px) {
-            .add-record-modal .modal-content main .form-group input::-webkit-input-placeholder {
-              font-size: 15px; }
-            .add-record-modal .modal-content main .form-group input:-ms-input-placeholder {
-              font-size: 15px; }
-            .add-record-modal .modal-content main .form-group input::-ms-input-placeholder {
-              font-size: 15px; }
-            .add-record-modal .modal-content main .form-group input::placeholder {
-              font-size: 15px; } }
+          font-size: 10px;
+          color: #c7c4c4; }
       .add-record-modal .modal-content main input[type=submit] {
         background-color: #2539ac;
         width: 50%;
@@ -371,36 +361,33 @@ html, body {
         background-color: #000839;
         color: white;
         border-color: #000839; }
-  #main main {
-    min-height: 60.5vh;
+  #main .main {
+    min-height: 60.2vh;
     padding: 20px 10px 0px; }
     @media (max-width: 768px) {
-      #main main {
+      #main .main {
         padding: 20px 0px 0px;
-        min-height: 63vh !important; } }
-    @media (max-width: 1446px) {
-      #main main {
-        min-height: 67.2vh; } }
-    #main main .title {
+        min-height: 62.2vh; } }
+    #main .main .title {
       display: -webkit-box;
       display: -ms-flexbox;
       display: flex;
       -webkit-box-pack: start;
       -ms-flex-pack: start;
       justify-content: start; }
-      #main main .title h4 {
+      #main .main .title h4 {
         width: 30%;
         font-size: larger;
         font-weight: bold;
         letter-spacing: 3px;
         color: #292828; }
         @media (max-width: 768px) {
-          #main main .title h4 {
+          #main .main .title h4 {
             font-size: medium;
             width: 35%;
             letter-spacing: 0;
             padding-left: 5px; } }
-      #main main .title .success {
+      #main .main .title .success {
         display: none;
         -webkit-box-pack: justify;
         -ms-flex-pack: justify;
@@ -410,11 +397,11 @@ html, body {
         padding: 2.5px 10px 0px;
         color: white;
         background-color: #b7efcd; }
-        #main main .title .success p {
+        #main .main .title .success p {
           margin: 0 !important;
           font-size: medium;
           font-weight: bold; }
-        #main main .title .success span {
+        #main .main .title .success span {
           margin-left: 10px;
           color: #ff9393;
           cursor: pointer; }
@@ -464,11 +451,14 @@ html, body {
   -ms-flex-pack: justify;
   justify-content: space-between;
   border-radius: 5px;
-  width: 50%;
+  width: 40%;
   margin: 1rem auto 0rem;
   padding: 2.5px 10px 2.5px 15px;
   color: white;
   background-color: #b7efcd; }
+  @media (max-width: 768px) {
+    .user_permit_success {
+      width: 80%; } }
   .user_permit_success p {
     margin: 0 !important;
     font-size: medium;
@@ -496,14 +486,12 @@ html, body {
     width: 30%;
     border: 0;
     border-radius: 20px;
-    padding: 0px 0px;
-    height: 30vh; }
+    padding: 0px 0px 10px; }
     @media (max-width: 768px) {
       .delete-modal .modal-content {
-        width: 82%;
-        height: 28vh; } }
+        width: 82%; } }
     .delete-modal .modal-content header {
-      border-radius: 20px;
+      border-radius: 20px 20px 0px 0px;
       display: block !important; }
       .delete-modal .modal-content header h4 {
         text-align: center !important;
@@ -556,12 +544,13 @@ html, body {
   color: #292828; }
 
 .user-section main {
-  min-height: 60.7vh !important; }
-  @media (max-width: 1446px) {
+  min-height: 60.7vh;
+  padding: 20px 10px 5px; }
+  @media (max-width: 768px) {
     .user-section main {
-      min-height: 66.2vh !important; } }
+      min-height: 62.2vh; } }
   .user-section main .action-btn {
-    padding: 0px 3px !important; }
+    padding: 0px 3px; }
 
 .fix {
   bottom: -29px !important; }

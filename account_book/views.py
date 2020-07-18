@@ -139,7 +139,6 @@ def create_user(request):
     email = request.data['email']
 
     users = User.objects.filter(username=username)
-    print(users)
     if len(users) > 0:
       return JsonResponse({'reply': 'username already exist'})
     else:
@@ -206,7 +205,6 @@ def update_client_record(request):
 # if request.user.is_authenticated:
   # context_instance = RequestContext(request)
   try:
-    print('igogdjdfdkfjdjfkdj')
     client_name = request.data['name']
     client_phone_num = request.data['phone']
     client_email = request.data['email']
@@ -231,7 +229,6 @@ def update_client_record(request):
         client.service_offered = service_offered
         client.amount_charged = amount_charged
         client.amount_paid = amount_paid
-        print('igot here')
 
         client.save()
         payload = reloadData(user)
@@ -280,9 +277,7 @@ def add_account_record(request):
 
 @api_view(['post'])
 def update_account_record(request):
-  print('igot her by mistake')
   try:
-    print(request.data)
     description = request.data['description']
     amount = request.data['amount']
     entry_type = request.data['entry_type']
@@ -313,7 +308,6 @@ def update_account_record(request):
 @api_view(['delete'])
 def delete_record(request):
   try:
-    print(request.data)
     table = request.data['table']
     del_id = request.data['id']
     user = request.data['user']
@@ -343,11 +337,11 @@ def user_permission(request):
     permissions = list(permissions_result.values('user_id', 'add_permit', 'edit_permit', 'delete_permit'))
     list_of_users = []
     for user in users:
+      if user['is_superuser']:
+        continue
       for permit in permissions:
         if permit['user_id'] == user['id']:
           user.update({'permissions': permit})
-        elif user['is_superuser']:
-          user.update({'permissions': {'add_permit': True, 'delete_permit': True, 'edit_permit': True}})
       list_of_users.append(user)
     context = {}
     context['users'] = json.dumps(list_of_users)

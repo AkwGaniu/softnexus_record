@@ -4,6 +4,7 @@
   <script type='text/javascript'> 
     const jscontext={token: '{{ users | safe }}'}
     var Data = JSON.parse(jscontext.token)
+    console.log(Data)
     const Admin = JSON.parse(localStorage.getItem('user'))
   </script>
   <div
@@ -21,7 +22,7 @@
       <div class="user-details">
         <div class="user">
           <p>
-            Hi, [[ current_user]]
+            Hi, [[ admin.user]]
             <span
               @click="userActionDropDown=!userActionDropDown"
             >
@@ -68,17 +69,17 @@
             <tbody>
               <tr
                 v-for="(user, index) in users"
+                v-if="!user.is_superuser"
               >
                 <th scope="row"> 
                   [[ index + 1 ]] 
                 </th>
                 <td> [[ user.username ]] </td>
-                <td v-if="user.is_superuser">Admin</td>
-                <td v-else>Staff</td>
+                <td v-if="user.is_staff">Staff</td>
                 <td class="action-btn-holder">
                   <button 
                     :class="[
-                      {permit: user.is_superuser || user.permissions.add_permit},
+                      {permit: user.permissions.add_permit},
                       {notPermit: !user.permissions.add_permit},'action-btn'
                     ]"
                     v-if="!user.permissions.add_permit"
@@ -88,7 +89,7 @@
                   </button>
                   <button 
                     :class="[
-                      {permit: user.is_superuser || user.permissions.add_permit},
+                      {permit: user.permissions.add_permit},
                       {notPermit: !user.permissions.add_permit},'action-btn'
                     ]"
                     v-else
@@ -100,7 +101,7 @@
                   <!-- END OF ADD BUTTON -->
                   <button
                     :class="[
-                      {permit: user.is_superuser || user.permissions.edit_permit},
+                      {permit: user.permissions.edit_permit},
                       {notPermit: !user.permissions.edit_permit},'action-btn'
                     ]"
                     v-if="!user.permissions.edit_permit"
@@ -110,7 +111,7 @@
                   </button>
                   <button
                     :class="[
-                      {permit: user.is_superuser || user.permissions.edit_permit},
+                      {permit: user.permissions.edit_permit},
                       {notPermit: !user.permissions.edit_permit},'action-btn'
                     ]"
                     v-else
@@ -121,7 +122,7 @@
                   <!-- END OF UPDATE BUTTON -->
                   <button 
                   :class="[
-                    {permit: user.is_superuser || user.permissions.delete_permit},
+                    {permit: user.permissions.delete_permit},
                     {notPermit: !user.permissions.delete_permit},'action-btn'
                   ]"
                   v-if="!user.permissions.delete_permit"
@@ -131,7 +132,7 @@
                 </button>
                 <button 
                   :class="[
-                    {permit: user.is_superuser || user.permissions.delete_permit},
+                    {permit: user.permissions.delete_permit},
                     {notPermit: !user.permissions.delete_permit},'action-btn'
                   ]"
                   v-else
@@ -193,7 +194,6 @@
         successMsg: '',
         permit_type: '',
         showModal_flag: false,
-        current_user: 'Olu',
         current_id: 0,
         userActionDropDown: false
       }
