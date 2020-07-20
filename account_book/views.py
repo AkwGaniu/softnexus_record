@@ -1,14 +1,13 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 import json
-import xlwt
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from rest_framework.decorators import api_view
 from account_book.models import Permission, Account, Client
 
 # PERSONAL IMPORTS
-from .utilities.utilities import user_friendly_date, is_permitted, reloadData, reloadUserData, account_data
+from .utilities.utilities import user_friendly_date, is_permitted, reloadData, reloadUserData, account_data, WriteToExcel
 
 
 def welcome(request):
@@ -380,47 +379,10 @@ def permit_user(request):
 
 def export_record(request):
   try:
-    response = HttpResponse(content_type='application/ms-excel')
-
-    #decide file name
-    response['Content-Disposition'] = 'attachment; filename="record.xls"'
-
-    #creating workbook
-    wb = xlwt.Workbook(encoding='utf-8')
-
-    #adding sheet
-    ws = wb.add_sheet("sheet1", cell_overwrite_ok=True)
-    font_style = xlwt.XFStyle()
-    # headers are bold
-    font_style.font.bold = True
-    font_style.align = 'center'
-
-    # Sheet header, first row
-    row_num = 0
-
-    #column header names, you can use your own headers here
-    columns = ['DESCRIPTION', 'TYPE', 'AMOUNT', 'DATE']
-
-    #write column headers in sheet
-    for col_num in range(len(columns)):
-      ws.write(row_num, col_num, columns[col_num], font_style)
-
-    # Sheet body, remaining rows
-    font_style = xlwt.XFStyle()
-
-    #get your data, from database or from a text file...
-    
-    data =  account_data() #dummy method to fetch data.
-    for my_row in data:
-      row_num = row_num + 2
-      ws.write(row_num, 0, my_row['description'], font_style)
-      ws.write(row_num, 1, my_row['entry_type'], font_style)
-      ws.write(row_num, 2, my_row['amount'], font_style)
-      ws.write(row_num, 3, my_row['date'], font_style)
-
-    wb.save(response)
+    response = HttpResponse(content_type='application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment; filename=Record.xlsX'
+    xlsx_data = WriteToExcel()
+    response.write(xlsx_data)
     return response
   except EnvironmentError as e:
-    print({'Error': e})
-  # content-type of response
-	
+    print({'error': e})

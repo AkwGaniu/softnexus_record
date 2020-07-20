@@ -1,6 +1,7 @@
 import datetime
 import calendar
-import xlwt
+import io
+import xlsxwriter
 from django.http import HttpResponse
 from django.contrib.auth.models import User
 from account_book.models import Permission 
@@ -44,6 +45,7 @@ def is_permitted(user, action):
 
 
 def reloadData(username):
+  try:
     current_user = User.objects.get(username=username)    
     if current_user.is_superuser:
        new_user_obj = {
@@ -81,6 +83,8 @@ def reloadData(username):
     }
 
     return payload
+  except EnvironmentError as e:
+    print({'Error': e})
 
 
 def reloadUserData():
@@ -104,43 +108,6 @@ def reloadUserData():
     print({'Error': e})
 
 
-def WriteToExcel():
-	#creating workbook
-	wb = xlwt.Workbook(encoding='utf-8')
-
-	#adding sheet
-	ws = wb.add_sheet("sheet1")
-
-	# Sheet header, first row
-	row_num = 0
-
-	font_style = xlwt.XFStyle()
-	# headers are bold
-	font_style.font.bold = True
-
-	#column header names, you can use your own headers here
-	columns = ['Column 1', 'Column 2', 'Column 3', 'Column 4', ]
-
-	#write column headers in sheet
-	for col_num in range(len(columns)):
-		ws.write(row_num, col_num, columns[col_num], font_style)
-
-	# Sheet body, remaining rows
-	font_style = xlwt.XFStyle()
-
-	#get your data, from database or from a text file...
-	data = get_data() #dummy method to fetch data.
-	for my_row in data:
-		row_num = row_num + 1
-		ws.write(row_num, 0, my_row.name, font_style)
-		ws.write(row_num, 1, my_row.start_date_time, font_style)
-		ws.write(row_num, 2, my_row.end_date_time, font_style)
-		ws.write(row_num, 3, my_row.notes, font_style)
-
-	wb.save(response)
-	return response
-
-
 def account_data():
   get_accounts = Account.objects.all()
 
@@ -149,11 +116,61 @@ def account_data():
   ))
   return account_records
 
-  # # output = StringIO.StringIO()
-  # workbook = xlsxwriter.Workbook()
 
-  # # Write some data here
-  # workbook.add_worksheet('Account')
-  # workbook.close()
-  # # xlsx_data = output.getvalue()
-  # return  workbook
+def WriteToExcel():
+  output = io.BytesIO()
+  workbook = xlsxwriter.Workbook(output)
+  worksheet_s = workbook.add_worksheet("Account record")
+
+  title = workbook.add_format({
+    'bold': True,
+    'font_size': 14,
+    'align': 'center',
+    'valign': 'vcenter'
+  })
+  header = workbook.add_format({
+      'bg_color': '#F7F7F7',
+      'color': 'black',
+      'align': 'center',
+      'valign': 'top',
+      'border': 1
+  })
+  cell_center = workbook.add_format({
+    'align': 'center',
+    'valign': 'bottom',
+  })
+  cell = workbook.add_format({
+    'align': 'left',
+    'valign': 'bottom',
+  })
+
+  title_text = "SoftNexus Account Record"
+  worksheet_s.merge_range('A1:E1', title_text, title)
+
+  worksheet_s.write(1, 0, "S/N", header)
+  worksheet_s.write(1, 1, "DESCRIPTION", header)
+  worksheet_s.write(1, 2, "ENTRY TYPE", header)
+  worksheet_s.write(1, 3, "AMOUNT", header)
+  worksheet_s.write(1, 4, "DATE", header)
+
+  # Here we will adding the code to add data
+  account_record = account_data()
+  description_col_width = 15
+  for idx, data in enumerate(account_record):
+    row = 2 + idx
+    worksheet_s.write_number(row, 0, idx + 1, cell_center)
+    worksheet_s.write_string(row, 1, data['description'], cell)
+    if len(data['description']) > description_col_width:
+      description_col_width = len(data['description'])
+    worksheet_s.write(row, 2, data['entry_type'], cell)
+    worksheet_s.write(row, 3, '#'+data['amount'], cell)
+    worksheet_s.write(row, 4, data['date'], cell)
+  
+  worksheet_s.set_column('B:B', description_col_width)
+  worksheet_s.set_column('C:C', 15)
+  worksheet_s.set_column('D:D', 15)
+  worksheet_s.set_column('E:E', 15)
+
+  workbook.close()
+  xlsx_data = output.getvalue()
+  return xlsx_data
