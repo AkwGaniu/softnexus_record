@@ -15,5 +15,6 @@ urlpatterns = [
     path('delete_record', views.delete_record),
     path('logout_user', views.logout_user),
     path('user_permission', views.user_permission),
-    path('permit_user', views.permit_user)
+    path('permit_user', views.permit_user),
+    path('export_record', views.export_record)
 ]

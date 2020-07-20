@@ -120,9 +120,11 @@ html, body {
 
     header {
       padding: 5px;
+      border-radius: 20px 20px 0px 0px;
       position: relative;
       @media (max-width: 768px) {
         padding: 15px;
+        border-radius: 0px;
       }
       h2 {
         color: whitesmoke;
@@ -452,6 +454,20 @@ html, body {
       margin: 0;
       padding: 0;
     }
+  }
+}
+.export-csv {
+  display: flex;
+  justify-content: flex-end;
+  a {
+    text-decoration: none;
+    padding: 2px 4px;
+    outline: none;
+    font-size: smaller;
+    color: whitesmoke;
+    font-weight: bold;
+    border: 0;
+    background-color: rgb(67, 236, 118);
   }
 }
 .table th,

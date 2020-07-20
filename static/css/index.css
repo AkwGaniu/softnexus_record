@@ -126,10 +126,12 @@ html, body {
         border-radius: 0px; } }
     .add-record-modal .modal-content header {
       padding: 5px;
+      border-radius: 20px 20px 0px 0px;
       position: relative; }
       @media (max-width: 768px) {
         .add-record-modal .modal-content header {
-          padding: 15px; } }
+          padding: 15px;
+          border-radius: 0px; } }
       .add-record-modal .modal-content header h2 {
         color: whitesmoke;
         font-weight: 400;
@@ -436,6 +438,23 @@ html, body {
       font-size: 20px;
       margin: 0;
       padding: 0; }
+
+.export-csv {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: end;
+  -ms-flex-pack: end;
+  justify-content: flex-end; }
+  .export-csv a {
+    text-decoration: none;
+    padding: 2px 4px;
+    outline: none;
+    font-size: smaller;
+    color: whitesmoke;
+    font-weight: bold;
+    border: 0;
+    background-color: #43ec76; }
 
 .table th,
 .table td {
