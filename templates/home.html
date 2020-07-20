@@ -157,7 +157,9 @@
             </tr>
           </tbody>
         </table>
-        <div class="export-csv">
+        <div
+          v-if="current_data.account_record.length > 0"
+          class="export-csv">
           <a href="export_record">
             <i class="fa fa-download" aria-hidden="true"></i>EXPORT EXCEL
           </a>
