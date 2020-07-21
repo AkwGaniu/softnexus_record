@@ -7,8 +7,7 @@ from rest_framework.decorators import api_view
 from account_book.models import Permission, Account, Client
 
 # PERSONAL IMPORTS
-from .utilities.utilities import user_friendly_date, is_permitted, reloadData, reloadUserData, account_data, WriteToExcel
-
+from .utilities import util
 
 def welcome(request):
   # if not request.user.is_authenticated:
@@ -97,7 +96,8 @@ def get_data(request):
         'is_admin': current_user.is_superuser,
         'edit_permit': True,
         'delete_permit': True,
-        'add_permit': True
+        'add_permit': True,
+        'download_permit': True
       }
     else:
       user_permission = Permission.objects.get(user=current_user.id)
@@ -106,7 +106,8 @@ def get_data(request):
         'is_admin': current_user.is_superuser,
         'edit_permit': user_permission.edit_permit,
         'delete_permit': user_permission.delete_permit,
-        'add_permit': user_permission.add_permit
+        'add_permit': user_permission.add_permit,
+        'download_permit': user_permission.download_permit
       }
 
     get_accounts = Account.objects.all()
@@ -172,14 +173,14 @@ def add_client_record(request):
     amount_paid = request.data['amount_paid']
     user = request.data['user']
     action = request.data['permit']
-    current_date = user_friendly_date()
+    current_date = util.user_friendly_date()
 
     if len(client_name) == 0 or len(client_email) == 0 or len(service_offered) == 0 or len(amount_charged) == 0:
       return JsonResponse({
         "reply": "fill required fields"
         })
     else:
-      if is_permitted(user, action):
+      if util.is_permitted(user, action):
         new_client_record = Client(
           client_name = client_name,
           client_email = client_email,
@@ -190,7 +191,7 @@ def add_client_record(request):
           date = current_date
         )
         new_client_record.save()
-        payload = reloadData(user)
+        payload = util.reloadData(user)
         return JsonResponse({"reply": payload})
       else:
         return JsonResponse({
@@ -220,7 +221,7 @@ def update_client_record(request):
         "reply": "fill required fields"
         })
     else:      
-      if is_permitted(user, action):
+      if util.is_permitted(user, action):
         client = Client.objects.get(id = client_id)
     
         client.client_name = client_name
@@ -231,7 +232,7 @@ def update_client_record(request):
         client.amount_paid = amount_paid
 
         client.save()
-        payload = reloadData(user)
+        payload = util.reloadData(user)
         return JsonResponse({"reply": payload})
       else:
         return JsonResponse({
@@ -251,14 +252,14 @@ def add_account_record(request):
     entry_type = request.data['entry_type']
     user = request.data['user']
     action = request.data['permit']
-    current_date = user_friendly_date()
+    current_date = util.user_friendly_date()
 
     if len(description) == 0 or len(amount) == 0 or len(entry_type) == 0:
       return JsonResponse({
         "reply": "fill required fields"
         })
     else:
-      if is_permitted(user, action):
+      if util.is_permitted(user, action):
         new_account_record = Account(
           description = description,
           entry_type = entry_type,
@@ -266,7 +267,7 @@ def add_account_record(request):
           date = current_date
         )
         new_account_record.save()
-        payload = reloadData(user)
+        payload = util.reloadData(user)
         return JsonResponse({"reply": payload})
       else:
         return JsonResponse({
@@ -290,13 +291,13 @@ def update_account_record(request):
         "reply": "fill required fields"
         })
     else:
-      if is_permitted(user, action):
+      if util.is_permitted(user, action):
         account = Account.objects.get(id = entry_id)
         account.description = description
-        account.type = entry_type
+        account.entry_type = entry_type
         account.amount = amount
         account.save()
-        payload = reloadData(user)
+        payload = util.reloadData(user)
         return JsonResponse({"reply": payload})
       else:
         return JsonResponse({
@@ -313,7 +314,7 @@ def delete_record(request):
     user = request.data['user']
     action = request.data['permit']
 
-    if is_permitted(user, action):
+    if util.is_permitted(user, action):
       if table == 'Client':
         record = Client.objects.get(id=del_id)
       elif table == 'Account':
@@ -321,7 +322,7 @@ def delete_record(request):
 
       record.delete()
       
-      payload = reloadData(user)
+      payload = util.reloadData(user)
       return JsonResponse({"reply": payload})
     else:
       return JsonResponse({"reply": 'Access denied'})
@@ -334,7 +335,11 @@ def user_permission(request):
     users_result = User.objects.filter()
     users = list(users_result.values('id', 'username', 'email', 'is_staff', 'is_superuser'))
     permissions_result = Permission.objects.filter()
-    permissions = list(permissions_result.values('user_id', 'add_permit', 'edit_permit', 'delete_permit'))
+    permissions = list(permissions_result.values(
+      'user_id', 'add_permit', 'edit_permit', 
+      'delete_permit', 'download_permit'
+    ))
+
     list_of_users = []
     for user in users:
       if user['is_superuser']:
@@ -361,15 +366,17 @@ def permit_user(request):
     if admin_user.is_superuser:
       permission = Permission.objects.get(user_id=user_id)
       if action == 'add_permit':
-        permission.add_permit = True
+        permission.add_permit = not permission.add_permit
       elif action == 'edit_permit':
-        permission.edit_permit =True
+        permission.edit_permit = not permission.edit_permit
       elif action == 'delete_permit':
-        permission.delete_permit = True
+        permission.delete_permit = not permission.delete_permit
+      elif action == 'download_permit':
+        permission.download_permit = not permission.download_permit
 
       permission.save()
       
-      payload = reloadUserData()
+      payload = util.reloadUserData()
       return JsonResponse({"reply": payload})
     else:
       return JsonResponse({"reply": 'Access denied'})
@@ -379,9 +386,16 @@ def permit_user(request):
 
 def export_record(request):
   try:
+    record = request.GET['record']
+    if record == 'account':
+      file_name = 'Account Record'
+      xlsx_data = util.write_account_to_excel()
+    elif record == 'client':
+      file_name = 'Client Record'
+      xlsx_data = util.write_client_to_excel()
+
     response = HttpResponse(content_type='application/vnd.ms-excel')
-    response['Content-Disposition'] = 'attachment; filename=Record.xlsX'
-    xlsx_data = WriteToExcel()
+    response['Content-Disposition'] = f'attachment; filename={file_name}.xlsX'
     response.write(xlsx_data)
     return response
   except EnvironmentError as e:

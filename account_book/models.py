@@ -24,5 +24,6 @@ class Permission(models.Model):
   edit_permit = models.BooleanField(default=False)
   delete_permit = models.BooleanField(default=False)
   add_permit = models.BooleanField(default=False)
+  download_permit = models.BooleanField(default=False)
 
   

@@ -77,13 +77,13 @@
                 <td> [[ user.username ]] </td>
                 <td v-if="user.is_staff">Staff</td>
                 <td class="action-btn-holder">
-                  <button 
+                  <button
                     :class="[
                       {permit: user.permissions.add_permit},
                       {notPermit: !user.permissions.add_permit},'action-btn'
                     ]"
                     v-if="!user.permissions.add_permit"
-                    @click="triggerPermitRequest(user.permissions.user_id, 'add')"
+                    @click="triggerPermitRequest(user.permissions.user_id, user.username, 'add', 'grant')"
                   >
                     <i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i>
                   </button>
@@ -93,8 +93,7 @@
                       {notPermit: !user.permissions.add_permit},'action-btn'
                     ]"
                     v-else
-                    @click="showPermitted('add')"
-
+                    @click="triggerPermitRequest(user.permissions.user_id, user.username, 'add', 'deny')"
                   >
                     <i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i>
                   </button>
@@ -105,7 +104,7 @@
                       {notPermit: !user.permissions.edit_permit},'action-btn'
                     ]"
                     v-if="!user.permissions.edit_permit"
-                    @click="triggerPermitRequest(user.permissions.user_id, 'edit')"
+                    @click="triggerPermitRequest(user.permissions.user_id, user.username, 'edit', 'grant')"
                   >
                     <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
                   </button>
@@ -115,7 +114,7 @@
                       {notPermit: !user.permissions.edit_permit},'action-btn'
                     ]"
                     v-else
-                    @click="showPermitted('edit')"
+                    @click="triggerPermitRequest(user.permissions.user_id, user.username, 'edit', 'deny')"
                   >
                     <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
                   </button>
@@ -126,22 +125,42 @@
                     {notPermit: !user.permissions.delete_permit},'action-btn'
                   ]"
                   v-if="!user.permissions.delete_permit"
-                  @click="triggerPermitRequest(user.permissions.user_id, 'delete')"
+                  @click="triggerPermitRequest(user.permissions.user_id, user.username, 'delete', 'grant')"
                 >
                   <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
-                </button>
-                <button 
-                  :class="[
-                    {permit: user.permissions.delete_permit},
-                    {notPermit: !user.permissions.delete_permit},'action-btn'
-                  ]"
-                  v-else
-                  @click="showPermitted('delete')"
-                >
-                  <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
-                </button>
-                  
+                  </button>
+                  <button 
+                    :class="[
+                      {permit: user.permissions.delete_permit},
+                      {notPermit: !user.permissions.delete_permit},'action-btn'
+                    ]"
+                    v-else
+                    @click="triggerPermitRequest(user.permissions.user_id, user.username, 'delete', 'deny')"
+                  >
+                    <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
+                  </button>
                   <!-- END OF DELETE BUTTON -->
+                  <button 
+                    :class="[
+                      {permit: user.permissions.download_permit},
+                      {notPermit: !user.permissions.download_permit},'action-btn'
+                    ]"
+                    v-if="!user.permissions.download_permit"
+                    @click="triggerPermitRequest(user.permissions.user_id, user.username, 'download', 'grant')"
+                  >
+                  <i class="fa fa-download fa-lg" aria-hidden="true"></i>
+                  </button>
+                  <button 
+                    :class="[
+                      {permit: user.permissions.download_permit},
+                      {notPermit: !user.permissions.download_permit},'action-btn'
+                    ]"
+                    v-else
+                    @click="triggerPermitRequest(user.permissions.user_id, user.username, 'download', 'deny')"
+                  >
+                    <i class="fa fa-download fa-lg" aria-hidden="true"></i>
+                  </button>
+                  <!-- END OF DOWNLOAD BUTTON -->
                 </td>
             </tr>
             </tbody>
@@ -173,9 +192,9 @@
             @click="closeModal()"
           >Cancel</button>
           <button 
-            @click="permitUser()"
+            @click="permitUser(permit)"
             class="permit"
-          >Permit</button>
+          > [[ permit ]] </button>
         </div>
       </main>
     </div><!-- END OF DELETE MODAL -->
@@ -193,54 +212,46 @@
         permission_request_text: '',
         successMsg: '',
         permit_type: '',
+        permit: '',
         showModal_flag: false,
         current_id: 0,
         userActionDropDown: false
       }
     },
     methods: {
-      triggerRecordEntryView (view, action)  {
-
-        if (view ==='account' && action === 'add') {
-          this.showAccEntry = true
-          this.edit_flag = false
-          this.modalHeader = 'Add New Account Record'
-        } else if (view === 'account' && action === 'edit') {
-          this.showAccEntry = true
-          this.edit_flag = true
-          this.modalHeader = 'Update Account Record'
-        } else if (view ==='client' && action === 'add') {
-          this.showClientEntry=true
-          this.edit_flag = false
-          this.modalHeader = 'Add New Client Record'
-        } else if (view ==='client' && action === 'edit') {
-          this.showClientEntry=true
-          this.edit_flag = true
-          this.modalHeader = 'Edit Client Record'
-        }
-        this.showModal = !this.showModal
-      },
-      triggerPermitRequest (id, permit) {
-        if (permit === 'edit') {
-          this.permission_request_text = 'Grant update permit'
+      triggerPermitRequest (id, user, permit_type, permit) {
+        let request_text
+        if (permit_type === 'edit') {
+          permit === 'grant' ? request_text = `Grant ${user} permission to update` : request_text = `Deny ${user} of update permit`
+          this.permission_request_text = request_text
           this.permit_type = 'edit_permit'
-        } else if (permit === 'add') {
-          this.permission_request_text = 'Grant add permit'
+        } else if (permit_type === 'add') {
+          permit === 'grant' ? request_text = `Grant ${user} permission to add` : request_text = `Deny ${user} of add permit`
+          this.permission_request_text = request_text
           this.permit_type = 'add_permit'
-        } else if (permit === 'delete') {
-          this.permission_request_text = 'Grant delete Permit'
+        } else if (permit_type === 'delete') {
+          permit === 'grant' ? request_text = `Grant ${user} permission to delete` : request_text = `Deny ${user} of delete permit`
+          this.permission_request_text = request_text
           this.permit_type = 'delete_permit'
-        } 
+        } else if (permit_type === 'download') {
+          permit === 'grant' ? request_text = `Grant ${user} permission to download` : request_text = `Deny ${user} of download permit`
+          this.permission_request_text = request_text
+          this.permit_type = 'download_permit'
+        }
+
+        permit === 'grant' ? this.permit = 'Grant' : this.permit = 'Deny'
         this.current_id = id
         this.showModal_flag = true
       },
+
       closeModal() {
         this.current_id = 0
         this.showModal_flag = false
         this.permission_request_text = ''
         this.permit_type = ''
       },
-      permitUser () {
+
+      permitUser (permit) {
         user_id = this.current_id
         permit_type = this.permit_type
         
@@ -254,13 +265,22 @@
 
         axios.put('/permit_user', data)
         .then((response) => {
-          this.showPermitted('Permission granted, proceed to inform user')
-          this.users = response.data.reply.users
+          if (response.data.reply === 'Access denied') {
+            this.showPermitted('Access Denied, you must have done some trick to get here')
+          } else {
+            if (permit === 'Grant') {
+              this.showPermitted('Permission granted, proceed to inform user')
+            }else if (permit === 'Deny') {
+              this.showPermitted('Permission denied')
+            }
+            this.users = response.data.reply.users
+          }
         })
         .catch((error) => {
           console.log({error: error})
         })
       },
+
       showPermitted (msg) {
         this.successMsg = msg
         setTimeout(()=> this.successMsg = '', 5000)
