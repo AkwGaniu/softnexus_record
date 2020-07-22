@@ -10,57 +10,22 @@ from account_book.models import Permission, Account, Client
 from .utilities import util
 
 def welcome(request):
-  # if not request.user.is_authenticated:
-  return render(request, 'login.html')
-  # else:
-  #   return render(request, 'home.html')
+  if not request.user.is_authenticated:
+    return render(request, 'login.html')
+  else:
+    return render(request, 'home.html')
 
 def register(request):
-  return render(request, 'register.html')
+  if not request.user.is_authenticated:
+    return render(request, 'register.html')
+  else:
+    return render(request, 'home.html')
 
 def home(request):
-# if request.user.is_authenticated:
-  # username = request.GET['user']
-  # current_user = User.objects.get(username=username)    
-  # if current_user.is_superuser:
-  #   new_user_obj = {
-  #     'username': current_user.username,
-  #     'is_admin': current_user.is_superuser,
-  #     'edit_permit': True,
-  #     'delete_permit': True,
-  #     'add_permit': True
-  #   }
-  # else:
-  #   user_permission = Permission.objects.get(user=current_user.id)
-  #   new_user_obj = {
-  #     'username': current_user.username,
-  #     'is_admin': current_user.is_superuser,
-  #     'edit_permit': user_permission.edit_permit,
-  #     'delete_permit': user_permission.delete_permit,
-  #     'add_permit': user_permission.add_permit
-  #   }
-
-  # get_accounts = Account.objects.all()
-  # get_clients = Client.objects.all()
-
-  # client_records = list(get_clients.values(
-  #   'id', 'client_name', 'client_email',
-  #   'client_phone', 'service_offered',
-  #   'amount_charged', 'amount_paid', 'date'
-  # ))
-  # account_records = list(get_accounts.values(
-  #   'id', 'description', 'date', 'amount', 'entry_type'
-  # ))
-  # payload = {
-  #   'user': new_user_obj,
-  #   'client_record': client_records,
-  #   'account_record': account_records
-  # }
-  # context = {}
-  # context['data'] = json.dumps(payload)
-  return render(request, 'home.html')
-# else:
-#   return render(request, '404.html')
+  if request.user.is_authenticated:
+    return render(request, 'home.html')
+  else:
+    return redirect('/')
 
 @api_view(['post'])
 def user_login(request):
@@ -86,51 +51,52 @@ def logout_user(request):
 
 
 def get_data(request):
-  # if request.user.is_authenticated:
-  try:
-    username = request.GET['user']
-    current_user = User.objects.get(username=username)    
-    if current_user.is_superuser:
-      new_user_obj = {
-        'username': current_user.username,
-        'is_admin': current_user.is_superuser,
-        'edit_permit': True,
-        'delete_permit': True,
-        'add_permit': True,
-        'download_permit': True
-      }
-    else:
-      user_permission = Permission.objects.get(user=current_user.id)
-      new_user_obj = {
-        'username': current_user.username,
-        'is_admin': current_user.is_superuser,
-        'edit_permit': user_permission.edit_permit,
-        'delete_permit': user_permission.delete_permit,
-        'add_permit': user_permission.add_permit,
-        'download_permit': user_permission.download_permit
-      }
+  if request.user.is_authenticated:
+    try:
+      username = request.GET['user']
+      current_user = User.objects.get(username=username)    
+      if current_user.is_superuser:
+        new_user_obj = {
+          'username': current_user.username,
+          'is_admin': current_user.is_superuser,
+          'edit_permit': True,
+          'delete_permit': True,
+          'add_permit': True,
+          'download_permit': True
+        }
+      else:
+        user_permission = Permission.objects.get(user=current_user.id)
+        new_user_obj = {
+          'username': current_user.username,
+          'is_admin': current_user.is_superuser,
+          'edit_permit': user_permission.edit_permit,
+          'delete_permit': user_permission.delete_permit,
+          'add_permit': user_permission.add_permit,
+          'download_permit': user_permission.download_permit
+        }
 
-    get_accounts = Account.objects.all()
-    get_clients = Client.objects.all()
+      get_accounts = Account.objects.all()
+      get_clients = Client.objects.all()
 
-    client_records = list(get_clients.values(
-      'id', 'client_name', 'client_email',
-      'client_phone', 'service_offered',
-      'amount_charged', 'amount_paid', 'date'
-    ))
-    account_records = list(get_accounts.values(
-      'id', 'description', 'date', 'amount', 'entry_type'
-    ))
-    payload = {
-      'user': new_user_obj,
-      'client_record': client_records,
-      'account_record': account_records
-    }
-    return JsonResponse({'reply': payload})
-  except EnvironmentError as e:
-    print('Error: ' + e)
-  # else:
-    # return render(request, '404.html')
+      client_records = list(get_clients.values(
+        'id', 'client_name', 'client_email',
+        'client_phone', 'service_offered',
+        'amount_charged', 'amount_paid', 'date'
+      ))
+      account_records = list(get_accounts.values(
+        'id', 'description', 'date', 'amount', 'entry_type'
+      ))
+      payload = {
+        'user': new_user_obj,
+        'client_record': client_records,
+        'account_record': account_records
+      }
+      return JsonResponse({'reply': payload})
+    except EnvironmentError as e:
+      print('Error: ' + e)
+  else:
+    return redirect('/')
+
 
 @api_view(['post'])
 def create_user(request):
@@ -203,8 +169,6 @@ def add_client_record(request):
 
 @api_view(['put'])
 def update_client_record(request):
-# if request.user.is_authenticated:
-  # context_instance = RequestContext(request)
   try:
     client_name = request.data['name']
     client_phone_num = request.data['phone']
@@ -240,8 +204,6 @@ def update_client_record(request):
           })
   except EnvironmentError as e:
     print({'Error': e})
-# else:
-#   return render(request, '404.html')
 
   
 @api_view(['post'])
@@ -276,7 +238,8 @@ def add_account_record(request):
   except EnvironmentError as e:
     print({'Error': e})
 
-@api_view(['post'])
+
+@api_view(['put'])
 def update_account_record(request):
   try:
     description = request.data['description']
@@ -306,6 +269,7 @@ def update_account_record(request):
   except EnvironmentError as e:
     print({'Error': e})
 
+
 @api_view(['delete'])
 def delete_record(request):
   try:
@@ -331,29 +295,31 @@ def delete_record(request):
 
 
 def user_permission(request):
-  try:
-    users_result = User.objects.filter()
-    users = list(users_result.values('id', 'username', 'email', 'is_staff', 'is_superuser'))
-    permissions_result = Permission.objects.filter()
-    permissions = list(permissions_result.values(
-      'user_id', 'add_permit', 'edit_permit', 
-      'delete_permit', 'download_permit'
-    ))
+  if request.user.is_authenticated:
+    try:
+      users_result = User.objects.filter()
+      users = list(users_result.values('id', 'username', 'email', 'is_staff', 'is_superuser'))
+      permissions_result = Permission.objects.filter()
+      permissions = list(permissions_result.values(
+        'user_id', 'add_permit', 'edit_permit', 
+        'delete_permit', 'download_permit'
+      ))
 
-    list_of_users = []
-    for user in users:
-      if user['is_superuser']:
-        continue
-      for permit in permissions:
-        if permit['user_id'] == user['id']:
-          user.update({'permissions': permit})
-      list_of_users.append(user)
-    context = {}
-    context['users'] = json.dumps(list_of_users)
-    return render(request, 'users.html', context)
-  except EnvironmentError as e:
-    print({'Error': e})
-
+      list_of_users = []
+      for user in users:
+        if user['is_superuser']:
+          continue
+        for permit in permissions:
+          if permit['user_id'] == user['id']:
+            user.update({'permissions': permit})
+        list_of_users.append(user)
+      context = {}
+      context['users'] = json.dumps(list_of_users)
+      return render(request, 'users.html', context)
+    except EnvironmentError as e:
+      print({'Error': e})
+  else:
+    redirect('/')
 
 @api_view(['put'])
 def permit_user(request):
@@ -385,18 +351,21 @@ def permit_user(request):
 
 
 def export_record(request):
-  try:
-    record = request.GET['record']
-    if record == 'account':
-      file_name = 'Account Record'
-      xlsx_data = util.write_account_to_excel()
-    elif record == 'client':
-      file_name = 'Client Record'
-      xlsx_data = util.write_client_to_excel()
+  if request.user.is_authenticated:
+    try:
+      record = request.GET['record']
+      if record == 'account':
+        file_name = 'Account Record'
+        xlsx_data = util.write_account_to_excel()
+      elif record == 'client':
+        file_name = 'Client Record'
+        xlsx_data = util.write_client_to_excel()
 
-    response = HttpResponse(content_type='application/vnd.ms-excel')
-    response['Content-Disposition'] = f'attachment; filename={file_name}.xlsX'
-    response.write(xlsx_data)
-    return response
-  except EnvironmentError as e:
-    print({'error': e})
+      response = HttpResponse(content_type='application/vnd.ms-excel')
+      response['Content-Disposition'] = f'attachment; filename={file_name}.xlsX'
+      response.write(xlsx_data)
+      return response
+    except EnvironmentError as e:
+      print({'error': e})
+  else:
+    redirect('/')

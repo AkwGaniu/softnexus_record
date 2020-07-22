@@ -73,18 +73,22 @@
             username: username,
             password: password
           }
-          axios.post('/user_login', payload)
+          axios.post('/rest-auth/login/', payload)
           .then((response) => {
-            if (response.data.reply === 'access denied') {
-              this.error = 'Invalid login credentials'
-            } else {
-              localStorage.setItem('user', JSON.stringify(response.data.reply))
-              //self.location = `/home?user=${response.data.reply.user}`
+            if (response.data.key) {
+              console.log(response.data)
+              newPayload = {
+                user: username,
+                token: response.data.key 
+              }
+              localStorage.setItem('user', JSON.stringify(newPayload))
               self.location = '/home'
+            } else {
+              console.log(response.data)
             }
           })
           .catch((error) => {
-            console.log({'error': error})
+            this.error = 'Invalid login credentials'
           })
         }
       }

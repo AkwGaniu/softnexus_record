@@ -4,7 +4,6 @@
   <script type='text/javascript'> 
     const jscontext={token: '{{ users | safe }}'}
     var Data = JSON.parse(jscontext.token)
-    console.log(Data)
     const Admin = JSON.parse(localStorage.getItem('user'))
   </script>
   <div
@@ -263,9 +262,27 @@
 
         this.closeModal()
 
-        axios.put('/permit_user', data)
-        .then((response) => {
-          if (response.data.reply === 'Access denied') {
+        
+        let url = `/permit_user`
+        const fetchData  = {
+            method: 'put',
+            body: JSON.stringify(data),
+            headers: {
+              "Content-Type": "application/json",
+              'Authorization': `Token ${this.admin.token}`,
+            }
+        }
+
+        fetch(url, fetchData)
+        .then(resp => {
+            if(resp.ok) {
+              return resp.json()
+            } else {
+              return Promise.reject(resp.json())
+            }
+        })
+        .then(data => {
+          if (data.reply === 'Access denied') {
             this.showPermitted('Access Denied, you must have done some trick to get here')
           } else {
             if (permit === 'Grant') {
@@ -273,11 +290,11 @@
             }else if (permit === 'Deny') {
               this.showPermitted('Permission denied')
             }
-            this.users = response.data.reply.users
+            this.users = data.reply.users
           }
         })
-        .catch((error) => {
-          console.log({error: error})
+        .catch(error => {
+            console.log(error.object)
         })
       },
 
@@ -285,6 +302,7 @@
         this.successMsg = msg
         setTimeout(()=> this.successMsg = '', 5000)
       },
+
     }
   })
 </script>

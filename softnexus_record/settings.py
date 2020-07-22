@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework.authtoken',
+    'rest_auth',
     'account_book'
 ]
 
@@ -89,18 +91,12 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.postgresql',
-    #     'NAME': 'd39bec24qtji5l',
-    #     'USER': 'cfmahnwxmvptij',
-    #     'PASSWORD': 'fe58d594bf96e376b1395b04c724d3698062616655b3a12b11ed5d6e5ecf3eec', 
-    #     'ROOT': 'ec2-50-19-26-235.compute-1.amazonaws.com',
-    # }
 }
 
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.AllowAny',
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication'
     ),
 }
 

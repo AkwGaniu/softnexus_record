@@ -445,7 +445,8 @@ html, body {
   display: flex;
   -webkit-box-pack: end;
   -ms-flex-pack: end;
-  justify-content: flex-end; }
+  justify-content: flex-end;
+  margin-bottom: 20px; }
   .export-csv a {
     text-decoration: none;
     padding: 2px 4px;

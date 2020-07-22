@@ -6,6 +6,7 @@ var app = new Vue({
     current_id: 0,
     current_data: Object,
     csrftoken: '',
+    token: '',
     userActionDropDown: false,
     showModal: false,
     showAccList:  true,
@@ -78,15 +79,32 @@ var app = new Vue({
         const data = this.validateClientRecord('add_permit')
 
         this.closeModal()
-
-        axios.post('/add_client_record', data)
-        .then((response) => {
-          this.displaySuccessMsg('Client record added')
-          this.current_data = response.data.reply
-        })
-        .catch((error) => {
-          console.log(error)
-        })
+      let url = `/add_client_record`
+      const fetchData  = {
+          method: 'post',
+          body: JSON.stringify(data),
+          headers: {
+            "Content-Type": "application/json",
+            'Authorization': `Token ${this.token}`,
+            'X-CSRFToken': this.csrftoken
+          }
+      }
+      fetch(url, fetchData)
+      .then(resp => {
+          if(resp.ok) {
+            return resp.json()
+          } else {
+            return Promise.reject(resp.json())
+          }
+      })
+      .then(data => {
+        console.log(data)
+        this.displaySuccessMsg('Account record added')
+        this.current_data = data.reply
+      })
+      .catch(error => {
+          console.log(error.object)
+      })
       }
     },
     addAccountRecord () {
@@ -107,14 +125,33 @@ var app = new Vue({
           permit: 'add_permit'
         }
         this.closeModal()
-        axios.post('/add_account_record', data)
-        .then((response) => {
-          this.displaySuccessMsg('Account record added')
-          this.current_data = response.data.reply
-        })
-        .catch((error) => {
-          console.log(error)
-        })
+
+        let url = `/add_account_record`
+        const fetchData  = {
+            method: 'post',
+            body: JSON.stringify(data),
+            headers: {
+              "Content-Type": "application/json",
+              'Authorization': `Token ${this.token}`,
+              'X-CSRFToken': this.csrftoken
+            }
+        }
+        fetch(url, fetchData)
+            .then(resp => {
+                if(resp.ok) {
+                  return resp.json()
+                } else {
+                  return Promise.reject(resp.json())
+                }
+            })
+            .then(data => {
+              console.log(data)
+              this.displaySuccessMsg('Account record added')
+              this.current_data = data.reply
+            })
+            .catch(error => {
+                console.log(error.object)
+            })
       }
     },
     triggerClientUpdate (id) {
@@ -167,15 +204,33 @@ var app = new Vue({
         const data = this.validateClientRecord('edit_permit')
 
         this.closeModal()
-
-        axios.put('/update_client_record', data)
-        .then((response) => {
-          this.displaySuccessMsg('Client record updated')
-          this.current_data = response.data.reply
-        })
-        .catch((error) => {
-          console.log(error)
-        })
+        let url = `/update_client_record`
+        const fetchData  = {
+            method: 'put',
+            body: JSON.stringify(data),
+            headers: {
+              "Content-Type": "application/json",
+              'Authorization': `Token ${this.token}`,
+              'X-CSRFToken': this.csrftoken
+            }
+        }
+        fetch(url, fetchData)
+            .then(resp => {
+                if(resp.ok) {
+                  return resp.json()
+                } else {
+                  return Promise.reject(resp.json())
+                }
+            })
+            .then(data => {
+              console.log(data)
+              this.displaySuccessMsg('Client record updated')
+              this.current_data = data.reply
+            })
+            .catch(error => {
+                console.log(error.object)
+            })
+        
       }
     },
     updateAccountRecord () {
@@ -197,16 +252,32 @@ var app = new Vue({
           id: this.current_id,
           permit: 'edit_permit'
         }
-        // { data: data, headers: { 'X-CSRFToken': this.csrftoken } }
         this.closeModal()
 
-        axios.post('/update_account_record', data)
-        .then((response) => {
-          this.displaySuccessMsg('Account record updated')
-          this.current_data = response.data.reply
+        let url = `/update_account_record`
+        const fetchData  = {
+            method: 'put',
+            body: JSON.stringify(data),
+            headers: {
+              "Content-Type": "application/json",
+              'Authorization': `Token ${this.token}`,
+              'X-CSRFToken': this.csrftoken
+            }
+        }
+        fetch(url, fetchData)
+        .then(resp => {
+            if(resp.ok) {
+              return resp.json()
+            } else {
+              return Promise.reject(resp.json())
+            }
         })
-        .catch((error) => {
-          console.log(error)
+        .then(data => {
+          this.displaySuccessMsg('Account record updated')
+          this.current_data = data.reply
+        })
+        .catch(error => {
+            console.log(error.object)
         })
       }
     },
@@ -237,15 +308,31 @@ var app = new Vue({
       this.current_id = 0
       this.delete_flag = false
       this.delete_table = ''
-
-        axios.delete('/delete_record', {data: payload})
-        .then((response) => {
-          this.current_data = response.data.reply
-          this.displaySuccessMsg('Record deleted')
-        })
-        .catch((error) => {
-          console.log(error)
-        })
+      let url = `/delete_record`
+      const fetchData  = {
+          method: 'delete',
+          body: JSON.stringify(payload),
+          headers: {
+            "Content-Type": "application/json",
+            'Authorization': `Token ${this.token}`,
+            'X-CSRFToken': this.csrftoken
+          }
+      }
+      fetch(url, fetchData)
+      .then(resp => {
+          if(resp.ok) {
+            return resp.json()
+          } else {
+            return Promise.reject(resp.json())
+          }
+      })
+      .then(data => {
+        this.displaySuccessMsg('Record deleted')
+        this.current_data = data.reply
+      })
+      .catch(error => {
+          console.log(error.object)
+      })
     },
     validEmail(email) {
       const regex = /^\S+@\S+\.\S+$/;
@@ -333,7 +420,6 @@ var app = new Vue({
     },
     getToken() {
       axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-      console.log('I ran')
           let token = document.head.querySelector('meta[name="csrf-token"]');
 
           if (token) {
@@ -342,22 +428,23 @@ var app = new Vue({
           } else {
               console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
           }
-      }
+    }
     },
     created () {
       const data = localStorage.getItem('user')
       if (data !== null) {
-        console.log('hljs-keyword')
-        user = JSON.parse(data)
-          axios.get('/get_data', {params: user})
+        userData = JSON.parse(data)
+        axios.get('/get_data', {
+          params: {user: userData.user}
+        })
         .then((response) => {
          this.current_data = response.data.reply
+         this.token = userData.token
         })
         .catch((error) => {
           console.log(error)
         })
       } else {
-        console.log('hey')
         self.location = '/logout_user'
       }
       this.getToken()
