@@ -319,7 +319,7 @@ def user_permission(request):
     except EnvironmentError as e:
       print({'Error': e})
   else:
-    redirect('/')
+    return  redirect('/')
 
 @api_view(['put'])
 def permit_user(request):
