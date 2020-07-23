@@ -124,8 +124,6 @@ def create_user(request):
       return JsonResponse({'reply': 'success'})
   except EnvironmentError as e:
     print({'Error': e})
-  # except:
-  #   return HttpResponse('Oopss, Something went wrong')
 
 
 @api_view(['post'])

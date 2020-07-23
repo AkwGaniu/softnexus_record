@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'ciat9ch7dy@u$=e5gy8v9sr1kpuv(lzt-i5rtnkjmr9yerw%2s'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [
     'softnexusrecord.herokuapp.com', 'localhost', '127.0.0.1', '*'
