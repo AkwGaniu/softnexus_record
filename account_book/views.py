@@ -13,17 +13,17 @@ def welcome(request):
   if not request.user.is_authenticated:
     return render(request, 'login.html')
   else:
-    return render(request, 'home.html')
+    return render(request, 'homeNew.html')
 
 def register(request):
   if not request.user.is_authenticated:
     return render(request, 'register.html')
   else:
-    return render(request, 'home.html')
+    return render(request, 'homeNew.html')
 
 def home(request):
   if request.user.is_authenticated:
-    return render(request, 'home.html')
+    return render(request, 'homeNew.html')
   else:
     return redirect('/')
 
@@ -38,7 +38,7 @@ def user_login(request):
       # login(request, user)
       user_data = {'user': user.username}
       return JsonResponse({'reply': user_data})
-      # return redirect('/home?user='+ user.username)
+      # return redirect('/homeNew?user='+ user.username)
     else:
       return JsonResponse({'reply':'access denied'})
   except EnvironmentError as e:
