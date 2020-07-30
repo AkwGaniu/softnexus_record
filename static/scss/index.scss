@@ -157,6 +157,9 @@ html, body {
         color: red;
       }
     }
+    .client-main {
+      overflow-y: scroll;
+    } 
     main {
       padding: 10px 20px 20px;
       @media (max-width: 768px) {
