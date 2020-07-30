@@ -8,7 +8,7 @@
         <span class="errMsg">
           [[ error ]]
         </span>
-        <form action="#" method="post">
+        <form action="#" enctype="multipart/form-data" method="post">
           {% csrf_token %}
           <div class="form-group">
             <span><i class="fa fa-user-o" aria-hidden="true"></i></span>
@@ -28,6 +28,23 @@
               autocomplete="off"
               placeholder="Email"
               @keyup.enter="register()"
+            >
+          </div>
+          <div class="form-group">
+            <span>
+              <i class="fa fa-upload" aria-hidden="true"></i>
+              [[ file_name ]]
+            </span>
+            <!-- <input type="file" multiple :name="uploadFieldName" :disabled="isSaving" @change="filesChange($event.target.name, $event.target.files); fileCount = $event.target.files.length" -->
+
+            <input
+              type="file"
+              @change="filesChange($event.target.files)"
+              accept="image/*"
+              autocomplete="off"
+              placeholder="Email"
+              @keyup.enter="register()"
+              class="input-file"
             >
           </div>
           <div class="form-group">
@@ -68,23 +85,31 @@
         return {
           error: '',
           successMessage: '',
+          file_name: 'Upload profile picture',
           user: {
             username: '',
             email: '',
+            profile_pic: '',
             password: '',
             comfirmpass: ''
           }
         }
       },
       methods: {
+        filesChange (file) {
+          this.user.profile_pic = file
+          const file_name = file[0].name
+          this.file_name = file_name
+        },
         register () {
           username = this.user.username
           email = this.user.email
           password = this.user.password
           comfirmpass = this.user.comfirmpass
+          profile_pic = this.user.profile_pic
   
           if (password === '' || username === '' || email === '') {
-            this.error = 'Please provide your login credentials'
+            this.error = 'Please fill out the all the fields'
           } else if (!this.validEmail(email)) {
             this.error = 'Please provide a valid email address'
           } else if (password.length < 6) {
@@ -92,28 +117,50 @@
           } else if (password !== comfirmpass) {
             console.log(password + comfirmpass)
             this.error = 'Password fields does not match'
-          } else {
+          }else {
+            let payload
+            if (profile_pic == '') {
+              payload = {
+                username: username,
+                email: email,
+                password: password,
+                file: ''
+              }
+            } else {
+              payload  = new FormData()
+              for (const file of profile_pic) {
+                  payload.append('file', file, file.name)
+                }
+              payload.append('username', username)
+              payload.append('email', email)
+              payload.append('password', password)
+            }
+            console.log(payload)
             this.error = ''
             thissuccessMessage =''
-            const payload = {
-              username: username,
-              email: email,
-              password: password
+            let url = `/register_user`
+
+            const fetchData  = {
+              method: 'post',
+              body:  payload,
             }
-            axios.post('/register_user', payload)
-            .then((response) => {
-              //self.location = '/home'
-              if (response.data.reply === 'success') {
+      
+            fetch(url, fetchData)
+            .then(resp => {
+                if(resp.ok) {
+                    return resp.json()
+                } else {
+                    return Promise.reject()
+                }
+            })
+            .then(data => {
+              if (data.reply === 'success') {
                 localStorage.setItem('message', JSON.stringify({message: 'Registration successful, Please login'}))
                 self.location = '/'
-              } else {
-                this.error = response.data.reply
-                console.log(response.data.reply)
               }
-              console.log(response.data)
             })
-            .catch((error) => {
-              console.log({'error': error})
+            .catch(error => {
+              console.log(error)
             })
           }
         },

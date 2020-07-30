@@ -5,6 +5,7 @@
     const jscontext={token: '{{ users | safe }}'}
     var Data = JSON.parse(jscontext.token)
     const Admin = JSON.parse(localStorage.getItem('user'))
+    console.log(Data)
   </script>
   <div
     id="main"
@@ -79,90 +80,92 @@
                 <td> [[ user.username ]] </td>
                 <td v-if="user.is_staff">Staff</td>
                 <td class="action-btn-holder">
-                  <button
-                    :class="[
-                      {permit: user.permissions.add_permit},
-                      {notPermit: !user.permissions.add_permit},'action-btn'
-                    ]"
-                    v-if="!user.permissions.add_permit"
-                    @click="triggerPermitRequest(user.permissions.user_id, user.username, 'add', 'grant')"
-                  >
-                    <i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i>
-                  </button>
-                  <button 
-                    :class="[
-                      {permit: user.permissions.add_permit},
-                      {notPermit: !user.permissions.add_permit},'action-btn'
-                    ]"
-                    v-else
-                    @click="triggerPermitRequest(user.permissions.user_id, user.username, 'add', 'deny')"
-                  >
-                    <i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i>
-                  </button>
-                  <!-- END OF ADD BUTTON -->
-                  <button
-                    :class="[
-                      {permit: user.permissions.edit_permit},
-                      {notPermit: !user.permissions.edit_permit},'action-btn'
-                    ]"
-                    v-if="!user.permissions.edit_permit"
-                    @click="triggerPermitRequest(user.permissions.user_id, user.username, 'edit', 'grant')"
-                  >
-                    <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
-                  </button>
-                  <button
-                    :class="[
-                      {permit: user.permissions.edit_permit},
-                      {notPermit: !user.permissions.edit_permit},'action-btn'
-                    ]"
-                    v-else
-                    @click="triggerPermitRequest(user.permissions.user_id, user.username, 'edit', 'deny')"
-                  >
-                    <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
-                  </button>
-                  <!-- END OF UPDATE BUTTON -->
-                  <button 
-                  :class="[
-                    {permit: user.permissions.delete_permit},
-                    {notPermit: !user.permissions.delete_permit},'action-btn'
-                  ]"
-                  v-if="!user.permissions.delete_permit"
-                  @click="triggerPermitRequest(user.permissions.user_id, user.username, 'delete', 'grant')"
-                >
-                  <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
-                  </button>
-                  <button 
+                  <div class="user-action-button-holder">
+                    <button
+                      :class="[
+                        {permit: user.permissions.add_permit},
+                        {notPermit: !user.permissions.add_permit},'action-btn'
+                      ]"
+                      v-if="!user.permissions.add_permit"
+                      @click="triggerPermitRequest(user.permissions.user_id, user.username, 'add', 'grant')"
+                    >
+                      <i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i>
+                    </button>
+                    <button 
+                      :class="[
+                        {permit: user.permissions.add_permit},
+                        {notPermit: !user.permissions.add_permit},'action-btn'
+                      ]"
+                      v-else
+                      @click="triggerPermitRequest(user.permissions.user_id, user.username, 'add', 'deny')"
+                    >
+                      <i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i>
+                    </button>
+                    <!-- END OF ADD BUTTON -->
+                    <button
+                      :class="[
+                        {permit: user.permissions.edit_permit},
+                        {notPermit: !user.permissions.edit_permit},'action-btn'
+                      ]"
+                      v-if="!user.permissions.edit_permit"
+                      @click="triggerPermitRequest(user.permissions.user_id, user.username, 'edit', 'grant')"
+                    >
+                      <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
+                    </button>
+                    <button
+                      :class="[
+                        {permit: user.permissions.edit_permit},
+                        {notPermit: !user.permissions.edit_permit},'action-btn'
+                      ]"
+                      v-else
+                      @click="triggerPermitRequest(user.permissions.user_id, user.username, 'edit', 'deny')"
+                    >
+                      <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
+                    </button>
+                    <!-- END OF UPDATE BUTTON -->
+                    <button 
                     :class="[
                       {permit: user.permissions.delete_permit},
                       {notPermit: !user.permissions.delete_permit},'action-btn'
                     ]"
-                    v-else
-                    @click="triggerPermitRequest(user.permissions.user_id, user.username, 'delete', 'deny')"
+                    v-if="!user.permissions.delete_permit"
+                    @click="triggerPermitRequest(user.permissions.user_id, user.username, 'delete', 'grant')"
                   >
                     <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
-                  </button>
-                  <!-- END OF DELETE BUTTON -->
-                  <button 
-                    :class="[
-                      {permit: user.permissions.download_permit},
-                      {notPermit: !user.permissions.download_permit},'action-btn'
-                    ]"
-                    v-if="!user.permissions.download_permit"
-                    @click="triggerPermitRequest(user.permissions.user_id, user.username, 'download', 'grant')"
-                  >
-                  <i class="fa fa-download fa-lg" aria-hidden="true"></i>
-                  </button>
-                  <button 
-                    :class="[
-                      {permit: user.permissions.download_permit},
-                      {notPermit: !user.permissions.download_permit},'action-btn'
-                    ]"
-                    v-else
-                    @click="triggerPermitRequest(user.permissions.user_id, user.username, 'download', 'deny')"
-                  >
+                    </button>
+                    <button 
+                      :class="[
+                        {permit: user.permissions.delete_permit},
+                        {notPermit: !user.permissions.delete_permit},'action-btn'
+                      ]"
+                      v-else
+                      @click="triggerPermitRequest(user.permissions.user_id, user.username, 'delete', 'deny')"
+                    >
+                      <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
+                    </button>
+                    <!-- END OF DELETE BUTTON -->
+                    <button 
+                      :class="[
+                        {permit: user.permissions.download_permit},
+                        {notPermit: !user.permissions.download_permit},'action-btn'
+                      ]"
+                      v-if="!user.permissions.download_permit"
+                      @click="triggerPermitRequest(user.permissions.user_id, user.username, 'download', 'grant')"
+                    >
                     <i class="fa fa-download fa-lg" aria-hidden="true"></i>
-                  </button>
-                  <!-- END OF DOWNLOAD BUTTON -->
+                    </button>
+                    <button 
+                      :class="[
+                        {permit: user.permissions.download_permit},
+                        {notPermit: !user.permissions.download_permit},'action-btn'
+                      ]"
+                      v-else
+                      @click="triggerPermitRequest(user.permissions.user_id, user.username, 'download', 'deny')"
+                    >
+                      <i class="fa fa-download fa-lg" aria-hidden="true"></i>
+                    </button>
+                    <!-- END OF DOWNLOAD BUTTON -->
+                  </div>
                 </td>
             </tr>
             </tbody>
@@ -305,7 +308,9 @@
         this.successMsg = msg
         setTimeout(()=> this.successMsg = '', 5000)
       },
-
+    },
+    created () {
+      console.log(this.users)
     }
   })
 </script>

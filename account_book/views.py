@@ -1,9 +1,11 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 import json
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, logout
 from django.contrib.auth.models import User
 from rest_framework.decorators import api_view
+from rest_framework.views import APIView
+from rest_framework.parsers import MultiPartParser
 from account_book.models import Permission, Account, Client
 
 # PERSONAL IMPORTS
@@ -15,34 +17,19 @@ def welcome(request):
   else:
     return render(request, 'homeNew.html')
 
+
 def register(request):
   if not request.user.is_authenticated:
     return render(request, 'register.html')
   else:
     return render(request, 'homeNew.html')
 
+
 def home(request):
   if request.user.is_authenticated:
     return render(request, 'homeNew.html')
   else:
     return redirect('/')
-
-@api_view(['post'])
-def user_login(request):
-  try:
-    username = request.data['username']
-    password = request.data['password']
-
-    user = authenticate(request, username=username, password=password)
-    if user is not None:
-      # login(request, user)
-      user_data = {'user': user.username}
-      return JsonResponse({'reply': user_data})
-      # return redirect('/homeNew?user='+ user.username)
-    else:
-      return JsonResponse({'reply':'access denied'})
-  except EnvironmentError as e:
-    print({'Error': e})
 
 
 def logout_user(request):
@@ -59,20 +46,32 @@ def get_data(request):
         new_user_obj = {
           'username': current_user.username,
           'is_admin': current_user.is_superuser,
+          'user_image': False,
           'edit_permit': True,
           'delete_permit': True,
           'add_permit': True,
           'download_permit': True
         }
       else:
-        user_permission = Permission.objects.get(user=current_user.id)
+        permit = Permission.objects.filter(user=current_user.id)
+        permit = list(permit.values(
+        'user_id', 'add_permit', 'edit_permit', 
+        'delete_permit', 'download_permit', 'user_image'
+        ))
+
+        user_permission = {}
+        for user in permit:
+          user_permission.update(user)
+
+        print(user_permission)
         new_user_obj = {
           'username': current_user.username,
           'is_admin': current_user.is_superuser,
-          'edit_permit': user_permission.edit_permit,
-          'delete_permit': user_permission.delete_permit,
-          'add_permit': user_permission.add_permit,
-          'download_permit': user_permission.download_permit
+          'user_image': user_permission['user_image'],
+          'edit_permit': user_permission['edit_permit'],
+          'delete_permit': user_permission['delete_permit'],
+          'add_permit': user_permission['add_permit'],
+          'download_permit': user_permission['download_permit']
         }
 
       get_accounts = Account.objects.all()
@@ -98,30 +97,87 @@ def get_data(request):
     return redirect('/')
 
 
+def user_permission(request):
+  if request.user.is_authenticated:
+    try:
+      users_result = User.objects.filter()
+      users = list(users_result.values('id', 'username', 'email', 'is_staff', 'is_superuser'))
+      permissions_result = Permission.objects.filter()
+      permissions = list(permissions_result.values(
+        'user_id', 'add_permit', 'edit_permit', 
+        'delete_permit', 'download_permit'
+      ))
+
+      list_of_users = []
+      for user in users:
+        if user['is_superuser']:
+          continue
+        for permit in permissions:
+          if permit['user_id'] == user['id']:
+            user.update({'permissions': permit})
+        list_of_users.append(user)
+      context = {}
+      context['users'] = json.dumps(list_of_users)
+      return render(request, 'users.html', context)
+    except EnvironmentError as e:
+      print({'Error': e})
+  else:
+    return  redirect('/')
+
+class CreateUser(APIView):
+
+  parser_classes = (MultiPartParser, )
+
+  def post(self, request, format=None):
+    try:
+      if 'file' in request.FILES:
+        user_image = request.FILES['file']
+      else:
+        user_image = False
+      print(user_image)
+      username = request.data['username']
+      password = request.data['password']
+      email = request.data['email']
+
+      if User.objects.filter(username=username).exists():
+        return JsonResponse({'reply': 'Username already exist'})
+      elif  User.objects.filter(email=email).exists():
+        return JsonResponse({'reply': 'Email already exist'})
+      else:
+        user = User(
+          username = username,
+          password = password,
+          email = email,
+          is_staff = True
+        )
+        user.set_password(password)
+        user.save()
+        if not user_image:
+          set_permission = Permission(
+            user = User(id=user.id),
+          )
+        else:
+          set_permission = Permission(
+            user = User(id=user.id),
+            user_image = user_image
+          )
+        set_permission.save()
+        return JsonResponse({'reply': 'success'})
+    except EnvironmentError as e:
+      print({'Error': e})
+
+
 @api_view(['post'])
-def create_user(request):
+def user_login(request):
   try:
     username = request.data['username']
     password = request.data['password']
-    email = request.data['email']
-
-    users = User.objects.filter(username=username)
-    if len(users) > 0:
-      return JsonResponse({'reply': 'username already exist'})
+    user = authenticate(request, username=username, password=password)
+    if user is not None:
+      user_data = {'user': user.username}
+      return JsonResponse({'reply': user_data})
     else:
-      user = User(
-        username = username,
-        password = password,
-        email = email,
-        is_staff = True
-      )
-      user.set_password(password)
-      user.save()
-      set_permission = Permission(
-        user = User(id=user.id)
-      )
-      set_permission.save()
-      return JsonResponse({'reply': 'success'})
+      return JsonResponse({'reply':'access denied'})
   except EnvironmentError as e:
     print({'Error': e})
 
@@ -291,33 +347,6 @@ def delete_record(request):
   except EnvironmentError as e:
     print({'Error': e})
 
-
-def user_permission(request):
-  if request.user.is_authenticated:
-    try:
-      users_result = User.objects.filter()
-      users = list(users_result.values('id', 'username', 'email', 'is_staff', 'is_superuser'))
-      permissions_result = Permission.objects.filter()
-      permissions = list(permissions_result.values(
-        'user_id', 'add_permit', 'edit_permit', 
-        'delete_permit', 'download_permit'
-      ))
-
-      list_of_users = []
-      for user in users:
-        if user['is_superuser']:
-          continue
-        for permit in permissions:
-          if permit['user_id'] == user['id']:
-            user.update({'permissions': permit})
-        list_of_users.append(user)
-      context = {}
-      context['users'] = json.dumps(list_of_users)
-      return render(request, 'users.html', context)
-    except EnvironmentError as e:
-      print({'Error': e})
-  else:
-    return  redirect('/')
 
 @api_view(['put'])
 def permit_user(request):

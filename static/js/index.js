@@ -4,6 +4,7 @@ var app = new Vue({
   data: () => {
     return {
     current_id: 0,
+    current_item: 0,
     current_data: Object,
     csrftoken: '',
     token: '',
@@ -438,6 +439,7 @@ var app = new Vue({
           params: {user: userData.user}
         })
         .then((response) => {
+          console.log(response.data.reply)
          this.current_data = response.data.reply
          this.token = userData.token
         })

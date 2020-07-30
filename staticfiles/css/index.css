@@ -9,8 +9,8 @@ html, body {
 
 .login-holder {
   background: url(../images/bg.jpg);
-  -webkit-box-shadow: inset 0 0 0 1000px rgba(0, 0, 0, 0.5);
-  box-shadow: inset 0 0 0 1000px rgba(0, 0, 0, 0.5);
+  -webkit-box-shadow: inset 0 0 0 1000px rgba(0, 0, 0, 0.2);
+  box-shadow: inset 0 0 0 1000px rgba(0, 0, 0, 0.2);
   background-repeat: no-repeat;
   background-size: cover;
   height: 100vh;
@@ -19,9 +19,9 @@ html, body {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: left;
-  -ms-flex-pack: left;
-  justify-content: left;
+  -webkit-box-pack: end;
+  -ms-flex-pack: end;
+  justify-content: flex-end;
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center; }
@@ -29,10 +29,9 @@ html, body {
     width: 30%;
     border-radius: 20px;
     padding: 20px;
-    background-color: blanchedalmond;
-    margin: 0px 0px 0px 70%;
-    -webkit-box-shadow: 2px 2px 6px black;
-    box-shadow: 2px 2px 6px black; }
+    background-color: #fffafa;
+    -webkit-box-shadow: 2px 2px 4px black;
+    box-shadow: 2px 2px 4px black; }
     @media (max-width: 768px) {
       .login-holder .login {
         width: 90%;
@@ -65,21 +64,22 @@ html, body {
       .login-holder .login .form-group input {
         outline: none;
         border: none;
+        padding-left: 5px;
         background-color: transparent;
         height: 100%;
         width: 95%; }
       .login-holder .login .form-group input::-webkit-input-placeholder {
         font-size: 10px;
-        color: black; }
+        color: #c7c4c4; }
       .login-holder .login .form-group input:-ms-input-placeholder {
         font-size: 10px;
-        color: black; }
+        color: #c7c4c4; }
       .login-holder .login .form-group input::-ms-input-placeholder {
         font-size: 10px;
-        color: black; }
+        color: #c7c4c4; }
       .login-holder .login .form-group input::placeholder {
         font-size: 10px;
-        color: black; }
+        color: #c7c4c4; }
     .login-holder .login input[type=submit] {
       background-color: #2539ac;
       width: 50%;
@@ -126,10 +126,12 @@ html, body {
         border-radius: 0px; } }
     .add-record-modal .modal-content header {
       padding: 5px;
+      border-radius: 20px 20px 0px 0px;
       position: relative; }
       @media (max-width: 768px) {
         .add-record-modal .modal-content header {
-          padding: 15px; } }
+          padding: 15px;
+          border-radius: 0px; } }
       .add-record-modal .modal-content header h2 {
         color: whitesmoke;
         font-weight: 400;
@@ -152,8 +154,7 @@ html, body {
       .add-record-modal .modal-content header span:hover {
         color: red; }
     .add-record-modal .modal-content main {
-      padding: 10px 20px 20px !important;
-      min-height: 36.5vh !important; }
+      padding: 10px 20px 20px; }
       @media (max-width: 768px) {
         .add-record-modal .modal-content main {
           padding: 20px 20px; } }
@@ -191,26 +192,17 @@ html, body {
         .add-record-modal .modal-content main .form-group option:hover {
           border: 0; }
         .add-record-modal .modal-content main .form-group input::-webkit-input-placeholder {
-          font-size: 13px;
-          color: black; }
+          font-size: 10px;
+          color: #c7c4c4; }
         .add-record-modal .modal-content main .form-group input:-ms-input-placeholder {
-          font-size: 13px;
-          color: black; }
+          font-size: 10px;
+          color: #c7c4c4; }
         .add-record-modal .modal-content main .form-group input::-ms-input-placeholder {
-          font-size: 13px;
-          color: black; }
+          font-size: 10px;
+          color: #c7c4c4; }
         .add-record-modal .modal-content main .form-group input::placeholder {
-          font-size: 13px;
-          color: black; }
-          @media (max-width: 768px) {
-            .add-record-modal .modal-content main .form-group input::-webkit-input-placeholder {
-              font-size: 15px; }
-            .add-record-modal .modal-content main .form-group input:-ms-input-placeholder {
-              font-size: 15px; }
-            .add-record-modal .modal-content main .form-group input::-ms-input-placeholder {
-              font-size: 15px; }
-            .add-record-modal .modal-content main .form-group input::placeholder {
-              font-size: 15px; } }
+          font-size: 10px;
+          color: #c7c4c4; }
       .add-record-modal .modal-content main input[type=submit] {
         background-color: #2539ac;
         width: 50%;
@@ -254,6 +246,11 @@ html, body {
       -webkit-box-align: end;
       -ms-flex-align: end;
       align-items: flex-end; }
+      #main header .user-details .user-avartar {
+        width: 45px; }
+        #main header .user-details .user-avartar img {
+          border-radius: 50%;
+          width: 100%; }
       #main header .user-details .user {
         position: relative; }
         #main header .user-details .user .ctas {
@@ -286,138 +283,109 @@ html, body {
     display: -ms-flexbox;
     display: flex; }
     #main .tab-btns .account-book {
-      display: -webkit-box;
-      display: -ms-flexbox;
-      display: flex;
-      -webkit-box-pack: start;
-      -ms-flex-pack: start;
-      justify-content: flex-start;
       width: 50%; }
       #main .tab-btns .account-book .account-tab {
-        outline: none;
-        padding: 5px 10px;
-        border: 2px solid #a4c5c6;
-        width: 75%;
-        font-size: larger;
-        font-weight: 500;
-        letter-spacing: 2px;
-        color: #2f2519;
-        background-color: #a4c5c6; }
-        @media (max-width: 768px) {
-          #main .tab-btns .account-book .account-tab {
-            width: 80%;
-            padding: 5px;
-            letter-spacing: 0; } }
-      #main .tab-btns .account-book .account-tab:hover {
-        background-color: #035aa6;
-        border-color: #035aa6;
-        color: whitesmoke; }
-      #main .tab-btns .account-book .add {
-        width: 10%;
-        padding: 7.5px 0px;
-        background-color: #6886c5;
-        border: 2px solid #6886c5;
-        margin: 0;
-        outline: none;
-        font-size: large;
-        color: whitesmoke; }
-        @media (max-width: 768px) {
-          #main .tab-btns .account-book .add {
-            width: 20%; } }
-      #main .tab-btns .account-book .add:hover {
-        background-color: #000839;
-        color: white;
-        border-color: #000839; }
+        border: 0;
+        border-right: 2px solid #f3f6f7; }
     #main .tab-btns .client-entry {
-      display: -webkit-box;
-      display: -ms-flexbox;
-      display: flex;
-      -webkit-box-pack: start;
-      -ms-flex-pack: start;
-      justify-content: flex-start;
       width: 50%; }
       #main .tab-btns .client-entry .client-tab {
-        outline: none;
-        padding: 5px 10px;
-        border: 2px solid #a4c5c6;
-        width: 75%;
-        background-color: #a4c5c6;
-        font-size: larger;
-        font-weight: 500;
-        letter-spacing: 2px;
-        color: #2f2519; }
-        @media (max-width: 768px) {
-          #main .tab-btns .client-entry .client-tab {
-            width: 80%;
-            padding: 5px;
-            letter-spacing: 0; } }
-      #main .tab-btns .client-entry .client-tab:hover {
-        background-color: #035aa6;
-        border-color: #035aa6;
-        color: whitesmoke; }
-      #main .tab-btns .client-entry .add {
-        width: 10%;
-        padding: 7.5px 0px;
-        background-color: #6886c5;
-        border: 2px solid #6886c5;
-        margin: 0;
-        outline: none;
-        font-size: large;
-        color: whitesmoke; }
-        @media (max-width: 768px) {
-          #main .tab-btns .client-entry .add {
-            width: 20%; } }
-      #main .tab-btns .client-entry .add:hover {
-        background-color: #000839;
-        color: white;
-        border-color: #000839; }
-  #main main {
-    min-height: 60.5vh;
+        border: 0;
+        border-left: 2px solid #f3f6f7; }
+    #main .tab-btns button {
+      outline: none;
+      padding: 10px;
+      width: 100%;
+      font-size: larger;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: #2f2519;
+      background-color: #a4c5c6; }
+      @media (max-width: 768px) {
+        #main .tab-btns button {
+          padding: 5px;
+          letter-spacing: 0; } }
+    #main .tab-btns button:hover {
+      background-color: #035aa6;
+      border-color: #035aa6;
+      color: whitesmoke; }
+  #main .main {
+    min-height: 60.2vh;
     padding: 20px 10px 0px; }
     @media (max-width: 768px) {
-      #main main {
+      #main .main {
         padding: 20px 0px 0px;
-        min-height: 63vh !important; } }
-    @media (max-width: 1446px) {
-      #main main {
-        min-height: 67.2vh; } }
-    #main main .title {
+        min-height: 62.2vh; } }
+    #main .main .record-header {
       display: -webkit-box;
       display: -ms-flexbox;
       display: flex;
-      -webkit-box-pack: start;
-      -ms-flex-pack: start;
-      justify-content: start; }
-      #main main .title h4 {
-        width: 30%;
-        font-size: larger;
-        font-weight: bold;
-        letter-spacing: 3px;
-        color: #292828; }
+      -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+      justify-content: space-between; }
+      #main .main .record-header .title {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-pack: start;
+        -ms-flex-pack: start;
+        justify-content: flex-start;
+        width: 90%;
+        padding: 0 5px; }
         @media (max-width: 768px) {
-          #main main .title h4 {
+          #main .main .record-header .title {
+            width: 75%; } }
+        #main .main .record-header .title h4 {
+          width: 42%;
+          font-size: larger;
+          font-weight: bold;
+          letter-spacing: 3px;
+          color: #292828; }
+          @media (max-width: 768px) {
+            #main .main .record-header .title h4 {
+              font-size: medium;
+              width: 20%;
+              letter-spacing: 0;
+              margin-right: 2.5px; } }
+        #main .main .record-header .title .success {
+          display: none;
+          -webkit-box-pack: justify;
+          -ms-flex-pack: justify;
+          justify-content: space-between;
+          border-radius: 5px;
+          margin-bottom: .4rem;
+          padding: 2.5px 10px 0px;
+          color: white;
+          background-color: #b7efcd; }
+          #main .main .record-header .title .success p {
+            margin: 0 !important;
             font-size: medium;
-            width: 35%;
-            letter-spacing: 0;
-            padding-left: 5px; } }
-      #main main .title .success {
-        display: none;
-        -webkit-box-pack: justify;
-        -ms-flex-pack: justify;
-        justify-content: space-between;
-        border-radius: 5px;
-        margin-bottom: .4rem;
-        padding: 2.5px 10px 0px;
-        color: white;
-        background-color: #b7efcd; }
-        #main main .title .success p {
-          margin: 0 !important;
-          font-size: medium;
-          font-weight: bold; }
-        #main main .title .success span {
-          margin-left: 10px;
-          color: #ff9393;
-          cursor: pointer; }
+            font-weight: bold; }
+          #main .main .record-header .title .success span {
+            margin-left: 10px;
+            color: #ff9393;
+            cursor: pointer; }
+      #main .main .record-header .add-btn {
+        width: 10%;
+        padding: 0 5px;
+        margin-bottom: .5rem; }
+        @media (max-width: 768px) {
+          #main .main .record-header .add-btn {
+            width: 22%; } }
+        #main .main .record-header .add-btn .add {
+          width: 100%;
+          padding: 0px 0px;
+          background-color: #6886c5;
+          border: 0;
+          border-radius: 10px;
+          margin: 0;
+          outline: none;
+          font-size: large;
+          color: whitesmoke; }
+        #main .main .record-header .add-btn .add:hover {
+          background-color: #000839;
+          color: white;
+          border-color: #000839; }
   #main .table-head {
     background-color: #a9c6de; }
   #main .action-btn {
@@ -450,10 +418,39 @@ html, body {
       margin: 0;
       padding: 0; }
 
+.export-csv {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: end;
+  -ms-flex-pack: end;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+  padding: 0 5px; }
+  .export-csv a {
+    border-radius: 10px;
+    text-decoration: none;
+    padding: 4px 10px;
+    outline: none;
+    font-size: smaller;
+    color: whitesmoke;
+    font-weight: bold;
+    border: 0;
+    background-color: #43ec76; }
+
 .table th,
 .table td {
   padding: .5rem !important;
   vertical-align: bottom !important; }
+
+.client-action-button-holder {
+  width: 66px; }
+
+.account-action-button-holder {
+  width: 46px; }
+
+.user-action-button-holder {
+  width: 96px; }
 
 .action-btn-holder {
   width: 50px !important; }
@@ -464,11 +461,14 @@ html, body {
   -ms-flex-pack: justify;
   justify-content: space-between;
   border-radius: 5px;
-  width: 50%;
+  width: 40%;
   margin: 1rem auto 0rem;
   padding: 2.5px 10px 2.5px 15px;
   color: white;
   background-color: #b7efcd; }
+  @media (max-width: 768px) {
+    .user_permit_success {
+      width: 80%; } }
   .user_permit_success p {
     margin: 0 !important;
     font-size: medium;
@@ -496,14 +496,12 @@ html, body {
     width: 30%;
     border: 0;
     border-radius: 20px;
-    padding: 0px 0px;
-    height: 30vh; }
+    padding: 0px 0px 10px; }
     @media (max-width: 768px) {
       .delete-modal .modal-content {
-        width: 82%;
-        height: 28vh; } }
+        width: 82%; } }
     .delete-modal .modal-content header {
-      border-radius: 20px;
+      border-radius: 20px 20px 0px 0px;
       display: block !important; }
       .delete-modal .modal-content header h4 {
         text-align: center !important;
@@ -556,12 +554,13 @@ html, body {
   color: #292828; }
 
 .user-section main {
-  min-height: 60.7vh !important; }
-  @media (max-width: 1446px) {
+  min-height: 60.7vh;
+  padding: 20px 10px 5px; }
+  @media (max-width: 768px) {
     .user-section main {
-      min-height: 66.2vh !important; } }
+      min-height: 62.2vh; } }
   .user-section main .action-btn {
-    padding: 0px 3px !important; }
+    padding: 0px 3px; }
 
 .fix {
   bottom: -29px !important; }
@@ -584,3 +583,6 @@ html, body {
 
 .notPermit {
   background-color: #e84a5f !important; }
+
+.activeTab {
+  border-bottom: 4px solid rgba(19, 167, 19, 0.849) !important; }

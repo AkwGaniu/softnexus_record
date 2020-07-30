@@ -8,7 +8,7 @@ html, body {
   font-family: 'Open Sans', sans-serif; }
 
 .login-holder {
-  background: url(../images/bg.jpg);
+  background: url("../images/bg.11431845f88a.jpg");
   -webkit-box-shadow: inset 0 0 0 1000px rgba(0, 0, 0, 0.2);
   box-shadow: inset 0 0 0 1000px rgba(0, 0, 0, 0.2);
   background-repeat: no-repeat;
@@ -51,7 +51,6 @@ html, body {
       margin: 0;
       padding: 0; }
     .login-holder .login .form-group {
-      position: relative;
       display: -webkit-box;
       display: -ms-flexbox;
       display: flex;
@@ -101,13 +100,6 @@ html, body {
         color: #302f2f; }
       .login-holder .login .reg-redirect a:hover {
         color: black; }
-
-.input-file {
-  opacity: 0;
-  /* invisible but it's there! */
-  width: 100%;
-  position: absolute;
-  cursor: pointer; }
 
 .add-record-modal {
   display: none;
@@ -254,11 +246,6 @@ html, body {
       -webkit-box-align: end;
       -ms-flex-align: end;
       align-items: flex-end; }
-      #main header .user-details .user-avartar {
-        width: 45px; }
-        #main header .user-details .user-avartar img {
-          border-radius: 50%;
-          width: 100%; }
       #main header .user-details .user {
         position: relative; }
         #main header .user-details .user .ctas {
@@ -291,32 +278,91 @@ html, body {
     display: -ms-flexbox;
     display: flex; }
     #main .tab-btns .account-book {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-pack: start;
+      -ms-flex-pack: start;
+      justify-content: flex-start;
       width: 50%; }
       #main .tab-btns .account-book .account-tab {
-        border: 0;
-        border-right: 2px solid #f3f6f7; }
+        outline: none;
+        padding: 5px 10px;
+        border: 2px solid #a4c5c6;
+        width: 75%;
+        font-size: larger;
+        font-weight: 500;
+        letter-spacing: 2px;
+        color: #2f2519;
+        background-color: #a4c5c6; }
+        @media (max-width: 768px) {
+          #main .tab-btns .account-book .account-tab {
+            width: 80%;
+            padding: 5px;
+            letter-spacing: 0; } }
+      #main .tab-btns .account-book .account-tab:hover {
+        background-color: #035aa6;
+        border-color: #035aa6;
+        color: whitesmoke; }
+      #main .tab-btns .account-book .add {
+        width: 10%;
+        padding: 7.5px 0px;
+        background-color: #6886c5;
+        border: 2px solid #6886c5;
+        margin: 0;
+        outline: none;
+        font-size: large;
+        color: whitesmoke; }
+        @media (max-width: 768px) {
+          #main .tab-btns .account-book .add {
+            width: 20%; } }
+      #main .tab-btns .account-book .add:hover {
+        background-color: #000839;
+        color: white;
+        border-color: #000839; }
     #main .tab-btns .client-entry {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-pack: start;
+      -ms-flex-pack: start;
+      justify-content: flex-start;
       width: 50%; }
       #main .tab-btns .client-entry .client-tab {
-        border: 0;
-        border-left: 2px solid #f3f6f7; }
-    #main .tab-btns button {
-      outline: none;
-      padding: 10px;
-      width: 100%;
-      font-size: larger;
-      font-weight: 700;
-      letter-spacing: 2px;
-      color: #2f2519;
-      background-color: #a4c5c6; }
-      @media (max-width: 768px) {
-        #main .tab-btns button {
-          padding: 5px;
-          letter-spacing: 0; } }
-    #main .tab-btns button:hover {
-      background-color: #035aa6;
-      border-color: #035aa6;
-      color: whitesmoke; }
+        outline: none;
+        padding: 5px 10px;
+        border: 2px solid #a4c5c6;
+        width: 75%;
+        background-color: #a4c5c6;
+        font-size: larger;
+        font-weight: 500;
+        letter-spacing: 2px;
+        color: #2f2519; }
+        @media (max-width: 768px) {
+          #main .tab-btns .client-entry .client-tab {
+            width: 80%;
+            padding: 5px;
+            letter-spacing: 0; } }
+      #main .tab-btns .client-entry .client-tab:hover {
+        background-color: #035aa6;
+        border-color: #035aa6;
+        color: whitesmoke; }
+      #main .tab-btns .client-entry .add {
+        width: 10%;
+        padding: 7.5px 0px;
+        background-color: #6886c5;
+        border: 2px solid #6886c5;
+        margin: 0;
+        outline: none;
+        font-size: large;
+        color: whitesmoke; }
+        @media (max-width: 768px) {
+          #main .tab-btns .client-entry .add {
+            width: 20%; } }
+      #main .tab-btns .client-entry .add:hover {
+        background-color: #000839;
+        color: white;
+        border-color: #000839; }
   #main .main {
     min-height: 60.2vh;
     padding: 20px 10px 0px; }
@@ -324,76 +370,43 @@ html, body {
       #main .main {
         padding: 20px 0px 0px;
         min-height: 62.2vh; } }
-    #main .main .record-header {
+    #main .main .title {
       display: -webkit-box;
       display: -ms-flexbox;
       display: flex;
-      -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-      justify-content: space-between; }
-      #main .main .record-header .title {
-        display: -webkit-box;
-        display: -ms-flexbox;
-        display: flex;
-        -webkit-box-pack: start;
-        -ms-flex-pack: start;
-        justify-content: flex-start;
-        width: 90%;
-        padding: 0 5px; }
+      -webkit-box-pack: start;
+      -ms-flex-pack: start;
+      justify-content: start; }
+      #main .main .title h4 {
+        width: 30%;
+        font-size: larger;
+        font-weight: bold;
+        letter-spacing: 3px;
+        color: #292828; }
         @media (max-width: 768px) {
-          #main .main .record-header .title {
-            width: 75%; } }
-        #main .main .record-header .title h4 {
-          width: 42%;
-          font-size: larger;
-          font-weight: bold;
-          letter-spacing: 3px;
-          color: #292828; }
-          @media (max-width: 768px) {
-            #main .main .record-header .title h4 {
-              font-size: medium;
-              width: 20%;
-              letter-spacing: 0;
-              margin-right: 2.5px; } }
-        #main .main .record-header .title .success {
-          display: none;
-          -webkit-box-pack: justify;
-          -ms-flex-pack: justify;
-          justify-content: space-between;
-          border-radius: 5px;
-          margin-bottom: .4rem;
-          padding: 2.5px 10px 0px;
-          color: white;
-          background-color: #b7efcd; }
-          #main .main .record-header .title .success p {
-            margin: 0 !important;
+          #main .main .title h4 {
             font-size: medium;
-            font-weight: bold; }
-          #main .main .record-header .title .success span {
-            margin-left: 10px;
-            color: #ff9393;
-            cursor: pointer; }
-      #main .main .record-header .add-btn {
-        width: 10%;
-        padding: 0 5px;
-        margin-bottom: .5rem; }
-        @media (max-width: 768px) {
-          #main .main .record-header .add-btn {
-            width: 22%; } }
-        #main .main .record-header .add-btn .add {
-          width: 100%;
-          padding: 0px 0px;
-          background-color: #6886c5;
-          border: 0;
-          border-radius: 10px;
-          margin: 0;
-          outline: none;
-          font-size: large;
-          color: whitesmoke; }
-        #main .main .record-header .add-btn .add:hover {
-          background-color: #000839;
-          color: white;
-          border-color: #000839; }
+            width: 35%;
+            letter-spacing: 0;
+            padding-left: 5px; } }
+      #main .main .title .success {
+        display: none;
+        -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+        justify-content: space-between;
+        border-radius: 5px;
+        margin-bottom: .4rem;
+        padding: 2.5px 10px 0px;
+        color: white;
+        background-color: #b7efcd; }
+        #main .main .title .success p {
+          margin: 0 !important;
+          font-size: medium;
+          font-weight: bold; }
+        #main .main .title .success span {
+          margin-left: 10px;
+          color: #ff9393;
+          cursor: pointer; }
   #main .table-head {
     background-color: #a9c6de; }
   #main .action-btn {
@@ -433,12 +446,10 @@ html, body {
   -webkit-box-pack: end;
   -ms-flex-pack: end;
   justify-content: flex-end;
-  margin-bottom: 20px;
-  padding: 0 5px; }
+  margin-bottom: 20px; }
   .export-csv a {
-    border-radius: 10px;
     text-decoration: none;
-    padding: 4px 10px;
+    padding: 2px 4px;
     outline: none;
     font-size: smaller;
     color: whitesmoke;
@@ -450,15 +461,6 @@ html, body {
 .table td {
   padding: .5rem !important;
   vertical-align: bottom !important; }
-
-.client-action-button-holder {
-  width: 66px; }
-
-.account-action-button-holder {
-  width: 46px; }
-
-.user-action-button-holder {
-  width: 96px; }
 
 .action-btn-holder {
   width: 50px !important; }
@@ -591,6 +593,3 @@ html, body {
 
 .notPermit {
   background-color: #e84a5f !important; }
-
-.activeTab {
-  border-bottom: 4px solid rgba(19, 167, 19, 0.849) !important; }

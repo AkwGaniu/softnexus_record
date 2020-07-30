@@ -25,5 +25,5 @@ class Permission(models.Model):
   delete_permit = models.BooleanField(default=False)
   add_permit = models.BooleanField(default=False)
   download_permit = models.BooleanField(default=False)
+  user_image = models.ImageField(upload_to='images')
 
-  

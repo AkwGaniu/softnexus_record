@@ -14,13 +14,22 @@
       <div class="logo-holder">
         <div class="logo">
           <a href="/home" target="_self">
-            <img src="static/images/logo.png" alt="SoftNexus Logo" >
+            <img src="/static/images/logo.png" alt="SoftNexus Logo" >
           </a>
         </div>
       </div>
       <div class="user-details">
         <div class="user-avartar">
-          <img src="/static/images/user1.png" alt="User">
+          <img 
+            src="/static/images/user1.png"
+            alt="User"
+            v-if="!current_data.user.user_image"
+          >
+          <img 
+            v-else
+            :src= `/media/${current_data.user.user_image}`
+            alt="User"
+          >
         </div>
         <div class="user">
           <p>
@@ -109,47 +118,54 @@
               <th scope="col">Type</th>
               <th scope="col">Amount</th>
               <th scope="col">Date</th>
-              <th scope="col">Actions</th>
+              <th scope="col"></th>
             </tr>
           </thead>
           <tbody>
             <tr
               v-for="(account, index) in current_data.account_record"
+              @mouseover="current_item = account.id"
+              @mouseleave="current_item = 0"
             >
               <th scope="row"> [[ index + 1 ]] </th>
               <td> [[ account.description ]] </td>
               <td> [[ account.entry_type ]] </td>
               <td> [[ account.amount]] </td>
               <td> [[ account.date ]] </td>
-              <td class="action-btn-holder">
-                <button 
-                  class="action-btn"
-                  v-if="current_data.user.edit_permit"
-                  @click="triggerAccountUpdate(account.id)"
-                >
-                  <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
-                </button>
-                <button 
-                  class="action-btn"
-                  v-else
-                  @click="seekPermit()"
-                >
-                  <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
-                </button>
-                <button
-                  class="action-btn"
-                  v-if="current_data.user.delete_permit"
-                  @click="triggerDelete(account.id, 'account')"
-                >
-                  <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
-                </button>
-                <button 
-                class="action-btn"
-                v-else
-                @click="seekPermit()"
+              <td 
+                class="action-btn-holder"
+                v-if="current_item === account.id"
               >
-                <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
-              </button>
+                <div class="account-action-button-holder">
+                    <button 
+                      class="action-btn"
+                      v-if="current_data.user.edit_permit"
+                      @click="triggerAccountUpdate(account.id)"
+                    >
+                      <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
+                    </button>
+                    <button 
+                      class="action-btn"
+                      v-else
+                      @click="seekPermit()"
+                    >
+                      <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
+                    </button>
+                    <button
+                      class="action-btn"
+                      v-if="current_data.user.delete_permit"
+                      @click="triggerDelete(account.id, 'account')"
+                    >
+                      <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
+                    </button>
+                    <button 
+                    class="action-btn"
+                    v-else
+                    @click="seekPermit()"
+                  >
+                    <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
+                  </button>
+                </div>
               </td>
             </tr>
           </tbody>
@@ -199,7 +215,7 @@
       </div>
     </div>
       <div class="table-responsive">
-        <table class="table .table-sm table-hover">
+        <table class="table table-hover">
           <thead class="table-head">
             <tr>
               <th scope="col">S/N</th>
@@ -210,12 +226,14 @@
               <th scope="col">Amount Charged</th>
               <th scope="col">Amount Paid</th>
               <th scope="col">Date</th>
-              <th scope="col">Actions</th>
+              <th scope="col"></th>
             </tr>
           </thead>
           <tbody>
             <tr
               v-for="(client, index) in current_data.client_record"
+              @mouseover="current_item = client.id"
+              @mouseleave="current_item = 0"
             >
               <th scope="row"> [[ index + 1 ]] </th>
               <td> [[ client.service_offered ]] </td>
@@ -225,42 +243,47 @@
               <td> [[ client.amount_charged ]] </td>
               <td> [[ client.amount_paid ]] </td>
               <td> [[ client.date ]] </td>             
-              <td class="action-btn-holder">
-                <button 
+              <td 
+                class="action-btn-holder"
+                v-if="current_item === client.id"
+              >
+                <div class="client-action-button-holder">
+                  <button 
                   class="action-btn"
                   v-if="current_data.user.edit_permit"
                   @click="triggerClientUpdate(client.id)"
-                >
-                  <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
-                </button>
-                <button 
-                  class="action-btn"
-                  v-else
-                  @click="seekPermit()"
-                >
-                  <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
-                </button>
-                <button 
-                  class="action-btn"
-                  v-if="current_data.user.delete_permit"
-                  @click="triggerDelete(client.id, 'client')"
-                >
-                  <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
-                </button>
-                <button 
-                  class="action-btn"
-                  v-else
-                  @click="seekPermit()"
-                >
-                  <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
-                </button>
-                <button
-                  class="action-btn"
-                  data-toggle="tooltip" data-placement="top" title="Generate invoice"
-                  @click="displaySuccessMsg('This function is not ready yet')"
-                >
-                  <i class="fa fa-book" aria-hidden="true"></i>
-                </button>
+                  >
+                    <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
+                  </button>
+                  <button 
+                    class="action-btn"
+                    v-else
+                    @click="seekPermit()"
+                  >
+                    <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
+                  </button>
+                  <button 
+                    class="action-btn"
+                    v-if="current_data.user.delete_permit"
+                    @click="triggerDelete(client.id, 'client')"
+                  >
+                    <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
+                  </button>
+                  <button 
+                    class="action-btn"
+                    v-else
+                    @click="seekPermit()"
+                  >
+                    <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
+                  </button>
+                  <button
+                    class="action-btn"
+                    data-toggle="tooltip" data-placement="top" title="Generate invoice"
+                    @click="displaySuccessMsg('This function is not ready yet')"
+                  >
+                    <i class="fa fa-book" aria-hidden="true"></i>
+                  </button>
+                </div>
               </td>
             </tr>
           </tbody>

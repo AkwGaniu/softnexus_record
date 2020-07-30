@@ -51,6 +51,7 @@ def reloadData(username):
        new_user_obj = {
         'username': current_user.username,
         'is_admin': current_user.is_superuser,
+        'user_image': False,
         'edit_permit': True,
         'delete_permit': True,
         'add_permit': True,
@@ -61,6 +62,7 @@ def reloadData(username):
       new_user_obj = {
         'username': current_user.username,
         'is_admin': current_user.is_superuser,
+        'user_image': user_permission.user_image,
         'edit_permit': user_permission.edit_permit,
         'delete_permit': user_permission.delete_permit,
         'add_permit': user_permission.add_permit,
