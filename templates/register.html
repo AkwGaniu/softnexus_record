@@ -115,27 +115,20 @@
           } else if (password.length < 6) {
             this.error = 'Your password cannot be less than 6 characters'
           } else if (password !== comfirmpass) {
-            console.log(password + comfirmpass)
             this.error = 'Password fields does not match'
-          }else {
-            let payload
-            if (profile_pic == '') {
-              payload = {
-                username: username,
-                email: email,
-                password: password,
-                file: ''
-              }
-            } else {
-              payload  = new FormData()
-              for (const file of profile_pic) {
-                  payload.append('file', file, file.name)
-                }
-              payload.append('username', username)
-              payload.append('email', email)
-              payload.append('password', password)
+          }else if (profile_pic == '') {
+            this.error = 'Please choose a profile picture'
+          } else {
+
+            payload  = new FormData()
+            for (const file of profile_pic) {
+              payload.append('file', file, file.name)
             }
-            console.log(payload)
+            payload.append('username', username)
+            payload.append('email', email)
+            payload.append('password', password)
+        
+
             this.error = ''
             thissuccessMessage =''
             let url = `/register_user`
@@ -157,6 +150,8 @@
               if (data.reply === 'success') {
                 localStorage.setItem('message', JSON.stringify({message: 'Registration successful, Please login'}))
                 self.location = '/'
+              } else {
+                this.error = data.reply
               }
             })
             .catch(error => {
