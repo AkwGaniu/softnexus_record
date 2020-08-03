@@ -120,7 +120,7 @@
           profile_pic = this.user.profile_pic
   
           if (password === '' || username === '' || email === '') {
-            this.error = 'Please fill out the all the fields'
+            this.error = 'Please fill out all the fields'
           } else if (!this.validEmail(email)) {
             this.error = 'Please provide a valid email address'
           } else if (password.length < 6) {
