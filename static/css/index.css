@@ -153,6 +153,9 @@ html, body {
   height: 100%;
   background-color: rgba(0, 0, 0, 0.9);
   z-index: 1000; }
+  @media (max-width: 768px) {
+    .add-record-modal {
+      overflow-y: scroll; } }
   .add-record-modal .modal-content {
     width: 50%;
     border-radius: 20px;
