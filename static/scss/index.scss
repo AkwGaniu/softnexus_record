@@ -198,6 +198,7 @@ html, body {
       padding: 10px 20px 20px;
       @media (max-width: 768px) {
         padding: 20px 20px;
+        overflow: scroll;
       }
       span {
         color: rgb(243, 138, 138);
@@ -292,7 +293,7 @@ html, body {
       padding: 20px 10px;
 
       .logo {
-        width: 70px;
+        width: 100px;
         img {
           width: 100%;
         }
@@ -389,11 +390,11 @@ html, body {
     }
   }
   .main {
-    min-height: 60.2vh;
+    min-height: 61.9vh;
     padding: 20px 10px 0px;
     @media (max-width: 768px) {
       padding: 20px 0px 0px;
-      min-height: 62.2vh;
+      min-height: 64.4vh;
     }
     .record-header {
       display: flex;
@@ -646,10 +647,10 @@ html, body {
     color: rgb(41, 40, 40)
   }
   main {
-    min-height: 60.7vh;
+    min-height: 63.3vh;
     padding: 20px 10px 5px;
     @media (max-width: 768px) {
-      min-height: 62.2vh;
+      min-height: 64.7vh;
     }
     .action-btn {
       padding: 0px 3px;

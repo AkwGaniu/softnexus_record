@@ -198,7 +198,8 @@ html, body {
       padding: 10px 20px 20px; }
       @media (max-width: 768px) {
         .add-record-modal .modal-content main {
-          padding: 20px 20px; } }
+          padding: 20px 20px;
+          overflow: scroll; } }
       .add-record-modal .modal-content main span {
         color: #f38a8a;
         font-size: smaller; }
@@ -287,7 +288,7 @@ html, body {
       width: 50%;
       padding: 20px 10px; }
       #main header .logo-holder .logo {
-        width: 70px; }
+        width: 100px; }
         #main header .logo-holder .logo img {
           width: 100%; }
     #main header .user-details {
@@ -367,12 +368,12 @@ html, body {
       border-color: #035aa6;
       color: whitesmoke; }
   #main .main {
-    min-height: 60.2vh;
+    min-height: 61.9vh;
     padding: 20px 10px 0px; }
     @media (max-width: 768px) {
       #main .main {
         padding: 20px 0px 0px;
-        min-height: 62.2vh; } }
+        min-height: 64.4vh; } }
     #main .main .record-header {
       display: -webkit-box;
       display: -ms-flexbox;
@@ -611,11 +612,11 @@ html, body {
   color: #292828; }
 
 .user-section main {
-  min-height: 60.7vh;
+  min-height: 63.3vh;
   padding: 20px 10px 5px; }
   @media (max-width: 768px) {
     .user-section main {
-      min-height: 62.2vh; } }
+      min-height: 64.7vh; } }
   .user-section main .action-btn {
     padding: 0px 3px; }
 
