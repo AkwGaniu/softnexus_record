@@ -325,6 +325,18 @@
         </header>
         <main>
           <form action="#">
+            <div class="group">
+              <div class="logo">
+                <a href="/" target="_self">
+                  <img src="/static/images/SoftNexusMain_Logo_Mark.png" alt="SoftNexus Logo" >
+                </a>
+              </div>
+              <div class="date">
+                <p>
+                  [[ current_date ]]
+                </p>
+              </div>
+            </div>
             <span>[[ errorMsg ]]</span>
             <div class="form-group">
               <label for="description">Description</label>
@@ -361,7 +373,7 @@
             >
             <input 
               type="submit"
-              value="Submit"
+              value="Save"
               v-else
               @click.prevent="addAccountRecord()"
             >
@@ -383,67 +395,86 @@
       <main class="client-main">
         <form action="#">
           {% csrf_token %}
+          <div class="group">
+            <div class="logo">
+              <a href="/" target="_self">
+                <img src="/static/images/SoftNexusMain_Logo_Mark.png" alt="SoftNexus Logo" >
+              </a>
+            </div>
+            <div class="date">
+              <p>
+                [[ current_date ]]
+              </p>
+            </div>
+          </div>
           <span>[[ errorMsg ]]</span>
-          <div class="form-group">
-            <label for="client name">Client Name*</label>
-            <input
-              type="text"
-              name="client_name"
-              v-model="clientRecord.name"
-              placeholder="Akowanu Ganiu"
-              autocomplete="off"
-            >
+          <div class="group">
+            <div class="form-group">
+              <label for="client name">Client Name*</label>
+              <input
+                type="text"
+                name="client_name"
+                v-model="clientRecord.name"
+                placeholder="Akowanu Ganiu"
+                autocomplete="off"
+              >
+            </div>
+            <div class="form-group">
+              <label for="client email ">Client Email*</label>
+              <input
+                type="text"
+                name="client_email"
+                v-model="clientRecord.email"
+                placeholder="client@example.com"
+                autocomplete="off"
+              >
+            </div>
           </div>
-          <div class="form-group">
-            <label for="client email ">Client Email*</label>
-            <input
-              type="text"
-              name="client_email"
-              v-model="clientRecord.email"
-              placeholder="client@example.com"
-              autocomplete="off"
-            >
+          <div class="group">
+            <div class="form-group">
+              <label for="client phone">Client Phone Number</label>
+              <input
+                type="text"
+                name="client_phone"
+                v-model="clientRecord.phone_number"
+                placeholder="07020025802"
+                autocomplete="off"
+              >
+            </div>
+            <div class="form-group">
+              <label for="service">Service Description*</label>
+              <input
+                type="text"
+                name="service"
+                v-model="clientRecord.service_offered"
+                placeholder="Decription of service Offered"
+                autocomplete="off"
+              >
+            </div>
           </div>
-          <div class="form-group">
-            <label for="client phone">Client Phone Number</label>
-            <input
-              type="text"
-              name="client_phone"
-              v-model="clientRecord.phone_number"
-              placeholder="07020025802"
-              autocomplete="off"
-            >
+          <div class="group">
+            <div class="form-group">
+              <label for="amount paid">Payment made</label>
+              <input
+                type="text"
+                name="amount_paid"
+                v-model="clientRecord.amount_paid"
+                placeholder="1500000"
+                autocomplete="off"
+              >
+            </div>
+            <div class="form-group">
+              <label for="amount charged">Payment Due*</label>
+              <input
+                type="text"
+                name="amount_charged"
+                v-model="clientRecord.amount_charged"
+                placeholder="2000000"
+                autocomplete="off"
+              >
+            </div>
           </div>
-          <div class="form-group">
-            <label for="service">Service Description*</label>
-            <input
-              type="text"
-              name="service"
-              v-model="clientRecord.service_offered"
-              placeholder="Decription of service Offered"
-              autocomplete="off"
-            >
-          </div>
-          <div class="form-group">
-            <label for="amount charged">Amount Charged*</label>
-            <input
-              type="text"
-              name="amount_charged"
-              v-model="clientRecord.amount_charged"
-              placeholder="2000000"
-              autocomplete="off"
-            >
-          </div>
-          <div class="form-group">
-            <label for="amount paid">Amount Paid</label>
-            <input
-              type="text"
-              name="amount_paid"
-              v-model="clientRecord.amount_paid"
-              placeholder="1500000"
-              autocomplete="off"
-            >
-          </div>
+
           <input 
             type="submit"
             value="Update"
@@ -452,7 +483,7 @@
           >
           <input 
             type="submit"
-            value="Submit"
+            value="Save"
             v-else
             @click.prevent="addClientRecord()"
           >

@@ -5,6 +5,7 @@ var app = new Vue({
     return {
     current_id: 0,
     current_item: 0,
+    current_date: '',
     current_data: Object,
     csrftoken: '',
     token: '',
@@ -53,6 +54,10 @@ var app = new Vue({
         this.edit_flag = true
         this.modalHeader = 'Edit Client Record'
       }
+      let date =  new Date()
+      const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+      this.current_date = `${months[date.getMonth()]} ${ date.getDate()}, ${date.getFullYear()}`
       this.showModal = !this.showModal
     },
     closeModal () {

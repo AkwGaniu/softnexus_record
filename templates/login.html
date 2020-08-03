@@ -2,15 +2,25 @@
 
 {% block content %}
   <div id="loginApp">
+    <nav class="nav-bar">
+      <div class="logo">
+        <a href="/" target="_self">
+          <img src="/static/images/SoftNexusMain_Logo_Mark.png" alt="SoftNexus Logo" >
+        </a>
+      </div>
+    </nav>
     <div class="login-holder">
       <div class="login">
-        <h3>Login</h3>  
-            <span class="successMsg">
-              [[ successMessage ]]     
-            </span>
-            <span class="errMsg">
-              [[ error ]]
-            </span>
+        <div class="head">
+          <h3>LogIn</h3>
+          <a href="/register">Sign Up</a>
+        </div>
+        <span class="successMsg">
+          [[ successMessage ]]     
+        </span>
+        <span class="errMsg">
+          [[ error ]]
+        </span>
         <form action="/login" method="post">
           {% csrf_token %}
           <div class="form-group">
@@ -39,7 +49,6 @@
             @click.prevent="tryLogin()"
           > 
         </form>
-        <p class="reg-redirect">Have no account? <a href="/register">Sign Up here</a></p>
       </div>
     </div>
   </div>

@@ -2,9 +2,19 @@
 
 {% block content %}
   <div id="regApp">
+    <nav class="nav-bar">
+      <div class="logo">
+        <a href="/register" target="_self">
+          <img src="/static/images/SoftNexusMain_Logo_Mark.png" alt="SoftNexus Logo" >
+        </a>
+      </div>
+    </nav>
     <div class="login-holder">
       <div class="login">
-        <h3>Sign Up</h3>
+        <div class="head">
+          <h3>Register</h3>
+          <a href="/">Sign In</a>
+        </div>
         <span class="errMsg">
           [[ error ]]
         </span>
@@ -33,18 +43,18 @@
           <div class="form-group">
             <span>
               <i class="fa fa-upload" aria-hidden="true"></i>
-              [[ file_name ]]
+              <span :class="[{fileSelected: fileIsSelected}, 'file-name']">
+                [[ file_name ]]
+              </span>
             </span>
-            <!-- <input type="file" multiple :name="uploadFieldName" :disabled="isSaving" @change="filesChange($event.target.name, $event.target.files); fileCount = $event.target.files.length" -->
-
             <input
               type="file"
-              @change="filesChange($event.target.files)"
+              @change="fileChange($event.target.files)"
               accept="image/*"
               autocomplete="off"
               placeholder="Email"
               @keyup.enter="register()"
-              class="input-file"
+              class="file-input"
             >
           </div>
           <div class="form-group">
@@ -73,7 +83,6 @@
             value="Sign Up"
           > 
         </form>
-        <p class="reg-redirect">Already have an account? <a href="/">Sign In here</a></p>
       </div>
     </div>
   </div>
@@ -85,6 +94,7 @@
         return {
           error: '',
           successMessage: '',
+          fileIsSelected: false,
           file_name: 'Upload profile picture',
           user: {
             username: '',
@@ -96,9 +106,10 @@
         }
       },
       methods: {
-        filesChange (file) {
+        fileChange (file) {
           this.user.profile_pic = file
           const file_name = file[0].name
+          this.fileIsSelected = true
           this.file_name = file_name
         },
         register () {
