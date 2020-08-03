@@ -155,6 +155,7 @@ html, body {
     @media (max-width: 768px) {
       width: 100%;
       height: 100vh;
+      overflow-y: scroll;
       border-radius: 0px;
     }
 
@@ -198,7 +199,6 @@ html, body {
       padding: 10px 20px 20px;
       @media (max-width: 768px) {
         padding: 20px 20px;
-        overflow-y: scroll;
       }
       span {
         color: rgb(243, 138, 138);

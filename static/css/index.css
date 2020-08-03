@@ -161,6 +161,7 @@ html, body {
       .add-record-modal .modal-content {
         width: 100%;
         height: 100vh;
+        overflow-y: scroll;
         border-radius: 0px; } }
     .add-record-modal .modal-content header {
       padding: 5px;
@@ -198,8 +199,7 @@ html, body {
       padding: 10px 20px 20px; }
       @media (max-width: 768px) {
         .add-record-modal .modal-content main {
-          padding: 20px 20px;
-          overflow-y: scroll; } }
+          padding: 20px 20px; } }
       .add-record-modal .modal-content main span {
         color: #f38a8a;
         font-size: smaller; }
