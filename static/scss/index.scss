@@ -198,7 +198,7 @@ html, body {
       padding: 10px 20px 20px;
       @media (max-width: 768px) {
         padding: 20px 20px;
-        overflow: scroll;
+        overflow-y: scroll;
       }
       span {
         color: rgb(243, 138, 138);

@@ -199,7 +199,7 @@ html, body {
       @media (max-width: 768px) {
         .add-record-modal .modal-content main {
           padding: 20px 20px;
-          overflow: scroll; } }
+          overflow-y: scroll; } }
       .add-record-modal .modal-content main span {
         color: #f38a8a;
         font-size: smaller; }
