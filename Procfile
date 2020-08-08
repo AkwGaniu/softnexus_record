@@ -1,1 +1,1 @@
-web: gunicorn softnexus_record.wsgi --log-file -
+web: gunicorn SoftnexusRecord.wsgi --log-file -

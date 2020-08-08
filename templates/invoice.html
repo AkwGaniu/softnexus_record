@@ -1,0 +1,97 @@
+{% extends 'index.html' %}
+
+{% block content %}
+  <script type='text/javascript'> 
+    const jscontext={token: '{{ invoice | safe }}'}
+    var Data = JSON.parse(jscontext.token)
+    console.log(Data)
+  </script>
+<div
+  id="invoiceApp"
+>
+  <header>
+    <div class="logo">
+      <img src="/static/images/SoftNexusMain_Logo_Mark.png" alt="SoftNexus Logo" >
+    </div>
+    <div class="title">
+      <h3>INVOICE</h3>
+      <P># 1</P>
+    </div>
+  </header>
+  <body>
+    <section class="first-section">
+     <div class="left-side">
+       <p class="p1">Bill To</p>
+       <p class="p2">Akowanu Ganiu</p>
+     </div>
+     <div class="right-side">
+       <div class="rows">
+        <div class="column-1">
+          <p>Date:</p>
+          <p class="terms">Payment Terms:</p>
+          <p>Due Date:</p>
+         </div>
+         <div class="column-2">
+          <p>Aug 1, 2020</p>
+          <p>At least, 50% beforehand</p>
+          <p>Aug 27, 2020</p>
+         </div>
+       </div>
+       <div class="row-bold">
+        <p class="p-left">Balance Due:</p>
+        <p>$1,150.00</p>
+       </div>
+      </div>
+    </section>
+    <section class="product-holder">
+      <table class="table .table-sm table-hover">
+        <thead class="table-head thead-dark">
+          <tr>
+            <th scope="col">
+              <div class="item">
+                Item
+              </div>
+            </th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Rate</th>
+            <th scope="col">Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <div class="item">
+                Website and mble application
+              </div>
+            </td>
+            <td>
+              2
+            </td>
+            <td>
+              $1,500.00
+            </td>
+            <td>
+              $3,000.00
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </body>
+</div>
+  
+<script>
+  const userApp = new Vue({
+    delimiters: ['[[',']]'],
+    el: '#invoiceApp',
+    data () {
+      return {
+        invoice: Data,
+      }
+    },
+    methods: {
+    }
+  })
+</script>
+{% endblock %}
+

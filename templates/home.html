@@ -1,10 +1,6 @@
 {% extends 'index.html' %}
 
 {% block content %}
-  <!-- <script type='text/javascript'> 
-    const jscontext={token: '{{ data | safe }}'}
-    var Data = JSON.parse(jscontext.token)
-  </script> -->
   <div
     id="main"
     :class="{pauseScroll: showModal || delete_flag}"
@@ -14,14 +10,26 @@
       <div class="logo-holder">
         <div class="logo">
           <a href="/home" target="_self">
-            <img src="static/images/logo.png" alt="SoftNexus Logo" >
+            <img src="/static/images/SoftNexusMain_Logo_Mark.png" alt="SoftNexus Logo" >
           </a>
         </div>
       </div>
       <div class="user-details">
+        <div class="user-avartar">
+          <img 
+            src="/static/images/user1.png"
+            alt="User"
+            v-if="!current_data.user.user_image"
+          >
+          <img 
+            v-else
+            :src= `/media/${current_data.user.user_image}`
+            alt="User"
+          >
+        </div>
         <div class="user">
           <p>
-            Hi, [[ current_data.user.username ]]
+            [[ current_data.user.username ]]
             <span
               @click="userActionDropDown=!userActionDropDown"
             >
@@ -40,7 +48,9 @@
             <li 
               v-if="current_data.user.is_admin"
             >
-              <a href="/user_permission">Manage Users</a>
+              <a 
+                href="/user_permission"
+              >Manage Users</a>
             </li>
           </ul>
         </div>
@@ -49,42 +59,16 @@
     <section class="tab-btns">
       <div class="account-book">
         <button
+          :class="[{activeTab: showAccList},'account-tab']"
           @click="showAccList=true"
-          class="account-tab"
         >Account Book</button>
-        <button 
-          @click="triggerRecordEntryView('account', 'add')"
-          class="add"
-          v-if="current_data.user.add_permit"
-        >
-          <i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i>
-        </button>
-        <button 
-          @click="seekPermit()"
-          class="add"
-          v-else
-        >
-          <i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i>
-        </button>
       </div>
       <div class="client-entry">
         <button
-          class="client-tab"
+          :class="[{activeTab: !showAccList},'client-tab']"
           @click="showAccList=false"
-        >Client Entries</button>
-        <button
-          class="add"
-          v-if="current_data.user.add_permit"
-          @click="triggerRecordEntryView('client', 'add')"
         >
-          <i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i>
-        </button>
-        <button
-          class="add"
-          v-else
-          @click="seekPermit()"
-        >
-          <i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i>
+        Client Entries
         </button>
       </div>
     </section>
@@ -92,16 +76,36 @@
       v-if="showAccList"
       class="main account-entry"
     >
-    <div class="title">
-      <h4>Account Record</h4>
-      <div
-        :class="[{showSuccessClass: successMsg != ''}, 'success']"
-      >
-      <p> [[ successMsg ]] </p>
-      <span
-        @click="successMsg = ''"
-      ><i class="fa fa-times" aria-hidden="true"></i></span>
-    </div>
+    <div class="record-header">
+      <div class="title">
+        <h4>Record</h4>
+        <div
+          :class="[{showSuccessClass: successMsg != ''}, 'success']"
+        >
+        <p> [[ successMsg ]] </p>
+        <span
+          @click="successMsg = ''"
+        ><i class="fa fa-times" aria-hidden="true"></i></span>
+        </div>
+      </div>
+      <div class="add-btn">
+        <button 
+        @click="triggerRecordEntryView('account', 'add')"
+        class="add"
+        v-if="current_data.user.add_permit"
+        >
+          <i class="fa fa-plus" aria-hidden="true"></i>
+          New
+        </button>
+        <button 
+          @click="seekPermit()"
+          class="add"
+          v-else
+        >
+          <i class="fa fa-plus" aria-hidden="true"></i>
+          New
+        </button>
+      </div>
     </div>
       <div class="table-responsive">
         <table class="table .table-sm table-hover">
@@ -112,77 +116,116 @@
               <th scope="col">Type</th>
               <th scope="col">Amount</th>
               <th scope="col">Date</th>
-              <th scope="col">Actions</th>
+              <th scope="col"></th>
             </tr>
           </thead>
           <tbody>
             <tr
               v-for="(account, index) in current_data.account_record"
+              @mouseover="current_item = account.id"
+              @mouseleave="current_item = 0"
             >
               <th scope="row"> [[ index + 1 ]] </th>
-              <td> [[ account.description ]] </td>
+              <td>
+                <div
+                :style="divSize(account.description)"
+                >
+                 [[ account.description ]] 
+                </div>
+              </td>
               <td> [[ account.entry_type ]] </td>
               <td> [[ account.amount]] </td>
-              <td> [[ account.date ]] </td>
-              <td class="action-btn-holder">
-                <button 
-                  class="action-btn"
-                  v-if="current_data.user.edit_permit"
-                  @click="triggerAccountUpdate(account.id)"
+              <td> 
+                <div
+                  :style="divSize(account.date)"
                 >
-                  <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
-                </button>
-                <button 
-                  class="action-btn"
-                  v-else
-                  @click="seekPermit()"
-                >
-                  <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
-                </button>
-                <button
-                  class="action-btn"
-                  v-if="current_data.user.delete_permit"
-                  @click="triggerDelete(account.id, 'account')"
-                >
-                  <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
-                </button>
-                <button 
-                class="action-btn"
-                v-else
-                @click="seekPermit()"
+                  [[ account.date ]]
+                </div> 
+              </td>
+              <td 
+                class="action-btn-holder"
+                v-if="current_item === account.id"
               >
-                <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
-              </button>
+                <div class="account-action-button-holder">
+                    <button 
+                      class="action-btn"
+                      v-if="current_data.user.edit_permit"
+                      @click="triggerAccountUpdate(account.id)"
+                    >
+                      <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
+                    </button>
+                    <button 
+                      class="action-btn"
+                      v-else
+                      @click="seekPermit()"
+                    >
+                      <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
+                    </button>
+                    <button
+                      class="action-btn"
+                      v-if="current_data.user.delete_permit"
+                      @click="triggerDelete(account.id, 'account')"
+                    >
+                      <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
+                    </button>
+                    <button 
+                    class="action-btn"
+                    v-else
+                    @click="seekPermit()"
+                  >
+                    <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
+                  </button>
+                </div>
               </td>
             </tr>
           </tbody>
         </table>
-        <div
-          v-if="current_data.user.download_permit && current_data.account_record.length > 0"
-          class="export-csv">
-          <a href="export_record?record=account">
-            <i class="fa fa-download" aria-hidden="true"></i>EXPORT EXCEL
-          </a>
-        </div>
+      </div>
+      <div
+        v-if="current_data.user.download_permit && current_data.account_record.length > 0"
+        class="export-csv">
+        <a href="export_record?record=account">
+          <i class="fa fa-download" aria-hidden="true"></i> EXPORT
+        </a>
       </div>
     </main>
     <main 
       v-if="!showAccList"
       class="main client-entry"
     >
-    <div class="title">
-      <h4>Client Record</h4>
-      <div
-        :class="[{showSuccessClass: successMsg != ''}, 'success']"
-      >
-      <p> [[ successMsg ]] </p>
-      <span
-        @click="successMsg = ''"
-      ><i class="fa fa-times" aria-hidden="true"></i></span>
-    </div>
+    <div class="record-header">
+      <div class="title">
+        <h4>Record</h4>
+        <div
+          :class="[{showSuccessClass: successMsg != ''}, 'success']"
+        >
+        <p> [[ successMsg ]] </p>
+        <span
+          @click="successMsg = ''"
+        ><i class="fa fa-times" aria-hidden="true"></i></span>
+        </div>
+      </div>
+      <div class="add-btn">
+        <button 
+          class="add"
+          v-if="current_data.user.add_permit"
+          @click="triggerRecordEntryView('client', 'add')"
+        >
+          <i class="fa fa-plus" aria-hidden="true"></i>
+          New
+        </button>
+        <button 
+          @click="seekPermit()"
+          class="add"
+          v-else
+        >
+          <i class="fa fa-plus" aria-hidden="true"></i>
+          New
+        </button>
+      </div>
     </div>
       <div class="table-responsive">
-        <table class="table .table-sm table-hover">
+        <table class="table table-hover">
           <thead class="table-head">
             <tr>
               <th scope="col">S/N</th>
@@ -190,72 +233,118 @@
               <th scope="col">Client Name</th>
               <th scope="col">Email</th>
               <th scope="col">Phone</th>
-              <th scope="col">Amount Charged</th>
-              <th scope="col">Amount Paid</th>
+              <th scope="col">
+                <div
+                  :style="paymentStyle"
+                >
+                  Payment Due
+                </div>
+              </th>
+              <th scope="col">
+                <div
+                  :style="paymentStyle"
+                >
+                  Payment Made
+                </div>
+              </th>
               <th scope="col">Date</th>
-              <th scope="col">Actions</th>
+              <th scope="col"></th>
             </tr>
           </thead>
           <tbody>
             <tr
               v-for="(client, index) in current_data.client_record"
+              @mouseover="current_item = client.id"
+              @mouseleave="current_item = 0"
             >
               <th scope="row"> [[ index + 1 ]] </th>
-              <td> [[ client.service_offered ]] </td>
-              <td> [[ client.client_name ]] </td>
+              <td> 
+                <div
+                :style="divSize(client.service_offered )"
+                >
+                  [[ client.service_offered ]]
+                </div>
+              </td>
+              <td> 
+                <div
+                  :style="divSize(client.client_name)"
+                >
+                  [[ client.client_name ]]
+                </div>
+              </td>
               <td> [[ client.client_email]] </td>
               <td> [[ client.client_phone ]] </td>
               <td> [[ client.amount_charged ]] </td>
               <td> [[ client.amount_paid ]] </td>
-              <td> [[ client.date ]] </td>             
-              <td class="action-btn-holder">
-                <button 
+              <td>
+                <div
+                :style="divSize(client.date)"
+                >
+                  [[ client.date ]]
+                </div>
+              </td>             
+              <td 
+                class="action-btn-holder"
+                v-if="current_item === client.id"
+              >
+                <div class="client-action-button-holder">
+                  <button 
                   class="action-btn"
                   v-if="current_data.user.edit_permit"
                   @click="triggerClientUpdate(client.id)"
-                >
-                  <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
-                </button>
-                <button 
-                  class="action-btn"
-                  v-else
-                  @click="seekPermit()"
-                >
-                  <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
-                </button>
-                <button 
-                  class="action-btn"
-                  v-if="current_data.user.delete_permit"
-                  @click="triggerDelete(client.id, 'client')"
-                >
-                  <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
-                </button>
-                <button 
-                  class="action-btn"
-                  v-else
-                  @click="seekPermit()"
-                >
-                  <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
-                </button>
-                <button
-                  class="action-btn"
-                  data-toggle="tooltip" data-placement="top" title="Generate invoice"
-                  @click="displaySuccessMsg('This function is not ready yet')"
-                >
-                  <i class="fa fa-book" aria-hidden="true"></i>
-                </button>
+                  >
+                    <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
+                  </button>
+                  <button 
+                    class="action-btn"
+                    v-else
+                    @click="seekPermit()"
+                  >
+                    <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
+                  </button>
+                  <button 
+                    class="action-btn"
+                    v-if="current_data.user.delete_permit"
+                    @click="triggerDelete(client.id, 'client')"
+                  >
+                    <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
+                  </button>
+                  <button 
+                    class="action-btn"
+                    v-else
+                    @click="seekPermit()"
+                  >
+                    <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
+                  </button>
+                  <a
+                    class="action-btn"
+                    data-toggle="tooltip" data-placement="top" title="Generate invoice"
+                    v-if="current_data.user.delete_permit"
+                    :href = `generate_invoice?id=${client.id}`
+                  >
+                    <i class="fa fa-book" aria-hidden="true"></i>
+                  </a>
+                  <a
+                    class="action-btn"
+                    da ta-toggle="tooltip" data-placement="top" title="Generate invoice"
+                    v-else
+                    @click="seekPermit()"
+                  >
+                    <i class="fa fa-book" aria-hidden="true"></i>
+                </a>
+                </div>
               </td>
             </tr>
           </tbody>
         </table>
-        <div
-        v-if="current_data.user.download_permit && current_data.client_record.length > 0"
-        class="export-csv">
-        <a href="export_record?record=client">
-          <i class="fa fa-download" aria-hidden="true"></i>EXPORT EXCEL
-        </a>
       </div>
-      </div>
+      <div
+      v-if="current_data.user.download_permit && current_data.client_record.length > 0"
+      class="export-csv">
+      <a href="export_record?record=client">
+        <i class="fa fa-download" aria-hidden="true"></i> EXPORT
+      </a>
+    </div>
     </main>
     <footer>
       <p>
@@ -285,6 +374,18 @@
         </header>
         <main>
           <form action="#">
+            <div class="group">
+              <div class="logo">
+                <a href="/" target="_self">
+                  <img src="/static/images/SoftNexusMain_Logo_Mark.png" alt="SoftNexus Logo" >
+                </a>
+              </div>
+              <div class="date">
+                <p>
+                  [[ current_date ]]
+                </p>
+              </div>
+            </div>
             <span>[[ errorMsg ]]</span>
             <div class="form-group">
               <label for="description">Description</label>
@@ -321,7 +422,7 @@
             >
             <input 
               type="submit"
-              value="Submit"
+              value="Save"
               v-else
               @click.prevent="addAccountRecord()"
             >
@@ -340,70 +441,89 @@
           @click="closeModal()"
         >+</span>
       </header>
-      <main>
+      <main class="client-main">
         <form action="#">
           {% csrf_token %}
+          <div class="group">
+            <div class="logo">
+              <a href="/" target="_self">
+                <img src="/static/images/SoftNexusMain_Logo_Mark.png" alt="SoftNexus Logo" >
+              </a>
+            </div>
+            <div class="date">
+              <p>
+                [[ current_date ]]
+              </p>
+            </div>
+          </div>
           <span>[[ errorMsg ]]</span>
-          <div class="form-group">
-            <label for="client name">Client Name*</label>
-            <input
-              type="text"
-              name="client_name"
-              v-model="clientRecord.name"
-              placeholder="Akowanu Ganiu"
-              autocomplete="off"
-            >
+          <div class="group">
+            <div class="form-group">
+              <label for="client name">Client Name*</label>
+              <input
+                type="text"
+                name="client_name"
+                v-model="clientRecord.name"
+                placeholder="Akowanu Ganiu"
+                autocomplete="off"
+              >
+            </div>
+            <div class="form-group">
+              <label for="client email ">Client Email*</label>
+              <input
+                type="text"
+                name="client_email"
+                v-model="clientRecord.email"
+                placeholder="client@example.com"
+                autocomplete="off"
+              >
+            </div>
           </div>
-          <div class="form-group">
-            <label for="client email ">Client Email*</label>
-            <input
-              type="text"
-              name="client_email"
-              v-model="clientRecord.email"
-              placeholder="client@example.com"
-              autocomplete="off"
-            >
+          <div class="group">
+            <div class="form-group">
+              <label for="client phone">Client Phone Number</label>
+              <input
+                type="text"
+                name="client_phone"
+                v-model="clientRecord.phone_number"
+                placeholder="07020025802"
+                autocomplete="off"
+              >
+            </div>
+            <div class="form-group">
+              <label for="service">Service Description*</label>
+              <input
+                type="text"
+                name="service"
+                v-model="clientRecord.service_offered"
+                placeholder="Service offered"
+                autocomplete="off"
+              >
+            </div>
           </div>
-          <div class="form-group">
-            <label for="client phone">Client Phone Number</label>
-            <input
-              type="text"
-              name="client_phone"
-              v-model="clientRecord.phone_number"
-              placeholder="07020025802"
-              autocomplete="off"
-            >
+          <div class="group">
+            <div class="form-group">
+              <label for="amount paid">Payment made</label>
+              <input
+                type="text"
+                name="amount_paid"
+                v-model="clientRecord.amount_paid"
+                placeholder="1500000"
+                autocomplete="off"
+              >
+            </div>
+            <div class="form-group">
+              <label for="amount charged">Payment Due*</label>
+              <input
+                type="text"
+                name="amount_charged"
+                v-model="clientRecord.amount_charged"
+                placeholder="2000000"
+                autocomplete="off"
+              >
+            </div>
           </div>
-          <div class="form-group">
-            <label for="service">Service Description*</label>
-            <input
-              type="text"
-              name="service"
-              v-model="clientRecord.service_offered"
-              placeholder="Decription of service Offered"
-              autocomplete="off"
-            >
-          </div>
-          <div class="form-group">
-            <label for="amount charged">Amount Charged*</label>
-            <input
-              type="text"
-              name="amount_charged"
-              v-model="clientRecord.amount_charged"
-              placeholder="2000000"
-              autocomplete="off"
-            >
-          </div>
-          <div class="form-group">
-            <label for="amount paid">Amount Paid</label>
-            <input
-              type="text"
-              name="amount_paid"
-              v-model="clientRecord.amount_paid"
-              placeholder="1500000"
-              autocomplete="off"
-            >
-          </div>
+
           <input 
             type="submit"
             value="Update"
@@ -412,7 +532,7 @@
           >
           <input 
             type="submit"
-            value="Submit"
+            value="Save"
             v-else
             @click.prevent="addClientRecord()"
           >

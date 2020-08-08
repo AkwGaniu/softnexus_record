@@ -225,7 +225,8 @@ html, body {
         }
       }
       .form-group {
-        padding: 5px;
+        padding: 5px; 
+        width: 50%;
         margin: 0px auto 0px; 
         @media (max-width: 768px) {
           padding: 10px;
@@ -354,6 +355,14 @@ html, body {
           }
         }
       }
+    }
+    .table th {
+      text-align: center !important;
+    }
+    .table th,
+    .table td {
+      padding: .5rem !important;
+      vertical-align: bottom !important;
     }
   }
   .tab-btns {
@@ -523,11 +532,7 @@ html, body {
   }
 }
 // End of .export-csv
-.table th,
-.table td {
-  padding: .5rem !important;
-  vertical-align: bottom !important;
-}
+
 .client-action-button-holder {
   width: 66px;
 }
@@ -662,6 +667,114 @@ html, body {
 }
 // End of .user-section
 
+#invoiceApp {
+  padding: 10px 20px;
+  font-family: 'Roboto', sans-serif;
+  header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+
+    .logo {
+      width: 90px;
+      img {
+        width: 100%;
+      }
+    }
+    .title {
+      h3 {
+        color: rgb(27, 27, 27);
+        font-weight: bold;
+        margin: 0;
+        padding: 0;
+      }
+      p {
+        color: rgb(189, 181, 181);
+        text-align: right;
+      }
+    }
+  }
+  .first-section {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 40px;
+
+    .left-side {
+      width: 60%;
+      p {
+        margin: 0;
+        padding: 0;
+      }
+      .p1 {
+        color: rgb(190, 189, 189);
+      }
+      .p2 {
+        font-weight: bolder;
+      }
+    }
+    .right-side {
+      width: 40%;
+      .rows {
+        display: flex;
+        justify-content: space-between;
+        padding-right: 20px;
+       .column-1 {
+         width: 60%;
+         margin-right: 0px;
+         .terms {
+           margin-bottom: 24px;
+         }
+         p {
+           color: rgb(190, 189, 189);
+           font-weight: 600;
+           margin: 0 0 5px 0;
+           text-align: right;
+         } 
+        }
+        .column-2 {
+          width: 40%;
+          margin-right: 0px;
+          p {
+            font-weight: 500;
+            margin: 0 0 5px 0;
+            text-align: right;
+          }
+        }
+      }
+      .row-bold {
+        background-color: rgb(240, 236, 236);
+        display: flex;
+        justify-content: space-between;
+        padding: 3px 20px 3px 10px;
+        border-radius: 5px;
+        p {
+          display: inline;
+          font-weight: bolder;
+          text-align: right;
+          margin: 0;
+        }
+        .p-left {
+          padding-left: 8.99rem;
+        }
+      }
+    }
+  }
+  .product-holder {
+    .item {
+      // padding-left: 10px;
+      width: 20rem;
+      text-align: left !important;
+    }
+    .table th {
+      text-align: right !important;
+    }
+    .table td {
+      padding-left: 20px !important;
+      text-align: left !important;
+    }
+  }
+}
 
 /////////////////////
 // ON FLY CLASSES///

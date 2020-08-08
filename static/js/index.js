@@ -32,10 +32,20 @@ var app = new Vue({
       description: '',
       amount: '',
       type: '',
+    },
+    paymentStyle: {
+      width: '108px'
     }
     }
   },
   methods: {
+    divSize (text) {
+      let size = text.length
+      size = (size + 2) / 2
+      return {
+        width: `${size}rem`
+      }
+    },
     triggerRecordEntryView (view, action)  {
       if (view ==='account' && action === 'add') {
         this.showAccEntry = true
@@ -151,7 +161,6 @@ var app = new Vue({
                 }
             })
             .then(data => {
-              console.log(data)
               this.displaySuccessMsg('Account record added')
               this.current_data = data.reply
             })
@@ -335,6 +344,37 @@ var app = new Vue({
       .then(data => {
         this.displaySuccessMsg('Record deleted')
         this.current_data = data.reply
+      })
+      .catch(error => {
+          console.log(error.object)
+      })
+    },
+    generateInvoice (id) {
+
+      // let payload = {
+      //   client_id: id
+      // }
+
+      let url = `/generate_invoice/${id}`
+      // const fetchData  = {
+      //     method: 'get',
+      //     body: JSON.stringify(payload),
+      //     // headers: {
+      //     //   "Content-Type": "application/json",
+      //     //   'Authorization': `Token ${this.token}`,
+      //     //   'X-CSRFToken': this.csrftoken
+      //     // }
+      // }
+      fetch(url)
+      .then(resp => {
+          if(resp.ok) {
+            return resp.json()
+          } else {
+            return Promise.reject(resp.json())
+          }
+      })
+      .then(data => {
+        console.log(data)
       })
       .catch(error => {
           console.log(error.object)

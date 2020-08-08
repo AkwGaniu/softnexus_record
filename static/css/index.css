@@ -223,6 +223,7 @@ html, body {
           font-weight: bolder; }
       .add-record-modal .modal-content main .form-group {
         padding: 5px;
+        width: 50%;
         margin: 0px auto 0px; }
         @media (max-width: 768px) {
           .add-record-modal .modal-content main .form-group {
@@ -499,6 +500,9 @@ html, body {
     border: 0;
     background-color: #43ec76; }
 
+.table th {
+  text-align: center !important; }
+
 .table th,
 .table td {
   padding: .5rem !important;
@@ -622,6 +626,97 @@ html, body {
       min-height: 64.7vh; } }
   .user-section main .action-btn {
     padding: 0px 3px; }
+
+#invoiceApp {
+  padding: 10px 20px;
+  font-family: 'Roboto', sans-serif; }
+  #invoiceApp header {
+    width: 100%;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    margin-bottom: 20px; }
+    #invoiceApp header .logo {
+      width: 90px; }
+      #invoiceApp header .logo img {
+        width: 100%; }
+    #invoiceApp header .title h3 {
+      color: #1b1b1b;
+      font-weight: bold;
+      margin: 0;
+      padding: 0; }
+    #invoiceApp header .title p {
+      color: #bdb5b5;
+      text-align: right; }
+  #invoiceApp .first-section {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    margin-bottom: 40px; }
+    #invoiceApp .first-section .left-side {
+      width: 60%; }
+      #invoiceApp .first-section .left-side p {
+        margin: 0;
+        padding: 0; }
+      #invoiceApp .first-section .left-side .p1 {
+        color: #bebdbd; }
+      #invoiceApp .first-section .left-side .p2 {
+        font-weight: bolder; }
+    #invoiceApp .first-section .right-side {
+      width: 40%; }
+      #invoiceApp .first-section .right-side .rows {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+        justify-content: space-between;
+        padding-right: 20px; }
+        #invoiceApp .first-section .right-side .rows .column-1 {
+          width: 60%;
+          margin-right: 0px; }
+          #invoiceApp .first-section .right-side .rows .column-1 .terms {
+            margin-bottom: 24px; }
+          #invoiceApp .first-section .right-side .rows .column-1 p {
+            color: #bebdbd;
+            font-weight: 600;
+            margin: 0 0 5px 0;
+            text-align: right; }
+        #invoiceApp .first-section .right-side .rows .column-2 {
+          width: 40%;
+          margin-right: 0px; }
+          #invoiceApp .first-section .right-side .rows .column-2 p {
+            font-weight: 500;
+            margin: 0 0 5px 0;
+            text-align: right; }
+      #invoiceApp .first-section .right-side .row-bold {
+        background-color: #f0ecec;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+        justify-content: space-between;
+        padding: 3px 20px 3px 10px;
+        border-radius: 5px; }
+        #invoiceApp .first-section .right-side .row-bold p {
+          display: inline;
+          font-weight: bolder;
+          text-align: right;
+          margin: 0; }
+        #invoiceApp .first-section .right-side .row-bold .p-left {
+          padding-left: 8.99rem; }
+  #invoiceApp .product-holder .item {
+    width: 15rem;
+    text-align: left !important; }
+  #invoiceApp .product-holder .table th {
+    text-align: right !important; }
 
 .fix {
   bottom: -29px !important; }

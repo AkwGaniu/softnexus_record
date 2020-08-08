@@ -15,19 +15,19 @@ def welcome(request):
   if not request.user.is_authenticated:
     return render(request, 'login.html')
   else:
-    return render(request, 'homeNew.html')
+    return render(request, 'home.html')
 
 
 def register(request):
   if not request.user.is_authenticated:
     return render(request, 'register.html')
   else:
-    return render(request, 'homeNew.html')
+    return render(request, 'home.html')
 
 
 def home(request):
   if request.user.is_authenticated:
-    return render(request, 'homeNew.html')
+    return render(request, 'home.html')
   else:
     return redirect('/')
 
@@ -396,3 +396,45 @@ def export_record(request):
       print({'error': e})
   else:
     redirect('/')
+
+
+def generate_invoice(request):
+  client_id = request.GET['id']
+  client = Client.objects.get(id = client_id)
+  invoice = {
+    'id': client.id,
+    'client_name': client.client_name,
+    'clent_email': client.client_email,
+    'client_phone': client.client_phone,
+    'service_offered': client.service_offered,
+    'amount_charged': client.amount_charged,
+    'amount_paid': client.amount_paid,
+    'date': client.date
+  }
+  
+  context = {}
+  context['invoice'] = json.dumps(invoice)
+  return render(request, 'invoice.html', context)
+  
+  # JsonResponse({
+  #   'error': 0,
+  #   'message': invoice,
+  #   "user_ip" : f"{request.META.get('REMOTE_ADDR', None)} {request.META.get('HTTP_USER_AGENT', '')}"
+  # })
+
+@api_view(['post'])
+def test(request, user_slug, hash_slug):
+  try:
+    name = request.data.get('name', None)
+    if name == None:
+      print("No data attached")
+    else:
+      print(name)
+    print(f"Yoooo {user_slug} YYYYoooo {hash_slug}")
+    return JsonResponse({
+      'error': 0,
+      'message': "Good",
+      "user_ip" : f"{request.META.get('REMOTE_ADDR', None)} {request.META.get('HTTP_USER_AGENT', '')}"
+    })
+  except EnvironmentError as error:
+    print(error)
