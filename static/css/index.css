@@ -796,8 +796,6 @@ html, body {
           @media (max-width: 768px) {
             #invoiceApp .summary-section .right-side .rows .column-1 {
               width: 55%; } }
-          #invoiceApp .summary-section .right-side .rows .column-1 .terms {
-            margin-bottom: 24px; }
           #invoiceApp .summary-section .right-side .rows .column-1 p {
             color: #bebdbd;
             font-weight: 600;
@@ -851,12 +849,14 @@ html, body {
     -ms-flex-pack: justify;
     justify-content: space-between; }
     @media (max-width: 768px) {
-      #invoiceApp .last-section .note-terms {
-        width: 55%; } }
+      #invoiceApp .last-section {
+        display: block; } }
     #invoiceApp .last-section .note-terms .heading {
       color: #bebdbd;
       font-weight: bold;
       margin: 0; }
+    #invoiceApp .last-section .note-terms .text {
+      margin: 0 0 10px; }
     #invoiceApp .last-section .cta-holder {
       display: -webkit-box;
       display: -ms-flexbox;
@@ -864,6 +864,11 @@ html, body {
       -webkit-box-align: end;
       -ms-flex-align: end;
       align-items: flex-end; }
+      @media (max-width: 768px) {
+        #invoiceApp .last-section .cta-holder {
+          -webkit-box-pack: end;
+          -ms-flex-pack: end;
+          justify-content: flex-end; } }
       #invoiceApp .last-section .cta-holder button {
         margin-left: 10px;
         outline: none;

@@ -848,9 +848,6 @@ html, body {
          @media (max-width: 768px) {
            width: 55%;
          }
-         .terms {
-           margin-bottom: 24px;
-         }
          p {
            color: rgb(190, 189, 189);
            font-weight: 600;
@@ -908,23 +905,26 @@ html, body {
   .last-section {
     display: flex;
     justify-content: space-between;
-
+    @media (max-width:768px) {
+      display: block;
+    }
     .note-terms {
-      @media (max-width:768px) {
-        width: 55%;
-      }
       .heading {
         color: rgb(190, 189, 189);
         font-weight: bold;
         margin: 0;
       }
       .text {
-
+        margin: 0 0 10px;
       }
     }
     .cta-holder {
       display: flex;
       align-items: flex-end;
+      @media (max-width:768px) {
+        justify-content: flex-end;
+
+      }
       button {
         margin-left: 10px;
         outline: none;
