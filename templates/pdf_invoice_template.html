@@ -1,0 +1,384 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Recursive&family=Roboto:ital,wght@1,300&display=swap" rel="stylesheet">  <link rel="stylesheet" type="text/css" href="static/css/index.css">
+
+  <title>SoftNexus - Record Application</title>
+  <style>
+    #invoiceApp {
+      width: 100%;
+      padding: 20px 30px 10px;
+      font-family: 'Roboto', sans-serif;
+      font-size: small; }
+      @media (max-width: 768px) {
+        #invoiceApp {
+          padding: 10px 15px 10px; } }
+      #invoiceApp header {
+        width: 100%;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+        justify-content: space-between;
+        margin-bottom: 30px;
+        padding: 0px 20px 0px 10px; }
+        @media (max-width: 768px) {
+          #invoiceApp header {
+            padding: 0px 10px 0px 0px; } }
+        #invoiceApp header .logo {
+          width: 90px; }
+          #invoiceApp header .logo img {
+            width: 100%; }
+        #invoiceApp header .title h3 {
+          color: #1b1b1b;
+          font-weight: bold;
+          margin: 0;
+          padding: 0; }
+        #invoiceApp header .title p {
+          color: #bdb5b5;
+          text-align: right;
+          margin: 0; }
+      #invoiceApp .first-section {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+        justify-content: space-between;
+        margin-bottom: 60px; }
+        #invoiceApp .first-section .left-side {
+          width: 35%;
+          padding-left: 20px; }
+          @media (max-width: 768px) {
+            #invoiceApp .first-section .left-side {
+              padding-left: 10px;
+              width: 35%; } }
+          #invoiceApp .first-section .left-side p {
+            margin: 0;
+            padding: 0; }
+          #invoiceApp .first-section .left-side .p1 {
+            color: #bebdbd; }
+          #invoiceApp .first-section .left-side .p2 {
+            font-weight: bolder; }
+        #invoiceApp .first-section .right-side {
+          width: 65%; }
+          #invoiceApp .first-section .right-side .rows {
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-pack: justify;
+            -ms-flex-pack: justify;
+            justify-content: space-between;
+            padding-right: 20px; }
+            @media (max-width: 768px) {
+              #invoiceApp .first-section .right-side .rows {
+                padding-right: 10px; } }
+            #invoiceApp .first-section .right-side .rows .column-1 {
+              width: 60%;
+              margin-right: 0px; }
+              @media (max-width: 768px) {
+                #invoiceApp .first-section .right-side .rows .column-1 {
+                  width: 55%; } }
+              #invoiceApp .first-section .right-side .rows .column-1 .terms {
+                margin-bottom: 24px; }
+              #invoiceApp .first-section .right-side .rows .column-1 p {
+                color: #bebdbd;
+                font-weight: 600;
+                margin: 0 0 5px 0;
+                text-align: right; }
+            #invoiceApp .first-section .right-side .rows .column-2 {
+              width: 20%;
+              margin-right: 0px; }
+              @media (max-width: 768px) {
+                #invoiceApp .first-section .right-side .rows .column-2 {
+                  width: 40%; } }
+              #invoiceApp .first-section .right-side .rows .column-2 p {
+                font-weight: 500;
+                margin: 0 0 5px 0;
+                text-align: right; }
+          #invoiceApp .first-section .right-side .row-bold {
+            background-color: #f9f9f9;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-pack: justify;
+            -ms-flex-pack: justify;
+            justify-content: space-between;
+            padding: 3px 20px 3px 10px;
+            border-radius: 5px;
+            width: 75%;
+            margin-left: 25%; }
+            @media (max-width: 768px) {
+              #invoiceApp .first-section .right-side .row-bold {
+                width: 90%;
+                margin-left: 10%;
+                padding: 3px 10px; } }
+            #invoiceApp .first-section .right-side .row-bold p {
+              display: inline;
+              font-weight: bolder;
+              text-align: right;
+              margin: 0; }
+            #invoiceApp .first-section .right-side .row-bold .p-left {
+              width: 45%; }
+              @media (max-width: 768px) {
+                #invoiceApp .first-section .right-side .row-bold .p-left {
+                  width: 47%; } }
+            @media (max-width: 768px) {
+              #invoiceApp .first-section .right-side .row-bold .p-right {
+                width: 50%; } }
+      #invoiceApp .product-holder {
+        margin-bottom: 60px;
+        width: 100%; }
+        #invoiceApp .product-holder .item {
+          width: 20rem;
+          padding-left: 40px;
+          font-weight: bold; }
+          @media (max-width: 768px) {
+            #invoiceApp .product-holder .item {
+              width: 8rem;
+              padding-left: 5px; } }
+      #invoiceApp .summary-section {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+        justify-content: space-between;
+        margin-bottom: 60px; }
+        #invoiceApp .summary-section .left-side {
+          width: 35%;
+          padding-left: 20px; }
+          @media (max-width: 768px) {
+            #invoiceApp .summary-section .left-side {
+              padding-left: 10px;
+              width: 35%; } }
+          #invoiceApp .summary-section .left-side p {
+            margin: 0;
+            padding: 0; }
+          #invoiceApp .summary-section .left-side .p1 {
+            color: #bebdbd; }
+          #invoiceApp .summary-section .left-side .p2 {
+            font-weight: bolder; }
+        #invoiceApp .summary-section .right-side {
+          width: 65%; }
+          #invoiceApp .summary-section .right-side .rows {
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-pack: justify;
+            -ms-flex-pack: justify;
+            justify-content: space-between;
+            padding-right: 20px; }
+            @media (max-width: 768px) {
+              #invoiceApp .summary-section .right-side .rows {
+                padding-right: 10px; } }
+            #invoiceApp .summary-section .right-side .rows .column-1 {
+              width: 60%;
+              margin-right: 0px; }
+              @media (max-width: 768px) {
+                #invoiceApp .summary-section .right-side .rows .column-1 {
+                  width: 55%; } }
+              #invoiceApp .summary-section .right-side .rows .column-1 p {
+                color: #bebdbd;
+                font-weight: 600;
+                margin: 0 0 5px 0;
+                text-align: right; }
+            #invoiceApp .summary-section .right-side .rows .column-2 {
+              width: 20%;
+              margin-right: 0px; }
+              @media (max-width: 768px) {
+                #invoiceApp .summary-section .right-side .rows .column-2 {
+                  width: 40%; } }
+              #invoiceApp .summary-section .right-side .rows .column-2 p {
+                font-weight: 500;
+                margin: 0 0 5px 0;
+                text-align: right; }
+          #invoiceApp .summary-section .right-side .row-bold {
+            background-color: #f9f9f9;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-pack: justify;
+            -ms-flex-pack: justify;
+            justify-content: space-between;
+            padding: 3px 20px 3px 10px;
+            border-radius: 5px;
+            width: 75%;
+            margin-left: 25%; }
+            @media (max-width: 768px) {
+              #invoiceApp .summary-section .right-side .row-bold {
+                width: 90%;
+                margin-left: 10%;
+                padding: 3px 10px; } }
+            #invoiceApp .summary-section .right-side .row-bold p {
+              display: inline;
+              font-weight: bolder;
+              text-align: right;
+              margin: 0; }
+            #invoiceApp .summary-section .right-side .row-bold .p-left {
+              width: 45%; }
+              @media (max-width: 768px) {
+                #invoiceApp .summary-section .right-side .row-bold .p-left {
+                  width: 47%; } }
+            @media (max-width: 768px) {
+              #invoiceApp .summary-section .right-side .row-bold .p-right {
+                width: 50%; } }
+      #invoiceApp .last-section {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+        justify-content: space-between; }
+        @media (max-width: 768px) {
+          #invoiceApp .last-section {
+            display: block; } }
+        #invoiceApp .last-section .note-terms .heading {
+          color: #bebdbd;
+          font-weight: bold;
+          margin: 0; }
+        #invoiceApp .last-section .note-terms .text {
+          margin: 0 0 20px; }
+        #invoiceApp .last-section .cta-holder {
+          display: -webkit-box;
+          display: -ms-flexbox;
+          display: flex;
+          -webkit-box-align: end;
+          -ms-flex-align: end;
+          align-items: flex-end; }
+          @media (max-width: 768px) {
+            #invoiceApp .last-section .cta-holder {
+              -webkit-box-pack: end;
+              -ms-flex-pack: end;
+              justify-content: flex-end; } }
+          #invoiceApp .last-section .cta-holder button {
+            margin-left: 10px;
+            outline: none;
+            padding: 4px 10px;
+            border-radius: 10px;
+            background-color: #3282b8;
+            border: 0;
+            color: honeydew;
+            font-weight: bold; }
+            .table_head {
+              background-color: #1b1b1b !important;
+            }
+  </style>
+</head>
+<body>
+<div id="invoiceApp" >
+  <header>
+    <div class="logo">
+      <img src="{% static 'images/SoftNexusMain_Logo_Mark.png' %}" alt="SoftNexus" />
+
+      <!-- <img src="/static/images/SoftNexusMain_Logo_Mark.png" alt="SoftNexus" > -->
+    </div>
+    <div class="title">
+      <h3>INVOICE</h3>
+      <P>#{{ invoice.id }} </P>
+    </div>
+  </header>
+  <body>
+    <section class="first-section">
+     <div class="left-side">
+       <p class="p1">Bill To</p>
+       <p class="p2"> {{ invoice.client_name }} </p>
+     </div>
+     <div class="right-side">
+       <div class="rows">
+        <div class="column-1">
+          <p>Date:</p>
+          <p class="terms">Payment Terms:</p>
+          <p>Due Date:</p>
+         </div>
+         <div class="column-2">
+          <p> {{ invoice.date }} </p>
+          <p>At least, 20% beforehand</p>
+          <p> {{ invoice.due_date }} </p>
+         </div>
+       </div>
+       <div class="row-bold">
+        <p class="p-left">Balance Due:</p>
+        <p class="p-right"> #{{ invoice.balance_due }} </p>
+       </div>
+      </div>
+    </section>
+    <section class="product-holder">
+     <div class="table-responsive">
+      <table class="table .table-sm table-hover">
+        <thead class="table-head">
+          <tr>
+            <th scope="col">
+              <div class="item">
+                Item
+              </div>
+            </th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Rate</th>
+            <th scope="col">Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <div class="item">
+                {{ invoice.service_offered}}
+              </div>
+            </td>
+            <td>
+              {{ invoice.qty }}
+            </td>
+            <td>
+              $1,500.00
+            </td>
+            <td>
+              #{{ invoice.amount_charged }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+     </div>
+    </section>
+    <section class="summary-section">
+      <div class="left-side">
+      </div>
+      <div class="right-side">
+        <div class="rows">
+         <div class="column-1">
+           <p>Total:</p>
+           <p class="terms">Amount Paid:</p>
+          </div>
+          <div class="column-2">
+           <p> #{{ invoice.amount_charged }} </p>
+           <p> #{{ invoice.amount_paid }} </p>
+          </div>
+        </div>
+        <div class="row-bold">
+         <p class="p-left">Balance Due:</p>
+         <p> #{{ invoice.balance_due }} </p>
+        </div>
+       </div>
+     </section>
+     <section class="last-section">
+       <div class="note-terms">
+        <div class="note">
+          <p class="heading">Notes:</p>
+          <p class="text">We reserve the right to use part of this project for our portfolio</p>
+        </div>
+        <div class="terms">
+         <p class="heading">Terms:</p>
+         <p class="text">Bla bla bla</p>
+        </div>
+       </div>
+     </section>
+  </body>
+ 
+</div>
+</body>
+</html>

@@ -8,6 +8,7 @@
   </script>
 <div
   id="invoiceApp"
+  ref="content"
 >
   <header>
     <div class="logo">
@@ -15,14 +16,14 @@
     </div>
     <div class="title">
       <h3>INVOICE</h3>
-      <P># 1</P>
+      <P># [[ invoice.id ]] </P>
     </div>
   </header>
   <body>
     <section class="first-section">
      <div class="left-side">
        <p class="p1">Bill To</p>
-       <p class="p2">Akowanu Ganiu</p>
+       <p class="p2"> [[ invoice.client_name ]] </p>
      </div>
      <div class="right-side">
        <div class="rows">
@@ -32,14 +33,14 @@
           <p>Due Date:</p>
          </div>
          <div class="column-2">
-          <p>Aug 1, 2020</p>
-          <p>At least, 50% beforehand</p>
-          <p>Aug 27, 2020</p>
+          <p> [[ currentDate() ]] </p>
+          <p>At least, 20% beforehand</p>
+          <p> [[ formatDate(invoice.due_date) ]] </p>
          </div>
        </div>
        <div class="row-bold">
         <p class="p-left">Balance Due:</p>
-        <p class="p-right">$1,150.00</p>
+        <p class="p-right"> #[[ invoice.balance_due ]] </p>
        </div>
       </div>
     </section>
@@ -62,17 +63,17 @@
           <tr>
             <td>
               <div class="item">
-                Website and mobile application with seo
+                [[ invoice.service_offered]]
               </div>
             </td>
             <td>
-              2
+              [[ invoice.qty ]]
             </td>
             <td>
               $1,500.00
             </td>
             <td>
-              $3,000.00
+              #[[ invoice.amount_charged ]]
             </td>
           </tr>
         </tbody>
@@ -89,13 +90,13 @@
            <p class="terms">Amount Paid:</p>
           </div>
           <div class="column-2">
-           <p>$1,150.00</p>
-           <p>$1,150.00</p>
+           <p> #[[ invoice.amount_charged ]] </p>
+           <p> #[[ invoice.amount_paid ]] </p>
           </div>
         </div>
         <div class="row-bold">
          <p class="p-left">Balance Due:</p>
-         <p>$1,150.00</p>
+         <p> #[[ invoice.balance_due ]] </p>
         </div>
        </div>
      </section>
@@ -110,14 +111,23 @@
          <p class="text">Bla bla bla</p>
         </div>
        </div>
-       <div class="cta-holder">
-         <button class="print">Print Invoice</button>
-         <button>Send Invoice</button>
+       <div 
+          class="cta-holder"
+          v-if="!beginDownload"
+        >
+        <a
+          class="cta"
+          :href=`/downlod_invoice?id=${invoice.id}`
+        >
+        Print Invoice
+      </a>
+        <button class="cta">Send Invoice</button>
        </div>      
      </section>
   </body>
+ 
 </div>
-  
+
 <script>
   const userApp = new Vue({
     delimiters: ['[[',']]'],
@@ -125,9 +135,54 @@
     data () {
       return {
         invoice: Data,
+        beginDownload: false
       }
     },
     methods: {
+      formatDate (dueDate) {
+        dateData = dueDate.split('-')
+        const year = dateData[0]
+        const month = dateData[1]
+        const day = dateData[2]
+        const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        const formattedDate = `${months[month - 1]} ${day}, ${year}`
+        return formattedDate
+      },
+      currentDate () {
+        const date = new Date()
+        const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        const formattedDate = `${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`
+        return formattedDate
+      },
+      printPdf () {
+        this.beginDownload = true
+        domtoimage.toPng(this.$refs.content)
+        .then(function(dataUrl) {
+          var img = new Image();
+          img.src = dataUrl;
+          const doc = new jsPDF({
+            orientation: "portrait",
+            // unit: "pt",
+            format: [900, 1400]
+          });
+          doc.addImage(img, "JPEG", 20, 20);
+          const date = new Date();
+          const filename =
+            "timechart_" +
+            date.getFullYear() +
+            ("0" + (date.getMonth() + 1)).slice(-2) +
+            ("0" + date.getDate()).slice(-2) +
+            ("0" + date.getHours()).slice(-2) +
+            ("0" + date.getMinutes()).slice(-2) +
+            ("0" + date.getSeconds()).slice(-2) +
+            ".pdf";
+          doc.save(filename);
+          beginDownload = false
+        })
+        .catch(function(error) {
+          console.error("oops, something went wrong!", error);
+        });
+      }
     }
   })
 </script>

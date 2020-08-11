@@ -27,6 +27,8 @@ var app = new Vue({
       phone_number: '',
       amount_charged: '',
       amount_paid: '',
+      due_date: '',
+      qty: ''
     },
     accountRecord: {
       description: '',
@@ -45,6 +47,15 @@ var app = new Vue({
       return {
         width: `${size}rem`
       }
+    },
+    formatDate (dueDate) {
+      dateData = dueDate.split('-')
+      const year = dateData[0]
+      const month = dateData[1]
+      const day = dateData[2]
+      const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+      const formattedDate = `${months[month - 1]} ${day}, ${year}`
+      return formattedDate
     },
     triggerRecordEntryView (view, action)  {
       if (view ==='account' && action === 'add') {
@@ -82,6 +93,8 @@ var app = new Vue({
         phone_number: '',
         amount_charged: '',
         amount_paid: '',
+        due_date: '',
+        qty: ''
       }
       this.accountRecord = {
         description: '',
@@ -93,34 +106,34 @@ var app = new Vue({
       this.errorMsg = ''
       if (this.validateClientRecord('add_permit')){
         const data = this.validateClientRecord('add_permit')
-
-        this.closeModal()
-      let url = `/add_client_record`
-      const fetchData  = {
-          method: 'post',
-          body: JSON.stringify(data),
-          headers: {
-            "Content-Type": "application/json",
-            'Authorization': `Token ${this.token}`,
-            'X-CSRFToken': this.csrftoken
-          }
-      }
-      fetch(url, fetchData)
-      .then(resp => {
-          if(resp.ok) {
-            return resp.json()
-          } else {
-            return Promise.reject(resp.json())
-          }
-      })
-      .then(data => {
         console.log(data)
-        this.displaySuccessMsg('Account record added')
-        this.current_data = data.reply
-      })
-      .catch(error => {
-          console.log(error.object)
-      })
+        this.closeModal()
+        let url = `/add_client_record`
+        const fetchData  = {
+            method: 'post',
+            body: JSON.stringify(data),
+            headers: {
+              "Content-Type": "application/json",
+              'Authorization': `Token ${this.token}`,
+              'X-CSRFToken': this.csrftoken
+            }
+        }
+        fetch(url, fetchData)
+        .then(resp => {
+            if(resp.ok) {
+              return resp.json()
+            } else {
+              return Promise.reject(resp.json())
+            }
+        })
+        .then(data => {
+          console.log(data)
+          this.displaySuccessMsg('Account record added')
+          this.current_data = data.reply
+        })
+        .catch(error => {
+            console.log(error.object)
+        })
       }
     },
     addAccountRecord () {
@@ -171,17 +184,24 @@ var app = new Vue({
     },
     triggerClientUpdate (id) {
       client = this.current_data.client_record.find(element => element.id === id)
-      let new_amount_paid
-      let new_amount_charge
+      let new_amount_paid = ''
+      let new_amount_charge = ''
       if (client.amount_paid === '0.00') {
         new_amount_paid = ''
       } else {
         let length = client.amount_paid.length
-        new_amount_paid = client.amount_paid.substring(0, length - 3)
+        let amount = client.amount_paid.substring(0, length - 3)
+        amount = amount.split(',')
+        for (num of amount) {
+          new_amount_paid += num
+        }
       }
       let len = client.amount_charged.length
-      new_amount_charge = client.amount_charged.substring(0, len - 3)
-
+      let amount = client.amount_charged.substring(0, len - 3)
+      amount = amount.split(',')
+      for (num of amount) {
+        new_amount_charge += num
+      }
       this.clientRecord = {
         service_offered: client.service_offered,
         name: client.client_name,
@@ -189,6 +209,8 @@ var app = new Vue({
         phone_number: client.client_phone,
         amount_charged: new_amount_charge,
         amount_paid: new_amount_paid,
+        due_date: client.due_date,
+        qty: client.qty,
       }
       this.current_id = id
       this.triggerRecordEntryView('client', 'edit')
@@ -196,7 +218,12 @@ var app = new Vue({
     triggerAccountUpdate (id) {
       account = this.current_data.account_record.find(element => element.id === id)
       let len = account.amount.length
-      new_amount = account.amount.substring(0, len - 3)
+      let new_amount = ''
+      amount = account.amount.substring(0, len - 3)
+      amount = amount.split(',')
+      for (num of amount) {
+        new_amount += num
+      }
       this.accountRecord = {
         description: account.description,
         amount: new_amount,
@@ -349,37 +376,6 @@ var app = new Vue({
           console.log(error.object)
       })
     },
-    generateInvoice (id) {
-
-      // let payload = {
-      //   client_id: id
-      // }
-
-      let url = `/generate_invoice/${id}`
-      // const fetchData  = {
-      //     method: 'get',
-      //     body: JSON.stringify(payload),
-      //     // headers: {
-      //     //   "Content-Type": "application/json",
-      //     //   'Authorization': `Token ${this.token}`,
-      //     //   'X-CSRFToken': this.csrftoken
-      //     // }
-      // }
-      fetch(url)
-      .then(resp => {
-          if(resp.ok) {
-            return resp.json()
-          } else {
-            return Promise.reject(resp.json())
-          }
-      })
-      .then(data => {
-        console.log(data)
-      })
-      .catch(error => {
-          console.log(error.object)
-      })
-    },
     validEmail(email) {
       const regex = /^\S+@\S+\.\S+$/;
       if(regex.test(email) === false) {
@@ -413,8 +409,8 @@ var app = new Vue({
       }
     },
     validateClientRecord(action_permit) {
-      let { service_offered, name, email, phone_number, amount_charged, amount_paid } = this.clientRecord
-      if (service_offered==='' || name==='' || email==='' || amount_charged==='') {
+      let { service_offered, name, email, phone_number, amount_charged, amount_paid, due_date, qty } = this.clientRecord
+      if (service_offered==='' || name==='' || email==='' || amount_charged==='' || due_date==='') {
         this.errorMsg = 'Please fill out the required fields'
         return false
       } else if (!this.validText(name)){
@@ -432,7 +428,10 @@ var app = new Vue({
       }else if (amount_paid.length > 0 && !this.validNumber(amount_paid)){
         this.errorMsg = 'Amount can only be numbers'
         return false
-      }else {
+      } else {
+        if (qty === ''){
+          qty = 1
+        }
         amount_paid.length ? amount_paid = amount_paid + ".00" : amount_paid = amount_paid + "0.00"
         amount_charged = amount_charged + ".00" 
         this.errorMsg = ''
@@ -445,6 +444,8 @@ var app = new Vue({
             phone: phone_number,
             amount_charged: amount_charged,
             amount_paid: amount_paid,
+            due_date: due_date,
+            qty: qty,
             user: this.current_data.user.username,
             id: this.current_id,
             permit: action_permit,
@@ -457,6 +458,8 @@ var app = new Vue({
             phone: phone_number,
             amount_charged: amount_charged,
             amount_paid: amount_paid,
+            due_date: due_date,
+            qty: qty,
             user: this.current_data.user.username,
             permit: action_permit,
           }

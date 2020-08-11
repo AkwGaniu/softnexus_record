@@ -18,6 +18,34 @@ def user_friendly_date():
   return user_date
 
 
+def format_date(date):
+  new_date = date.split('-')
+  year, month, day = new_date
+  month_name = calendar.month_name[int(month)]
+  formated_date = month_name +' '+ day +', '+ year
+  return formated_date
+
+
+def format_price(num):
+  price = num[:-3]
+  if len(price) < 4:
+    formated_price = num
+  elif len(price) == 4:
+    formated_price = f"{price[0:1]},{price[1:]}.00"
+  elif len(price) == 5:
+    formated_price = f"{price[0:2]},{price[2:]}.00"
+  elif len(price) == 6:
+    formated_price = f"{price[0:3]},{price[3:]}.00" 
+  elif len(price) == 7:
+    formated_price = f"{price[0:1]},{price[1:4]},{price[4:]}.00"
+  elif len(price) == 8:
+    formated_price = f"{price[0:2]},{price[2:5]},{price[5:]}.00"
+  elif len(price) == 9:
+    formated_price = f"{price[0:3]},{price[3:6]},{price[6:]}.00"
+  elif len(price) == 10:
+    formated_price = f"{price[0:1]},{price[1:4]},{price[4:7]},{price[7:]}.00"
+  return formated_price
+
 def is_permitted(user, action):
   current_user = User.objects.get(username=user)
   user_is_permitted = current_user.is_superuser
@@ -75,7 +103,8 @@ def reloadData(username):
     client_records = list(get_clients.values(
       'id', 'client_name', 'client_email',
       'client_phone', 'service_offered',
-      'amount_charged', 'amount_paid', 'date'
+      'amount_charged', 'amount_paid', 'balance_due',
+      'qty', 'due_date', 'date'
     ))
     account_records = list(get_accounts.values(
       'id', 'description', 'date', 'amount', 'entry_type'

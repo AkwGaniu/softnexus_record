@@ -21,5 +21,5 @@ urlpatterns = [
     path('permit_user', views.permit_user),
     path('export_record', views.export_record),
     path('generate_invoice', views.generate_invoice),
-    path('email_verification/<str:user_slug>/<int:hash_slug>', views.test)
+    path('downlod_invoice', views.html_to_pdf_view),
 ]

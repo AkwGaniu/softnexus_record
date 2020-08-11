@@ -78,10 +78,12 @@ def get_data(request):
       get_clients = Client.objects.all()
 
       client_records = list(get_clients.values(
-        'id', 'client_name', 'client_email',
-        'client_phone', 'service_offered',
-        'amount_charged', 'amount_paid', 'date'
+      'id', 'client_name', 'client_email',
+      'client_phone', 'service_offered',
+      'amount_charged', 'amount_paid', 'balance_due',
+      'qty', 'due_date', 'date'
       ))
+
       account_records = list(get_accounts.values(
         'id', 'description', 'date', 'amount', 'entry_type'
       ))
@@ -191,6 +193,8 @@ def add_client_record(request):
     service_offered = request.data['service']
     amount_charged = request.data['amount_charged']
     amount_paid = request.data['amount_paid']
+    due_date = request.data['due_date']
+    qty = request.data['qty']
     user = request.data['user']
     action = request.data['permit']
     current_date = util.user_friendly_date()
@@ -201,6 +205,12 @@ def add_client_record(request):
         })
     else:
       if util.is_permitted(user, action):
+        balance_due = float(amount_charged) - float(amount_paid)
+        balance_due = str(balance_due) + '0'
+        balance_due =  util.format_price(balance_due)
+        amount_charged = util.format_price(amount_charged)
+        amount_paid = util.format_price(amount_paid)
+
         new_client_record = Client(
           client_name = client_name,
           client_email = client_email,
@@ -208,8 +218,12 @@ def add_client_record(request):
           service_offered = service_offered,
           amount_charged = amount_charged,
           amount_paid = amount_paid,
+          balance_due = balance_due,
+          qty = qty,
+          due_date = due_date,
           date = current_date
         )
+
         new_client_record.save()
         payload = util.reloadData(user)
         return JsonResponse({"reply": payload})
@@ -230,6 +244,8 @@ def update_client_record(request):
     service_offered = request.data['service']
     amount_charged = request.data['amount_charged']
     amount_paid = request.data['amount_paid']
+    qty = request.data['qty']
+    due_date = request.data['due_date']
     client_id = request.data['id']
     user = request.data['user']
     action = request.data['permit']
@@ -240,14 +256,24 @@ def update_client_record(request):
         })
     else:      
       if util.is_permitted(user, action):
+        balance_due = float(amount_charged) - float(amount_paid)
+        balance_due = str(balance_due) + '0'
+        balance_due =  util.format_price(balance_due)
+        amount_charged = util.format_price(amount_charged)
+        amount_paid = util.format_price(amount_paid)
+
         client = Client.objects.get(id = client_id)
-    
+
         client.client_name = client_name
         client.client_email = client_email
         client.client_phone = client_phone_num
         client.service_offered = service_offered
         client.amount_charged = amount_charged
         client.amount_paid = amount_paid
+        client.balance_due = balance_due
+        client.qty = qty
+        client.due_date = due_date
+
 
         client.save()
         payload = util.reloadData(user)
@@ -276,6 +302,7 @@ def add_account_record(request):
         })
     else:
       if util.is_permitted(user, action):
+        amount = util.format_price(amount)
         new_account_record = Account(
           description = description,
           entry_type = entry_type,
@@ -309,7 +336,10 @@ def update_account_record(request):
         })
     else:
       if util.is_permitted(user, action):
+        amount = util.format_price(amount)
+
         account = Account.objects.get(id = entry_id)
+        
         account.description = description
         account.entry_type = entry_type
         account.amount = amount
@@ -409,18 +439,51 @@ def generate_invoice(request):
     'service_offered': client.service_offered,
     'amount_charged': client.amount_charged,
     'amount_paid': client.amount_paid,
-    'date': client.date
+    'balance_due': client.balance_due,
+    'qty': client.qty,
+    'due_date': client.due_date
   }
   
   context = {}
   context['invoice'] = json.dumps(invoice)
   return render(request, 'invoice.html', context)
-  
-  # JsonResponse({
-  #   'error': 0,
-  #   'message': invoice,
-  #   "user_ip" : f"{request.META.get('REMOTE_ADDR', None)} {request.META.get('HTTP_USER_AGENT', '')}"
-  # })
+
+
+from django.core.files.storage import FileSystemStorage
+from django.http import HttpResponse
+from django.template.loader import render_to_string
+from django.template.loader import get_template
+
+from weasyprint import HTML
+
+def html_to_pdf_view(request):
+  client_id = request.GET['id']
+  client = Client.objects.get(id = client_id)
+
+  date = util.user_friendly_date()
+  due_date = util.format_date(client.due_date)
+
+  invoice = {
+    'id': client.id,
+    'client_name': client.client_name,
+    'clent_email': client.client_email,
+    'client_phone': client.client_phone,
+    'service_offered': client.service_offered,
+    'amount_charged': client.amount_charged,
+    'amount_paid': client.amount_paid,
+    'balance_due': client.balance_due,
+    'qty': client.qty,
+    'due_date': due_date,
+    'date': date
+  }
+
+  html_template = render_to_string('pdf_invoice_template.html', {'invoice': invoice})
+  pdf_file = HTML(string=html_template, base_url=request.build_absolute_uri()).write_pdf() 
+
+  response = HttpResponse(pdf_file, content_type='application/pdf')
+  response['Content-Disposition'] = 'attachment; filename="invoice.pdf"'
+  return response
+
 
 @api_view(['post'])
 def test(request, user_slug, hash_slug):

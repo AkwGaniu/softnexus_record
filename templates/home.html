@@ -134,7 +134,7 @@
                 </div>
               </td>
               <td> [[ account.entry_type ]] </td>
-              <td> [[ account.amount]] </td>
+              <td> #[[ account.amount]] </td>
               <td> 
                 <div
                   :style="divSize(account.date)"
@@ -237,7 +237,7 @@
                 <div
                   :style="paymentStyle"
                 >
-                  Payment Due
+                  Total Amount
                 </div>
               </th>
               <th scope="col">
@@ -247,7 +247,21 @@
                   Payment Made
                 </div>
               </th>
-              <th scope="col">Date</th>
+              <th scope="col">
+                <div
+                  :style="paymentStyle"
+                >
+                  Balance Due
+                </div>
+              </th>
+              <th scope="col">Entry Date</th>
+              <th scope="col">
+                <div
+                  :style="paymentStyle"
+                >
+                  Due Date
+                </div>
+              </th>
               <th scope="col"></th>
             </tr>
           </thead>
@@ -274,15 +288,23 @@
               </td>
               <td> [[ client.client_email]] </td>
               <td> [[ client.client_phone ]] </td>
-              <td> [[ client.amount_charged ]] </td>
-              <td> [[ client.amount_paid ]] </td>
+              <td> #[[ client.amount_charged ]] </td>
+              <td> #[[ client.amount_paid ]] </td>
+              <td> #[[ client.balance_due ]] </td>
               <td>
                 <div
                 :style="divSize(client.date)"
                 >
                   [[ client.date ]]
                 </div>
-              </td>             
+              </td>
+              <td>
+                <div
+                  :style="divSize(formatDate(client.due_date))"
+                  v-html="formatDate(client.due_date)"
+                >
+                </div>
+              </td>           
               <td 
                 class="action-btn-holder"
                 v-if="current_item === client.id"
@@ -387,7 +409,7 @@
               </div>
             </div>
             <span>[[ errorMsg ]]</span>
-            <div class="form-group">
+            <div class="form-group account-form-group">
               <label for="description">Description</label>
               <input
                 type="text"
@@ -397,7 +419,7 @@
                 autocomplete="off"
               >
             </div>
-            <div class="form-group">
+            <div class="form-group account-form-group">
               <label for="entry type">Choose Entry Type</label>
               <select v-model="accountRecord.type">
                 <option value="">Entry type</option>
@@ -405,7 +427,7 @@
                 <option value="Debit">Debit</option>              
               </select>
             </div>
-            <div class="form-group">
+            <div class="form-group account-form-group">
               <label for="amount">Amount</label>
               <input
                 type="text"
@@ -513,7 +535,7 @@
               >
             </div>
             <div class="form-group">
-              <label for="amount charged">Payment Due*</label>
+              <label for="amount charged">Total Amount*</label>
               <input
                 type="text"
                 name="amount_charged"
@@ -523,7 +545,28 @@
               >
             </div>
           </div>
-
+          <div class="group">
+            <div class="form-group">
+              <label for="due date">Due Date*</label>
+              <input
+                type="date"
+                name="due_date"
+                v-model="clientRecord.due_date"
+                placeholder="Due date"
+                autocomplete="off"
+              >
+            </div>
+            <div class="form-group">
+              <label for="Quantity">Quantity</label>
+              <input
+                type="text"
+                name="amount_charged"
+                v-model="clientRecord.qty"
+                placeholder="quantity of product"
+                autocomplete="off"
+              >
+            </div>
+          </div>
           <input 
             type="submit"
             value="Update"

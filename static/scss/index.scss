@@ -224,6 +224,9 @@ html, body {
           }
         }
       }
+      .account-form-group {
+        width: 100% !important;
+      }
       .form-group {
         padding: 5px; 
         width: 50%;
@@ -676,7 +679,7 @@ html, body {
     width: 100%;
     display: flex;
     justify-content: space-between;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
     padding: 0px 20px 0px 10px;
     @media (max-width: 768px) {
       padding: 0px 10px 0px 0px
@@ -698,6 +701,7 @@ html, body {
       p {
         color: rgb(189, 181, 181);
         text-align: right;
+        margin: 0;
       }
     }
   }
@@ -785,7 +789,7 @@ html, body {
         .p-left {
           width: 45%;
           @media (max-width: 768px) {
-            width: 50%;
+            width: 47%;
           }
         }
         .p-right {
@@ -814,7 +818,6 @@ html, body {
     display: flex;
     justify-content: space-between;
     margin-bottom: 40px;
-
    .left-side {
       width: 35%;
       padding-left: 20px;
@@ -891,7 +894,7 @@ html, body {
         .p-left {
           width: 45%;
           @media (max-width: 768px) {
-            width: 50%;
+            width: 47%;
           }
         }
         .p-right {
@@ -915,7 +918,7 @@ html, body {
         margin: 0;
       }
       .text {
-        margin: 0 0 10px;
+        margin: 0 0 20px;
       }
     }
     .cta-holder {
@@ -925,10 +928,10 @@ html, body {
         justify-content: flex-end;
 
       }
-      button {
+      .cta {
         margin-left: 10px;
         outline: none;
-        padding: 4px 6px;
+        padding: 4px 10px;
         border-radius: 10px;
         background-color: #3282b8;
         border: 0;

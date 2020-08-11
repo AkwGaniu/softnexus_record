@@ -16,6 +16,9 @@ class Client(models.Model):
   service_offered = models.CharField(max_length=1500)
   amount_charged = models.CharField(max_length=20)
   amount_paid = models.CharField(max_length=20)
+  balance_due = models.CharField(max_length=20)
+  due_date = models.CharField(max_length=30)
+  qty = models.IntegerField()
   date = models.CharField(max_length=50)
 
 

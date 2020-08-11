@@ -221,6 +221,8 @@ html, body {
         .add-record-modal .modal-content main .group .date p {
           color: #242222;
           font-weight: bolder; }
+      .add-record-modal .modal-content main .account-form-group {
+        width: 100% !important; }
       .add-record-modal .modal-content main .form-group {
         padding: 5px;
         width: 50%;
@@ -639,7 +641,7 @@ html, body {
     -webkit-box-pack: justify;
     -ms-flex-pack: justify;
     justify-content: space-between;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
     padding: 0px 20px 0px 10px; }
     @media (max-width: 768px) {
       #invoiceApp header {
@@ -655,7 +657,8 @@ html, body {
       padding: 0; }
     #invoiceApp header .title p {
       color: #bdb5b5;
-      text-align: right; }
+      text-align: right;
+      margin: 0; }
   #invoiceApp .first-section {
     display: -webkit-box;
     display: -ms-flexbox;
@@ -740,7 +743,7 @@ html, body {
           width: 45%; }
           @media (max-width: 768px) {
             #invoiceApp .first-section .right-side .row-bold .p-left {
-              width: 50%; } }
+              width: 47%; } }
         @media (max-width: 768px) {
           #invoiceApp .first-section .right-side .row-bold .p-right {
             width: 50%; } }
@@ -837,7 +840,7 @@ html, body {
           width: 45%; }
           @media (max-width: 768px) {
             #invoiceApp .summary-section .right-side .row-bold .p-left {
-              width: 50%; } }
+              width: 47%; } }
         @media (max-width: 768px) {
           #invoiceApp .summary-section .right-side .row-bold .p-right {
             width: 50%; } }
@@ -856,7 +859,7 @@ html, body {
       font-weight: bold;
       margin: 0; }
     #invoiceApp .last-section .note-terms .text {
-      margin: 0 0 10px; }
+      margin: 0 0 20px; }
     #invoiceApp .last-section .cta-holder {
       display: -webkit-box;
       display: -ms-flexbox;
@@ -869,16 +872,16 @@ html, body {
           -webkit-box-pack: end;
           -ms-flex-pack: end;
           justify-content: flex-end; } }
-      #invoiceApp .last-section .cta-holder button {
+      #invoiceApp .last-section .cta-holder .cta {
         margin-left: 10px;
         outline: none;
-        padding: 4px 6px;
+        padding: 4px 10px;
         border-radius: 10px;
         background-color: #3282b8;
         border: 0;
         color: honeydew;
         font-weight: bold; }
-        #invoiceApp .last-section .cta-holder button:hover {
+        #invoiceApp .last-section .cta-holder .cta:hover {
           background-color: #0f4c75; }
 
 .fix {
