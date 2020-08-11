@@ -3,9 +3,13 @@ import calendar
 import io
 import xlsxwriter
 from django.http import HttpResponse
+from django.core.mail import EmailMessage
+from django.template.loader import get_template
 from django.contrib.auth.models import User
-from account_book.models import Permission 
+
 from account_book.models import Permission, Account, Client
+from SoftnexusRecord.settings import EMAIL_HOST_USER, EMAIL_REPLY_TO
+
 
 
 def user_friendly_date():
@@ -301,3 +305,21 @@ def write_client_to_excel():
   xlsx_data = output.getvalue()
   return xlsx_data
 
+
+# def generate_pdf(data):
+
+
+def send_invoice_as_mail(invoice):
+  try:
+    email_subject = f"{invoice['service_offered']} Invoice"
+    email_context = {'invoice': invoice}
+    print(email_context)
+    email_template = get_template('email_invoice_template.html')
+    email_content = email_template.render(email_context)
+    email_msg = EmailMessage(email_subject, email_content, EMAIL_HOST_USER, [invoice['client_email']], reply_to=[EMAIL_REPLY_TO])
+    email_msg.content_subtype = "html"
+    res = email_msg.send()
+    return res
+  except Exception as e:
+    print({'Error': str(e)})
+  

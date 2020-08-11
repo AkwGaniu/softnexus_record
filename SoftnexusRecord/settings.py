@@ -139,13 +139,24 @@ USE_TZ = True
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles/')
 STATIC_URL = '/static/'
-
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
- 
+# Media settings
 MEDIA_ROOT =  os.path.join(BASE_DIR, 'media/')
 MEDIA_URL = '/media/'
+
+# email settings
+EMAIL_HOST = 'mail.privateemail.com'
+EMAIL_HOST_USER = 'noreply@tiwa.africa'
+EMAIL_HOST_PASSWORD = "fudnuv-tavmyJ-dimjy1"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+EMAIL_REPLY_TO = "info@tiwa.africa"
+
 
 
 django_heroku.settings(locals())

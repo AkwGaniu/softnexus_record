@@ -3,6 +3,9 @@ from django.http import HttpResponse, JsonResponse
 import json
 from django.contrib.auth import authenticate, logout
 from django.contrib.auth.models import User
+from django.template.loader import render_to_string
+
+from weasyprint import HTML
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework.parsers import MultiPartParser
@@ -449,14 +452,7 @@ def generate_invoice(request):
   return render(request, 'invoice.html', context)
 
 
-from django.core.files.storage import FileSystemStorage
-from django.http import HttpResponse
-from django.template.loader import render_to_string
-from django.template.loader import get_template
-
-from weasyprint import HTML
-
-def html_to_pdf_view(request):
+def generate_pdf(request):
   client_id = request.GET['id']
   client = Client.objects.get(id = client_id)
 
@@ -477,10 +473,37 @@ def html_to_pdf_view(request):
     'date': date
   }
 
-  html_template = render_to_string('pdf_invoice_template.html', {'invoice': invoice})
-  pdf_file = HTML(string=html_template, base_url=request.build_absolute_uri()).write_pdf() 
+  # pdf_file = util.generate_pdf(invoice)
+  try:
+    html_template = render_to_string('pdf_invoice_template.html', {'invoice': invoice})
+    pdf_file = HTML(string=html_template, base_url=request.build_absolute_uri()).write_pdf()
+    response = HttpResponse(pdf_file, content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="invoice.pdf"'
+    return response
+  except Exception as e:
+    print({'Error': str(e)})
 
-  response = HttpResponse(pdf_file, content_type='application/pdf')
-  response['Content-Disposition'] = 'attachment; filename="invoice.pdf"'
-  return response
-  # render(request, 'pdf_invoice_template.html', {'invoice': invoice})
+
+def send_invoice(request):
+  client_id = request.GET['id']
+  client = Client.objects.get(id = client_id)
+
+  date = util.user_friendly_date()
+  due_date = util.format_date(client.due_date)
+
+  invoice = {
+    'id': client.id,
+    'client_name': client.client_name,
+    'client_email': client.client_email,
+    'client_phone': client.client_phone,
+    'service_offered': client.service_offered,
+    'amount_charged': client.amount_charged,
+    'amount_paid': client.amount_paid,
+    'balance_due': client.balance_due,
+    'qty': client.qty,
+    'due_date': due_date,
+    'date': date
+  }
+
+  response = util.send_invoice_as_mail(invoice)
+  return JsonResponse({'Reply': str(response)})

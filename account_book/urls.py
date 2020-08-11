@@ -21,5 +21,6 @@ urlpatterns = [
     path('permit_user', views.permit_user),
     path('export_record', views.export_record),
     path('generate_invoice', views.generate_invoice),
-    path('downlod_invoice', views.html_to_pdf_view),
+    path('downlod_invoice', views.generate_pdf),
+    path('send_invoice', views.send_invoice)
 ]
