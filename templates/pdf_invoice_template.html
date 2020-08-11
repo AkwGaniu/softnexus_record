@@ -135,6 +135,30 @@
       #invoiceApp .product-holder {
         margin-bottom: 60px;
         width: 100%; }
+        #invoiceApp .product-holder .table-responsive {
+          width: 100%;
+          overflow-x: scroll;
+        }
+        #invoiceApp .product-holder .table {
+          width: 100%;
+        }
+        #invoiceApp .product-holder .table thead th{
+          background-color: #313131 !important;
+          color: whitesmoke !important;
+          padding: 10px 20px;
+          text-align: left;
+          letter-spacing: 2px;
+        }
+        #invoiceApp .product-holder .table thead .radius-left{
+          border-radius: 5px 0px 0px 5px;
+        }
+        #invoiceApp .product-holder .table thead .radius-right{
+          border-radius: 0px 5px 5px 0px;
+        }
+        #invoiceApp .product-holder .table tbody td{
+          padding: 10px 20px;
+          text-align: left;
+        }
         #invoiceApp .product-holder .item {
           width: 20rem;
           padding-left: 40px;
@@ -311,17 +335,17 @@
     </section>
     <section class="product-holder">
      <div class="table-responsive">
-      <table class="table .table-sm table-hover">
+      <table class="table">
         <thead class="table-head">
           <tr>
-            <th scope="col">
+            <th scope="col" class="radius-left">
               <div class="item">
                 Item
               </div>
             </th>
             <th scope="col">Quantity</th>
             <th scope="col">Rate</th>
-            <th scope="col">Amount</th>
+            <th scope="col" class="radius-right">Amount</th>
           </tr>
         </thead>
         <tbody>

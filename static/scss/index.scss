@@ -813,6 +813,12 @@ html, body {
 
       }
     }
+    .radius-right{
+      border-radius: 5px 0px 0px 5px;
+    }
+    .radius-right{
+      border-radius: 0px 5px 5px 0px;
+    }
   }
   .summary-section {
     display: flex;

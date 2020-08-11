@@ -758,6 +758,10 @@ html, body {
         #invoiceApp .product-holder .item {
           width: 8rem;
           padding-left: 5px; } }
+    #invoiceApp .product-holder .radius-right {
+      border-radius: 5px 0px 0px 5px; }
+    #invoiceApp .product-holder .radius-right {
+      border-radius: 0px 5px 5px 0px; }
   #invoiceApp .summary-section {
     display: -webkit-box;
     display: -ms-flexbox;

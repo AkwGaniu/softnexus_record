@@ -483,21 +483,4 @@ def html_to_pdf_view(request):
   response = HttpResponse(pdf_file, content_type='application/pdf')
   response['Content-Disposition'] = 'attachment; filename="invoice.pdf"'
   return response
-
-
-@api_view(['post'])
-def test(request, user_slug, hash_slug):
-  try:
-    name = request.data.get('name', None)
-    if name == None:
-      print("No data attached")
-    else:
-      print(name)
-    print(f"Yoooo {user_slug} YYYYoooo {hash_slug}")
-    return JsonResponse({
-      'error': 0,
-      'message': "Good",
-      "user_ip" : f"{request.META.get('REMOTE_ADDR', None)} {request.META.get('HTTP_USER_AGENT', '')}"
-    })
-  except EnvironmentError as error:
-    print(error)
+  # render(request, 'pdf_invoice_template.html', {'invoice': invoice})
