@@ -265,7 +265,6 @@ var app = new Vue({
                 }
             })
             .then(data => {
-              console.log(data)
               this.displaySuccessMsg('Client record updated')
               this.current_data = data.reply
             })
@@ -477,25 +476,25 @@ var app = new Vue({
           } else {
               console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
           }
-    }
     },
-    created () {
-      const data = localStorage.getItem('user')
-      if (data !== null) {
-        userData = JSON.parse(data)
-        axios.get('/get_data', {
-          params: {user: userData.user}
-        })
-        .then((response) => {
-         this.current_data = response.data.reply
-         this.token = userData.token
-        })
-        .catch((error) => {
-          console.log(error)
-        })
-      } else {
-        self.location = '/logout_user'
-      }
-      this.getToken()
+  },
+  created () {
+    const data = localStorage.getItem('user')
+    if (data !== null) {
+      userData = JSON.parse(data)
+      axios.get('/get_data', {
+        params: {user: userData.user}
+      })
+      .then((response) => {
+        this.current_data = response.data.reply
+        this.token = userData.token
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+    } else {
+      self.location = '/logout_user'
     }
+    this.getToken()
+  }
 })

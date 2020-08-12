@@ -42,92 +42,20 @@ def logout_user(request):
 
 def get_data(request):
   if request.user.is_authenticated:
-    try:
-      username = request.GET['user']
-      current_user = User.objects.get(username=username)    
-      if current_user.is_superuser:
-        new_user_obj = {
-          'username': current_user.username,
-          'is_admin': current_user.is_superuser,
-          'user_image': False,
-          'edit_permit': True,
-          'delete_permit': True,
-          'add_permit': True,
-          'download_permit': True
-        }
-      else:
-        permit = Permission.objects.filter(user=current_user.id)
-        permit = list(permit.values(
-        'user_id', 'add_permit', 'edit_permit', 
-        'delete_permit', 'download_permit', 'user_image'
-        ))
-
-        user_permission = {}
-        for user in permit:
-          user_permission.update(user)
-
-        print(user_permission)
-        new_user_obj = {
-          'username': current_user.username,
-          'is_admin': current_user.is_superuser,
-          'user_image': user_permission['user_image'],
-          'edit_permit': user_permission['edit_permit'],
-          'delete_permit': user_permission['delete_permit'],
-          'add_permit': user_permission['add_permit'],
-          'download_permit': user_permission['download_permit']
-        }
-
-      get_accounts = Account.objects.all()
-      get_clients = Client.objects.all()
-
-      client_records = list(get_clients.values(
-      'id', 'client_name', 'client_email',
-      'client_phone', 'service_offered',
-      'amount_charged', 'amount_paid', 'balance_due',
-      'qty', 'due_date', 'date'
-      ))
-
-      account_records = list(get_accounts.values(
-        'id', 'description', 'date', 'amount', 'entry_type'
-      ))
-      payload = {
-        'user': new_user_obj,
-        'client_record': client_records,
-        'account_record': account_records
-      }
-      return JsonResponse({'reply': payload})
-    except EnvironmentError as e:
-      print('Error: ' + e)
+    username = request.GET['user']
+    payload = util.reloadData(username)
+    return JsonResponse({'reply': payload})
   else:
     return redirect('/')
 
 
 def user_permission(request):
   if request.user.is_authenticated:
-    try:
-      users_result = User.objects.filter()
-      users = list(users_result.values('id', 'username', 'email', 'is_staff', 'is_superuser'))
-      permissions_result = Permission.objects.filter()
-      permissions = list(permissions_result.values(
-        'user_id', 'add_permit', 'edit_permit', 
-        'delete_permit', 'download_permit'
-      ))
-
-      list_of_users = []
-      for user in users:
-        if user['is_superuser']:
-          continue
-        for permit in permissions:
-          if permit['user_id'] == user['id']:
-            user.update({'permissions': permit})
-        list_of_users.append(user)
-      context = {}
-      context['users'] = json.dumps(list_of_users)
-      return render(request, 'users.html', context)
-    except EnvironmentError as e:
-      print({'Error': e})
+    context = util.reloadUserData(initial=True)
+    return render(request, 'users.html', context)
   else:
     return  redirect('/')
+
 
 class CreateUser(APIView):
 
@@ -210,9 +138,9 @@ def add_client_record(request):
       if util.is_permitted(user, action):
         balance_due = float(amount_charged) - float(amount_paid)
         balance_due = str(balance_due) + '0'
-        balance_due =  util.format_price(balance_due)
-        amount_charged = util.format_price(amount_charged)
-        amount_paid = util.format_price(amount_paid)
+        balance_due =  util.money_format(balance_due)
+        amount_charged = util.money_format(amount_charged)
+        amount_paid = util.money_format(amount_paid)
 
         new_client_record = Client(
           client_name = client_name,
@@ -261,9 +189,9 @@ def update_client_record(request):
       if util.is_permitted(user, action):
         balance_due = float(amount_charged) - float(amount_paid)
         balance_due = str(balance_due) + '0'
-        balance_due =  util.format_price(balance_due)
-        amount_charged = util.format_price(amount_charged)
-        amount_paid = util.format_price(amount_paid)
+        balance_due =  util.money_format(balance_due)
+        amount_charged = util.money_format(amount_charged)
+        amount_paid = util.money_format(amount_paid)
 
         client = Client.objects.get(id = client_id)
 
@@ -305,7 +233,7 @@ def add_account_record(request):
         })
     else:
       if util.is_permitted(user, action):
-        amount = util.format_price(amount)
+        amount = util.money_format(amount)
         new_account_record = Account(
           description = description,
           entry_type = entry_type,
@@ -339,7 +267,7 @@ def update_account_record(request):
         })
     else:
       if util.is_permitted(user, action):
-        amount = util.format_price(amount)
+        amount = util.money_format(amount)
 
         account = Account.objects.get(id = entry_id)
         
@@ -402,7 +330,7 @@ def permit_user(request):
 
       permission.save()
       
-      payload = util.reloadUserData()
+      payload = util.reloadUserData(initial=False)
       return JsonResponse({"reply": payload})
     else:
       return JsonResponse({"reply": 'Access denied'})
@@ -504,6 +432,7 @@ def send_invoice(request):
     'due_date': due_date,
     'date': date
   }
-
+  # email_context = {'invoice': invoice}
   response = util.send_invoice_as_mail(invoice)
-  return JsonResponse({'Reply': str(response)})
+  return JsonResponse({'reply': response})
+  # return render(request, 'email_invoice_template.html', email_context)

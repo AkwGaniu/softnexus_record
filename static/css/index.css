@@ -18,8 +18,8 @@ html, body {
 
 #loginApp .login-holder, #regApp .login-holder {
   background: url(../images/bg.jpg);
-  -webkit-box-shadow: inset 0 0 0 1000px rgba(0, 0, 0, .2);
-  box-shadow: inset 0 0 0 1000px rgba(0, 0, 0, .2);
+  -webkit-box-shadow: inset 0 0 0 1000px rgba(0, 0, 0, 0.2);
+  box-shadow: inset 0 0 0 1000px rgba(0, 0, 0, 0.2);
   background-repeat: no-repeat;
   background-size: cover;
   height: 94.8vh;
@@ -151,7 +151,7 @@ html, body {
   top: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, .9);
+  background-color: rgba(0, 0, 0, 0.9);
   z-index: 1000; }
   @media (max-width: 768px) {
     .add-record-modal {
@@ -184,6 +184,7 @@ html, body {
         color: whitesmoke;
         font-weight: 400;
         -webkit-transform: rotate(45deg);
+        -ms-transform: rotate(45deg);
         transform: rotate(45deg);
         position: absolute;
         top: -16px;
@@ -343,8 +344,6 @@ html, body {
             cursor: pointer; }
     #main header .table th,
     #main header .table td {
-      padding: 8px !important;
-      padding: 8px !important;
       padding: .5rem !important;
       vertical-align: bottom !important; }
   #main .tab-btns {
@@ -422,8 +421,6 @@ html, body {
           -ms-flex-pack: justify;
           justify-content: space-between;
           border-radius: 5px;
-          margin-bottom: 6.4px;
-          margin-bottom: 6.4px;
           margin-bottom: .4rem;
           padding: 2.5px 10px 0px;
           color: white;
@@ -439,8 +436,6 @@ html, body {
       #main .main .record-header .add-btn {
         width: 10%;
         padding: 0 5px;
-        margin-bottom: 8px;
-        margin-bottom: 8px;
         margin-bottom: .5rem; }
         @media (max-width: 768px) {
           #main .main .record-header .add-btn {
@@ -530,8 +525,6 @@ html, body {
   justify-content: space-between;
   border-radius: 5px;
   width: 40%;
-  margin: 16px auto 0px;
-  margin: 16px auto 0px;
   margin: 1rem auto 0rem;
   padding: 2.5px 10px 2.5px 15px;
   color: white;
@@ -560,7 +553,7 @@ html, body {
   top: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, .1);
+  background-color: rgba(0, 0, 0, 0.1);
   z-index: 1000; }
   .delete-modal .modal-content {
     width: 30%;
@@ -706,7 +699,7 @@ html, body {
           margin-right: 0px; }
           @media (max-width: 768px) {
             #invoiceApp .first-section .right-side .rows .column-1 {
-              width: 55%; } }
+              width: 50%; } }
           #invoiceApp .first-section .right-side .rows .column-1 .terms {
             margin-bottom: 24px; }
           #invoiceApp .first-section .right-side .rows .column-1 p {
@@ -719,7 +712,7 @@ html, body {
           margin-right: 0px; }
           @media (max-width: 768px) {
             #invoiceApp .first-section .right-side .rows .column-2 {
-              width: 40%; } }
+              width: 50%; } }
           #invoiceApp .first-section .right-side .rows .column-2 p {
             font-weight: 500;
             margin: 0 0 5px 0;
@@ -738,8 +731,8 @@ html, body {
         margin-left: 25%; }
         @media (max-width: 768px) {
           #invoiceApp .first-section .right-side .row-bold {
-            width: 90%;
-            margin-left: 10%;
+            width: 100%;
+            margin-left: 0%;
             padding: 3px 10px; } }
         #invoiceApp .first-section .right-side .row-bold p {
           display: inline;
@@ -758,8 +751,6 @@ html, body {
     margin-bottom: 40px;
     width: 100%; }
     #invoiceApp .product-holder .item {
-      width: 320px;
-      width: 320px;
       width: 20rem;
       padding-left: 40px;
       font-weight: bold; }
@@ -921,7 +912,7 @@ html, body {
   background-color: #e84a5f !important; }
 
 .activeTab {
-  border-bottom: 4px solid rgba(19, 167, 19, .849) !important; }
+  border-bottom: 4px solid rgba(19, 167, 19, 0.849) !important; }
 
 .fileSelected {
   color: #272626 !important;

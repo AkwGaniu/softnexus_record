@@ -122,12 +122,12 @@
         >
           Download Invoice
         </a>
-        <a
+        <button
           class="cta"
-          :href=`/send_invoice?id=${invoice.id}`
+          @click="sendInvoice(invoice.id)"
         >
           Send Invoice
-        </a>
+      </button>
        </div>      
      </section>
   </body>
@@ -160,35 +160,23 @@
         const formattedDate = `${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`
         return formattedDate
       },
-      printPdf () {
-        this.beginDownload = true
-        domtoimage.toPng(this.$refs.content)
-        .then(function(dataUrl) {
-          var img = new Image();
-          img.src = dataUrl;
-          const doc = new jsPDF({
-            orientation: "portrait",
-            // unit: "pt",
-            format: [900, 1400]
-          });
-          doc.addImage(img, "JPEG", 20, 20);
-          const date = new Date();
-          const filename =
-            "timechart_" +
-            date.getFullYear() +
-            ("0" + (date.getMonth() + 1)).slice(-2) +
-            ("0" + date.getDate()).slice(-2) +
-            ("0" + date.getHours()).slice(-2) +
-            ("0" + date.getMinutes()).slice(-2) +
-            ("0" + date.getSeconds()).slice(-2) +
-            ".pdf";
-          doc.save(filename);
-          beginDownload = false
+      sendInvoice(id) {
+        const url = `/send_invoice?id=${id}`
+        fetch(url)
+        .then(resp => {
+            if(resp.ok) {
+              return resp.json()
+            } else {
+              return Promise.reject(resp.json())
+            }
         })
-        .catch(function(error) {
-          console.error("oops, something went wrong!", error);
-        });
-      }
+        .then(data => {
+          console.log(data)
+        })
+        .catch(error => {
+            console.log(error.object)
+        })
+      },
     }
   })
 </script>

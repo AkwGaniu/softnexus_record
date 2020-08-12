@@ -1,6 +1,7 @@
 import datetime
 import calendar
 import io
+import json
 import xlsxwriter
 from django.http import HttpResponse
 from django.core.mail import EmailMessage
@@ -30,24 +31,24 @@ def format_date(date):
   return formated_date
 
 
-def format_price(num):
+def money_format(num):
   price = num[:-3]
   if len(price) < 4:
     formated_price = num
   elif len(price) == 4:
-    formated_price = f"{price[0:1]},{price[1:]}.00"
+    formated_price = f"{price[0:1]},{price[1:]}:00"
   elif len(price) == 5:
-    formated_price = f"{price[0:2]},{price[2:]}.00"
+    formated_price = f"{price[0:2]},{price[2:]}:00"
   elif len(price) == 6:
-    formated_price = f"{price[0:3]},{price[3:]}.00" 
+    formated_price = f"{price[0:3]},{price[3:]}:00" 
   elif len(price) == 7:
-    formated_price = f"{price[0:1]},{price[1:4]},{price[4:]}.00"
+    formated_price = f"{price[0:1]},{price[1:4]},{price[4:]}:00"
   elif len(price) == 8:
-    formated_price = f"{price[0:2]},{price[2:5]},{price[5:]}.00"
+    formated_price = f"{price[0:2]},{price[2:5]},{price[5:]}:00"
   elif len(price) == 9:
-    formated_price = f"{price[0:3]},{price[3:6]},{price[6:]}.00"
+    formated_price = f"{price[0:3]},{price[3:6]},{price[6:]}:00"
   elif len(price) == 10:
-    formated_price = f"{price[0:1]},{price[1:4]},{price[4:7]},{price[7:]}.00"
+    formated_price = f"{price[0:1]},{price[1:4]},{price[4:7]},{price[7:]}:00"
   return formated_price
 
 def is_permitted(user, action):
@@ -80,7 +81,7 @@ def reloadData(username):
   try:
     current_user = User.objects.get(username=username)    
     if current_user.is_superuser:
-       new_user_obj = {
+      new_user_obj = {
         'username': current_user.username,
         'is_admin': current_user.is_superuser,
         'user_image': False,
@@ -124,7 +125,7 @@ def reloadData(username):
     print({'Error': e})
 
 
-def reloadUserData():
+def reloadUserData(initial):
   try:
     users_result = User.objects.filter()
     users = list(users_result.values('id', 'username', 'email', 'is_staff', 'is_superuser'))
@@ -142,7 +143,10 @@ def reloadUserData():
           user.update({'permissions': permit})
       list_of_users.append(user)
     context = {}
-    context['users'] = list_of_users
+    if initial:
+      context['users'] = json.dumps(list_of_users)
+    else:
+      context['users'] = list_of_users
     return  context
   except EnvironmentError as e:
     print({'Error': e})
@@ -159,6 +163,7 @@ def account_data():
   except EnvironmentError as e:
     print({'Error': e})
 
+
 def client_data():
   try:
     get_clients = Client.objects.all()
@@ -171,6 +176,7 @@ def client_data():
     return client_records
   except EnvironmentError as e:
     print({'Error': e})
+
 
 def write_account_to_excel():
   output = io.BytesIO()
@@ -313,7 +319,6 @@ def send_invoice_as_mail(invoice):
   try:
     email_subject = f"{invoice['service_offered']} Invoice"
     email_context = {'invoice': invoice}
-    print(email_context)
     email_template = get_template('email_invoice_template.html')
     email_content = email_template.render(email_context)
     email_msg = EmailMessage(email_subject, email_content, EMAIL_HOST_USER, [invoice['client_email']], reply_to=[EMAIL_REPLY_TO])

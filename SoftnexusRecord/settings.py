@@ -147,13 +147,22 @@ MEDIA_ROOT =  os.path.join(BASE_DIR, 'media/')
 MEDIA_URL = '/media/'
 
 # email settings
-EMAIL_HOST = 'mail.privateemail.com'
-EMAIL_HOST_USER = 'noreply@tiwa.africa'
-EMAIL_HOST_PASSWORD = "fudnuv-tavmyJ-dimjy1"
-EMAIL_PORT = 587
+EMAIL_HOST = 'localhost'
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ""
+EMAIL_PORT = 25
 EMAIL_USE_TLS = True
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+# EMAIL_REPLY_TO = "info@tiwa.africa" 
+# EMAIL_HOST = 'mail.privateemail.com'
+# EMAIL_HOST_USER = 'noreply@tiwa.africa'
+# EMAIL_HOST_PASSWORD = "fudnuv-tavmyJ-dimjy1"
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 EMAIL_REPLY_TO = "info@tiwa.africa"
 
