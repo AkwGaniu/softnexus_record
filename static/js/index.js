@@ -106,7 +106,6 @@ var app = new Vue({
       this.errorMsg = ''
       if (this.validateClientRecord('add_permit')){
         const data = this.validateClientRecord('add_permit')
-        console.log(data)
         this.closeModal()
         let url = `/add_client_record`
         const fetchData  = {

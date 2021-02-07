@@ -5,6 +5,9 @@ from django.contrib.auth import authenticate, logout
 from django.contrib.auth.models import User
 from django.template.loader import render_to_string
 
+# import cloudinary
+# import cloudinary.uploader
+# import cloudinary.api
 from weasyprint import HTML
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
@@ -67,7 +70,6 @@ class CreateUser(APIView):
         user_image = request.FILES['file']
       else:
         user_image = False
-      print(user_image)
       username = request.data['username']
       password = request.data['password']
       email = request.data['email']
@@ -96,6 +98,7 @@ class CreateUser(APIView):
           )
         set_permission.save()
         return JsonResponse({'reply': 'success'})
+        
     except EnvironmentError as e:
       print({'Error': e})
 

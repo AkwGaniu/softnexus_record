@@ -314,7 +314,6 @@ def write_client_to_excel():
 
 # def generate_pdf(data):
 
-
 def send_invoice_as_mail(invoice):
   try:
     email_subject = f"{invoice['service_offered']} Invoice"
@@ -327,4 +326,10 @@ def send_invoice_as_mail(invoice):
     return res
   except Exception as e:
     print({'Error': str(e)})
-  
+
+# cloudinary.uploader.upload("dog.mp4", 
+#   folder = "my_folder/my_sub_folder/", 
+#   public_id = "my_dog",
+#   overwrite = true, 
+#   notification_url = "https://mysite.example.com/notify_endpoint", 
+#   resource_type = "video")
